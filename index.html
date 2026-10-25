@@ -2462,8 +2462,7 @@ Provide the response EXACTLY in the following JSON format without any markdown w
 
         // 통신 오류 방지를 위한 try-catch 및 abort 처리 강화
         async function callGeminiAPI(history, callback) {
-            const apiKey = `/api/chat`;
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            const apiUrl =`/api/chat`;
             const payload = { contents: history };
             
             const controller = new AbortController();
@@ -2494,8 +2493,7 @@ Provide the response EXACTLY in the following JSON format without any markdown w
         }
 
         async function callGeminiJSON(history, callback) {
-            const apiKey = `/api/chat`";
-            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+            const apiUrl = `/api/chat`;
             const payload = { 
                 contents: history,
                 generationConfig: {
