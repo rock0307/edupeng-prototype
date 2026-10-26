@@ -741,22 +741,24 @@
 
     <!-- Auth Modal -->
     <div class="modal-overlay" id="authModal">
-        <div class="modal-overlay" id="authModal">
         <div class="modal-card">
             <button class="modal-close" onclick="closeAuthModal()">✕</button>
             <h2 id="modalTitle" style="margin-bottom: 24px; color: var(--primary); font-size: 1.5rem;">로그인</h2>
             <form id="authForm" onsubmit="handleAuthSubmit(event)">
+                <!-- 회원가입 시에만 나타나는 유저 아이디(닉네임) 입력창 -->
                 <div class="form-group" id="nameGroup" style="display: none;">
-                    <label id="lbl-auth-name">이름 (닉네임)</label>
-                    <input type="text" id="authName" class="form-input" placeholder="홍길동">
+                    <label id="lbl-auth-name">유저 아이디 (닉네임)</label>
+                    <input type="text" id="authName" class="form-input" placeholder="예: LEEGIEUN">
                 </div>
+                <!-- 로그인 & 회원가입 공통 이메일 입력창 -->
                 <div class="form-group">
-                    <label id="lbl-auth-id">이메일</label>
-                    <input type="email" id="authId" class="form-input" placeholder="user@example.com" required>
+                    <label id="lbl-auth-id">이메일 주소</label>
+                    <input type="email" id="authEmail" class="form-input" placeholder="user@example.com" required>
                 </div>
+                <!-- 비밀번호 입력창 -->
                 <div class="form-group">
                     <label id="lbl-auth-pw">비밀번호</label>
-                    <input type="password" id="authPassword" class="form-input" placeholder="6자리 이상 비밀번호" required minlength="6">
+                    <input type="password" id="authPassword" class="form-input" placeholder="•••••••• (6자리 이상)" required minlength="6">
                 </div>
                 <button type="submit" class="btn-start" id="btnAuthSubmit" style="padding: 14px; font-size: 1.1rem; margin-top: 12px;">로그인</button>
             </form>
@@ -2554,16 +2556,12 @@ clearInterval(timer);
             }, stepTime);
         }
 
-       initApp();
+      initApp();
 
-        // 🌟 팝업 강제 실행 함수 (Firebase 모듈 스코프와 상관없이 즉각 동작)
         window.openAuthModal = function(mode) {
             window.authMode = mode || 'login';
             var modal = document.getElementById('authModal');
-            if (!modal) {
-                alert("authModal 요소를 찾을 수 없습니다.");
-                return;
-            }
+            if (!modal) return;
             modal.style.display = 'flex';
             modal.classList.add('active');
 
@@ -2587,7 +2585,6 @@ clearInterval(timer);
         };
     </script>
 
-    <!-- Firebase 통신 및 DB 스크립트 -->
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
       import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
@@ -2677,6 +2674,7 @@ clearInterval(timer);
               if (badge) badge.innerText = (window.currentUser.name || 'U').charAt(0).toUpperCase();
               if (nameEl) nameEl.innerText = window.currentUser.name;
               if (idEl) idEl.innerText = window.currentUser.email;
+
               const isAdmin = (window.currentUser.name === 'LEEGIEUN' || window.currentUser.name === 'LEE');
               document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdmin ? 'block' : 'none');
           } else {
@@ -2688,9 +2686,11 @@ clearInterval(timer);
 
       window.handleAuthSubmit = async function(e) {
           e.preventDefault();
-          const email = document.getElementById('authId').value.trim();
+          const emailInput = document.getElementById('authEmail');
+          const email = emailInput ? emailInput.value.trim() : '';
           const password = document.getElementById('authPassword').value.trim();
-          const name = document.getElementById('authName').value.trim() || email.split('@')[0];
+          const nameInput = document.getElementById('authName');
+          const name = (nameInput && nameInput.value.trim()) ? nameInput.value.trim() : email.split('@')[0];
 
           if (password.length < 6) {
               alert("비밀번호는 6자리 이상이어야 합니다.");
@@ -2707,10 +2707,10 @@ clearInterval(timer);
                       createdAt: new Date().toISOString(),
                       role: (name === 'LEEGIEUN' || name === 'LEE') ? 'admin' : 'user'
                   });
-                  alert("🎉 가입 성공!");
+                  alert("🎉 회원가입 성공!");
                   window.closeAuthModal();
               } catch(err) {
-                  const msg = err.code === 'auth/email-already-in-use' ? "이미 등록된 이메일입니다." :
+                  const msg = err.code === 'auth/email-already-in-use' ? "이미 등록된 이메일 주소입니다." :
                               err.code === 'auth/invalid-email' ? "올바른 이메일 형식을 입력하세요." : err.message;
                   alert("가입 실패: " + msg);
               }
@@ -2720,7 +2720,7 @@ clearInterval(timer);
                   alert("🎉 로그인 성공!");
                   window.closeAuthModal();
               } catch(err) {
-                  alert("이메일 또는 비밀번호가 올바르지 않습니다.");
+                  alert("이메일 주소 또는 비밀번호가 올바르지 않습니다.");
               }
           }
       };
@@ -2736,7 +2736,9 @@ clearInterval(timer);
               let userName = user.email.split('@')[0];
               try {
                   const docSnap = await getDoc(doc(db, "users", user.uid));
-                  if (docSnap.exists() && docSnap.data().name) userName = docSnap.data().name;
+                  if (docSnap.exists() && docSnap.data().name) {
+                      userName = docSnap.data().name;
+                  }
               } catch(e) {}
 
               window.currentUser = { email: user.email, id: user.email, uid: user.uid, name: userName };
