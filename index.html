@@ -2548,12 +2548,99 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                 current += increment;
                 obj.innerHTML = current;
                 if (current == end) {
-                    clearInterval(timer);
+clearInterval(timer);
                 }
             }, stepTime);
         }
 
         initApp();
+    </script>
+
+    <!-- 파이어베이스 연동 코드 시작 -->
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
+      import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
+      import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyA7v4V_jMb3x996QdHW7EL2DcZsB8FoiZw",
+        authDomain: "my-language-site.firebaseapp.com",
+        projectId: "my-language-site",
+        storageBucket: "my-language-site.firebasestorage.app",
+        messagingSenderId: "550541389936",
+        appId: "1:550541389936:web:8b0f38c9312d2b6b7bc4b5",
+        measurementId: "G-X1RLXJ8H7R"
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      window.firebaseDb = db;
+
+      window.handleAuthSubmit = async function(e) {
+        e.preventDefault();
+        const email = document.getElementById('authId').value.trim(); 
+        const password = document.getElementById('authPassword').value.trim();
+        const name = document.getElementById('authName').value.trim() || email.split('@')[0];
+
+        if (window.authMode === 'signup') {
+            try {
+                const userCred = await createUserWithEmailAndPassword(auth, email, password);
+                await setDoc(doc(db, "users", userCred.user.uid), {
+                    uid: userCred.user.uid,
+                    email: email,
+                    name: name,
+                    createdAt: new Date().toISOString(),
+                    role: (email === 'admin@edupeng.com') ? 'admin' : 'user'
+                });
+                window.customAlert("🎉 가입 성공!");
+                window.closeAuthModal();
+            } catch(error) {
+                window.customAlert("가입 실패: " + error.message);
+            }
+        } else {
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                window.customAlert("🎉 로그인 성공!");
+                window.closeAuthModal();
+            } catch(error) {
+                window.customAlert("로그인 실패: 아이디(이메일)와 비밀번호를 확인하세요.");
+            }
+        }
+      };
+
+      window.handleLogout = function() {
+        signOut(auth).then(() => {
+            window.customAlert("로그아웃 되었습니다.");
+        });
+      };
+
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            const docRef = doc(db, "users", user.uid);
+            const docSnap = await getDoc(docRef);
+            let userName = user.email.split('@')[0];
+            
+            if(docSnap.exists() && docSnap.data().name) {
+                userName = docSnap.data().name;
+            }
+
+            window.currentUser = { 
+                id: user.email, 
+                uid: user.uid,
+                name: userName
+            };
+            
+            if(typeof window.loadUserData === 'function') window.loadUserData();
+            if(typeof window.updateAuthUI === 'function') window.updateAuthUI();
+            if(typeof window.renderHomeStats === 'function') window.renderHomeStats();
+        } else {
+            window.currentUser = null;
+            if(typeof window.loadUserData === 'function') window.loadUserData();
+            if(typeof window.updateAuthUI === 'function') window.updateAuthUI();
+            if(typeof window.renderHomeStats === 'function') window.renderHomeStats();
+        }
+      });
     </script>
 </body>
 </html>
