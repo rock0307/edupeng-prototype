@@ -743,24 +743,24 @@
    <div class="modal-overlay" id="authModal">
         <div class="modal-card">
             <button class="modal-close" onclick="closeAuthModal()">✕</button>
-            <h2 id="modalTitle" style="margin-bottom: 24px; color: var(--primary); font-size: 1.5rem;">로그인</h2>
+            <h2 id="modalTitle" style="margin-bottom: 24px; color: var(--primary); font-size: 1.5rem;">ログイン</h2>
             <form id="authForm" onsubmit="handleAuthSubmit(event)">
-                <!-- 유저이름(닉네임) 입력창 (로그인 / 가입 공통) -->
+                <!-- 유저이름(아이디) 입력창 -->
                 <div class="form-group">
-                    <label id="lbl-auth-name">유저이름 (아이디)</label>
-                    <input type="text" id="authName" class="form-input" placeholder="예: LEEGIEUN" required>
+                    <label id="lbl-auth-name">ユーザー名 (ID)</label>
+                    <input type="text" id="authName" class="form-input" placeholder="edupeng" required>
                 </div>
-                <!-- 회원가입 시에만 나타나는 이메일 입력창 -->
+                <!-- 회원가입 전용 이메일 입력창 -->
                 <div class="form-group" id="emailGroup" style="display: none;">
-                    <label id="lbl-auth-id">이메일 주소</label>
+                    <label id="lbl-auth-email">メールアドレス</label>
                     <input type="email" id="authEmail" class="form-input" placeholder="user@example.com">
                 </div>
                 <!-- 비밀번호 입력창 -->
                 <div class="form-group">
-                    <label id="lbl-auth-pw">비밀번호</label>
-                    <input type="password" id="authPassword" class="form-input" placeholder="•••••••• (6자리 이상)" required minlength="6">
+                    <label id="lbl-auth-pw">パスワード</label>
+                    <input type="password" id="authPassword" class="form-input" placeholder="••••••••" required minlength="6">
                 </div>
-                <button type="submit" class="btn-start" id="btnAuthSubmit" style="padding: 14px; font-size: 1.1rem; margin-top: 12px;">로그인</button>
+                <button type="submit" class="btn-start" id="btnAuthSubmit" style="padding: 14px; font-size: 1.1rem; margin-top: 12px;">ログイン</button>
             </form>
         </div>
     </div>
@@ -2558,6 +2558,7 @@ clearInterval(timer);
 
       initApp();
 
+        // 팝업 열기/닫기 및 다국어 텍스트 완전 대응 함수
         window.openAuthModal = function(mode) {
             window.authMode = mode || 'login';
             var modal = document.getElementById('authModal');
@@ -2565,22 +2566,38 @@ clearInterval(timer);
             modal.style.display = 'flex';
             modal.classList.add('active');
 
+            var lang = window.currentLang || localStorage.getItem('edupeng_lang') || 'ja';
+            var isJa = (lang === 'ja');
+
             var titleEl = document.getElementById('modalTitle');
             var btnEl = document.getElementById('btnAuthSubmit');
             var emailGroup = document.getElementById('emailGroup');
             var emailInput = document.getElementById('authEmail');
-
-            if (titleEl) titleEl.innerText = (window.authMode === 'login') ? "로그인" : "회원가입";
-            if (btnEl) btnEl.innerText = (window.authMode === 'login') ? "로그인" : "회원가입";
+            var nameInput = document.getElementById('authName');
+            var pwInput = document.getElementById('authPassword');
             
-            if (emailGroup) {
-                if (window.authMode === 'signup') {
-                    emailGroup.style.display = 'block';
-                    if (emailInput) emailInput.required = true;
-                } else {
-                    emailGroup.style.display = 'none';
-                    if (emailInput) emailInput.required = false;
-                }
+            var lblName = document.getElementById('lbl-auth-name');
+            var lblEmail = document.getElementById('lbl-auth-email');
+            var lblPw = document.getElementById('lbl-auth-pw');
+
+            if (lblName) lblName.innerText = isJa ? "ユーザー名 (ID)" : "유저이름 (아이디)";
+            if (lblEmail) lblEmail.innerText = isJa ? "メールアドレス" : "이메일 주소";
+            if (lblPw) lblPw.innerText = isJa ? "パスワード" : "비밀번호";
+
+            if (nameInput) nameInput.placeholder = "edupeng";
+            if (emailInput) emailInput.placeholder = "user@example.com";
+            if (pwInput) pwInput.placeholder = isJa ? "6文字以上のパスワード" : "6자리 이상 비밀번호";
+
+            if (window.authMode === 'login') {
+                if (titleEl) titleEl.innerText = isJa ? "ログイン" : "로그인";
+                if (btnEl) btnEl.innerText = isJa ? "ログイン" : "로그인";
+                if (emailGroup) emailGroup.style.display = 'none';
+                if (emailInput) emailInput.required = false;
+            } else {
+                if (titleEl) titleEl.innerText = isJa ? "会員登録" : "회원가입";
+                if (btnEl) btnEl.innerText = isJa ? "会員登録" : "회원가입";
+                if (emailGroup) emailGroup.style.display = 'block';
+                if (emailInput) emailInput.required = true;
             }
         };
 
@@ -2615,8 +2632,24 @@ clearInterval(timer);
       const db = getFirestore(app);
       window.firebaseDb = db;
 
-      // 브라우저 탭을 이동하거나 새로고침해도 로그인 상태가 유지되도록 로컬 세션 고정
       setPersistence(auth, browserLocalPersistence).catch(console.error);
+
+      function getAuthMessage(key) {
+          const lang = window.currentLang || localStorage.getItem('edupeng_lang') || 'ja';
+          const isJa = (lang === 'ja');
+          const messages = {
+              pwLength: isJa ? "パスワードは6文字以上で入力してください。" : "비밀번호는 6자리 이상이어야 합니다.",
+              requireEmail: isJa ? "メールアドレスを入力してください。" : "이메일 주소를 입력해주세요.",
+              signupSuccess: isJa ? "🎉 会員登録が完了しました！ ようこそ！" : "🎉 회원가입 성공! Welcome!",
+              emailInUse: isJa ? "既に登録されているメールアドレスです。" : "이미 등록된 이메일 주소입니다.",
+              invalidEmail: isJa ? "正しいメールアドレスの形式を入力してください。" : "올바른 이메일 형식을 입력하세요.",
+              userNotFound: isJa ? "存在しないユーザー名です。" : "존재하지 않는 유저이름입니다.",
+              loginSuccess: isJa ? "🎉 ログインに成功しました！" : "🎉 로그인 성공!",
+              authFailed: isJa ? "ユーザー名またはパスワードが正しくありません。" : "유저이름 또는 비밀번호가 올바르지 않습니다.",
+              logoutSuccess: isJa ? "ログアウトしました。" : "로그아웃 되었습니다."
+          };
+          return messages[key] || "";
+      }
 
       window.saveUserData = async function() {
           if (!window.currentUser || !window.currentUser.uid) return;
@@ -2704,7 +2737,7 @@ clearInterval(timer);
           const password = document.getElementById('authPassword').value.trim();
 
           if (password.length < 6) {
-              alert("비밀번호는 6자리 이상이어야 합니다.");
+              alert(getAuthMessage('pwLength'));
               return;
           }
 
@@ -2713,7 +2746,7 @@ clearInterval(timer);
               const email = emailInput ? emailInput.value.trim() : '';
 
               if (!email) {
-                  alert("이메일 주소를 입력해주세요.");
+                  alert(getAuthMessage('requireEmail'));
                   return;
               }
 
@@ -2726,15 +2759,14 @@ clearInterval(timer);
                       createdAt: new Date().toISOString(),
                       role: (name === 'LEEGIEUN' || name === 'LEE') ? 'admin' : 'user'
                   });
-                  alert("🎉 회원가입 성공! Welcome!");
+                  alert(getAuthMessage('signupSuccess'));
                   window.closeAuthModal();
               } catch(err) {
-                  const msg = err.code === 'auth/email-already-in-use' ? "이미 등록된 이메일 주소입니다." :
-                              err.code === 'auth/invalid-email' ? "올바른 이메일 형식을 입력하세요." : err.message;
-                  alert("가입 실패: " + msg);
+                  const msg = err.code === 'auth/email-already-in-use' ? getAuthMessage('emailInUse') :
+                              err.code === 'auth/invalid-email' ? getAuthMessage('invalidEmail') : err.message;
+                  alert(msg);
               }
           } else {
-              // 로그인: 유저이름(닉네임)으로 이메일을 찾아 로그인 수행
               try {
                   let targetEmail = "";
                   if (name.includes('@')) {
@@ -2743,24 +2775,24 @@ clearInterval(timer);
                       const q = query(collection(db, "users"), where("name", "==", name));
                       const querySnapshot = await getDocs(q);
                       if (querySnapshot.empty) {
-                          alert("존재하지 않는 유저이름입니다.");
+                          alert(getAuthMessage('userNotFound'));
                           return;
                       }
                       targetEmail = querySnapshot.docs[0].data().email;
                   }
 
                   await signInWithEmailAndPassword(auth, targetEmail, password);
-                  alert("🎉 로그인 성공!");
+                  alert(getAuthMessage('loginSuccess'));
                   window.closeAuthModal();
               } catch(err) {
-                  alert("유저이름 또는 비밀번호가 올바르지 않습니다.");
+                  alert(getAuthMessage('authFailed'));
               }
           }
       };
 
       window.handleLogout = function() {
           signOut(auth).then(() => {
-              alert("로그아웃 되었습니다.");
+              alert(getAuthMessage('logoutSuccess'));
           });
       };
 
