@@ -2557,7 +2557,7 @@ clearInterval(timer);
     </script>
 
     <!-- 파이어베이스 연동 코드 시작 -->
-    <script type="module">
+   <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
       import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
       import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
@@ -2577,6 +2577,86 @@ clearInterval(timer);
       const db = getFirestore(app);
       window.firebaseDb = db;
 
+      window.saveUserData = async function() {
+          if(!window.currentUser || !window.currentUser.uid) return;
+          const userRef = doc(db, "users", window.currentUser.uid);
+          
+          const dataToSave = {
+              completedUnits: Array.from(completedUnits || []),
+              userDecks: userDecks || {},
+              testCounts: window.currentUser.testCounts || { numbers: 0, dates: 0, times: 0 },
+              dailyGoals: window.currentUser.dailyGoals || { numbers: 5, dates: 5, times: 5 },
+              history: window.currentUser.history || {},
+              lastLogin: new Date().toISOString()
+          };
+          
+          try {
+              await setDoc(userRef, dataToSave, { merge: true });
+          } catch(error) {
+              console.error("데이터 저장 실패:", error);
+          }
+      };
+
+      window.loadUserData = async function() {
+          if(!window.currentUser || !window.currentUser.uid) {
+              completedUnits.clear();
+              for (let key in userDecks) delete userDecks[key]; 
+              ensureDefaultDeck();
+              return;
+          }
+
+          try {
+              const userRef = doc(db, "users", window.currentUser.uid);
+              const docSnap = await getDoc(userRef);
+              
+              if (docSnap.exists()) {
+                  const data = docSnap.data();
+                  
+                  completedUnits.clear();
+                  if(data.completedUnits) {
+                      data.completedUnits.forEach(unit => completedUnits.add(unit));
+                  }
+                  
+                  for (let key in userDecks) delete userDecks[key]; 
+                  if(data.userDecks) {
+                      Object.assign(userDecks, data.userDecks);
+                  }
+                  
+                  window.currentUser.testCounts = data.testCounts || { numbers: 0, dates: 0, times: 0 };
+                  window.currentUser.dailyGoals = data.dailyGoals || { numbers: 5, dates: 5, times: 5 };
+                  window.currentUser.history = data.history || {};
+              } 
+              
+              ensureDefaultDeck();
+              
+              updateOverallProgress();
+              renderCourses(activeTab === 'dashboard' ? 'all' : activeTab);
+              renderHomeStats();
+              if(activeTab.startsWith('vocab')) renderVocab();
+              if(activeTab.startsWith('bookmarks')) { renderDecks(); if(currentDeckId) renderDeckWords(); }
+              
+          } catch(error) {
+              console.error("데이터 불러오기 실패:", error);
+          }
+      };
+
+      window.updateAuthUI = function() {
+          if(window.currentUser) {
+              document.getElementById('loggedOutUI').style.display = 'none'; 
+              document.getElementById('loggedInUI').style.display = 'flex';
+              document.getElementById('userBadge').innerText = window.currentUser.name.charAt(0).toUpperCase(); 
+              document.getElementById('userName').innerText = window.currentUser.name; 
+              document.getElementById('userIdDisplay').innerText = `@${window.currentUser.id.split('@')[0]}`;
+              
+              const isAdmin = (window.currentUser.name === 'LEEGIEUN' || window.currentUser.name === 'LEE');
+              document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdmin ? 'block' : 'none');
+          } else { 
+              document.getElementById('loggedOutUI').style.display = 'flex'; 
+              document.getElementById('loggedInUI').style.display = 'none'; 
+              document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+          }
+      };
+
       window.handleAuthSubmit = async function(e) {
         e.preventDefault();
         const email = document.getElementById('authId').value.trim(); 
@@ -2591,7 +2671,7 @@ clearInterval(timer);
                     email: email,
                     name: name,
                     createdAt: new Date().toISOString(),
-                    role: (email === 'admin@edupeng.com') ? 'admin' : 'user'
+                    role: (name === 'LEEGIEUN' || name === 'LEE') ? 'admin' : 'user'
                 });
                 window.customAlert("🎉 가입 성공!");
                 window.closeAuthModal();
@@ -2631,13 +2711,12 @@ clearInterval(timer);
                 name: userName
             };
             
-            if(typeof window.loadUserData === 'function') window.loadUserData();
-            if(typeof window.updateAuthUI === 'function') window.updateAuthUI();
-            if(typeof window.renderHomeStats === 'function') window.renderHomeStats();
+            await window.loadUserData();
+            window.updateAuthUI();
         } else {
             window.currentUser = null;
-            if(typeof window.loadUserData === 'function') window.loadUserData();
-            if(typeof window.updateAuthUI === 'function') window.updateAuthUI();
+            await window.loadUserData();
+            window.updateAuthUI();
             if(typeof window.renderHomeStats === 'function') window.renderHomeStats();
         }
       });
