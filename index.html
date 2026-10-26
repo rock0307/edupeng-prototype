@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>edupeng🐧 - エデュペン語学学習ポータル</title>
+    <title>edupeng🐧 - 에듀펜 어학 학습 포털</title>
     <style>
         :root {
             --primary: #059669;
@@ -401,14 +401,14 @@
 
             <div class="nav-category" id="cat-vocab-eng">🇺🇸 영어 단어장</div>
             <div class="nav-item main-tab" onclick="nav('vocab_eng')" id="nav-vocab-eng">📝 통합 단어장</div>
-            <div class="nav-item main-tab" onclick="nav('bookmarks_eng')" id="nav-bookmarks-eng">📁 MY 단어장</div>
+            <div class="nav-item main-tab require-login-menu" onclick="nav('bookmarks_eng')" id="nav-bookmarks-eng">📁 MY 단어장</div>
 
             <div class="nav-category" id="cat-vocab-kor">🇰🇷 한국어 단어장</div>
             <div class="nav-item main-tab" onclick="nav('vocab_kor')" id="nav-vocab-kor">📝 통합 단어장</div>
-            <div class="nav-item main-tab" onclick="nav('bookmarks_kor')" id="nav-bookmarks-kor">📁 MY 단어장</div>
+            <div class="nav-item main-tab require-login-menu" onclick="nav('bookmarks_kor')" id="nav-bookmarks-kor">📁 MY 단어장</div>
 
-            <div class="nav-category" id="cat-ai-conv-menu">🐧 AI 튜터</div>
-            <div class="nav-item main-tab" onclick="nav('ai_conv')" id="nav-ai-conv">💬 에듀펭과 대화</div>
+            <div class="nav-category require-login-menu" id="cat-ai-conv-menu">🐧 AI 튜터</div>
+            <div class="nav-item main-tab require-login-menu" onclick="nav('ai_conv')" id="nav-ai-conv">💬 에듀펭과 대화</div>
 
             <div class="nav-category admin-only" style="display:none;" id="cat-admin">👑 관리자 메뉴</div>
             <div class="nav-item admin-only" style="display:none;" onclick="nav('admin_panel')" id="nav-admin">👥 회원 관리기록</div>
@@ -743,24 +743,24 @@
    <div class="modal-overlay" id="authModal">
         <div class="modal-card">
             <button class="modal-close" onclick="closeAuthModal()">✕</button>
-            <h2 id="modalTitle" style="margin-bottom: 24px; color: var(--primary); font-size: 1.5rem;">ログイン</h2>
+            <h2 id="modalTitle" style="margin-bottom: 24px; color: var(--primary); font-size: 1.5rem;">로그인</h2>
             <form id="authForm" onsubmit="handleAuthSubmit(event)">
-                <!-- 유저이름(아이디) 입력창 -->
-                <div class="form-group">
-                    <label id="lbl-auth-name">ユーザー名 (ID)</label>
-                    <input type="text" id="authName" class="form-input" placeholder="edupeng" required>
-                </div>
-                <!-- 회원가입 전용 이메일 입력창 -->
+                <!-- 이메일 입력창 (회원가입 시 표시) -->
                 <div class="form-group" id="emailGroup" style="display: none;">
-                    <label id="lbl-auth-email">メールアドレス</label>
+                    <label id="lbl-auth-email">이메일 (Email)</label>
                     <input type="email" id="authEmail" class="form-input" placeholder="user@example.com">
+                </div>
+                <!-- 아이디 입력창 -->
+                <div class="form-group">
+                    <label id="lbl-auth-id">아이디 (ID)</label>
+                    <input type="text" id="authId" class="form-input" placeholder="edupeng" required>
                 </div>
                 <!-- 비밀번호 입력창 -->
                 <div class="form-group">
-                    <label id="lbl-auth-pw">パスワード</label>
+                    <label id="lbl-auth-pw">비밀번호 (Password)</label>
                     <input type="password" id="authPassword" class="form-input" placeholder="••••••••" required minlength="6">
                 </div>
-                <button type="submit" class="btn-start" id="btnAuthSubmit" style="padding: 14px; font-size: 1.1rem; margin-top: 12px;">ログイン</button>
+                <button type="submit" class="btn-start" id="btnAuthSubmit" style="padding: 14px; font-size: 1.1rem; margin-top: 12px;">로그인</button>
             </form>
         </div>
     </div>
@@ -939,22 +939,22 @@ B|I|11|신규 직원 소개|新入社員の紹介|Everyone, please welcome our n
 B|I|12|휴가 복귀|休暇明け|Welcome back! How was your vacation?|돌아오신 걸 환영합니다! 휴가는 어땠나요?|お帰りなさい！休暇はどうでしたか？|It was wonderful, very relaxing.|아주 좋았어요, 정말 편안했습니다.|素晴らしかったです、とてもリラックスできました。|Did you manage to completely disconnect?|완전히 일을 잊고 쉴 수 있었나요?|完全に仕事から離れて休めましたか？|Yes, I didn't check my emails at all.|네, 이메일 확인을 전혀 안 했어요.|はい、メールは全くチェックしませんでした。|welcome back|환영하다(돌아온 것을)|お帰りなさい|relaxing|편안한|リラックスできる|disconnect|연결을 끊다(일을 잊다)|接続を断つ(仕事から離れる)
 B|I|13|성과 평가|業績評価|It's time for your annual performance review.|연간 성과 평가 시간입니다.|年次業績評価の時間です。|I've prepared a self-evaluation report.|자기 평가 보고서를 준비했습니다.|自己評価レポートを準備しました。|Let's discuss your achievements and goals.|당신의 성과와 목표에 대해 이야기해 봅시다.|あなたの業績と目標について話し合いましょう。|I'm open to any constructive criticism.|어떤 건설적인 비판이든 수용할 준비가 되어 있습니다.|建設的な批判は受け入れる準備ができています。|performance review|성과 평가|業績評価|self-evaluation|자기 평가|自己評価|achievements|성과, 업적|業績
 B|I|14|해외 파견|海外赴任|I've been assigned to the London office.|런던 지사로 발령받았습니다.|ロンドン支社に配属されました。|Congratulations! When do you leave?|축하해요! 언제 떠나나요?|おめでとうございます！いつ出発しますか？|I'll be relocating at the end of the month.|이번 달 말에 이주할 예정입니다.|今月末に移住する予定です。|We'll have to throw a farewell party.|송별회를 열어야겠네요.|送別会を開かないといけませんね。|assigned to|~에 발령받은|〜に配属された|relocating|이주하는|移住する|farewell party|송별회|送別会
-B|I|15|은퇴 축하|退職のお祝い|Happy retirement! You will be missed.|은퇴를 축하합니다! 보고 싶을 거예요.|退職おめでとうございます！寂しくなります。|Thank you. It's been a great journey.|감사합니다. 정말 멋진 여정이었습니다.|ありがとうございます。素晴らしい旅でした。|What are your plans for the future?|앞으로의 계획은 무엇인가요?|앞으로의 계획은 무엇인가요?|I plan to travel and spend time with family.|여행을 다니고 가족과 시간을 보낼 계획입니다.|旅行をして家族と時間を過ごす予定です。|retirement|은퇴|退職|missed|그리운, 보고 싶은|寂しい|journey|여정|旅
+B|I|15|은퇴 축하|退職のお祝い|Happy retirement! You will be missed.|은퇴를 축하합니다! 보고 싶을 거예요.|退職おめでとうございます！寂しくなります。|Thank you. It's been a great journey.|감사합니다. 정말 멋진 여정이었습니다.|ありがとうございます。素晴らしい旅でした。|What are your plans for the future?|앞으로의 계획은 무엇인가요?|今後の計画は何ですか？|I plan to travel and spend time with family.|여행을 다니고 가족과 시간을 보낼 계획입니다.|旅行をして家族と時間を過ごす予定です。|retirement|은퇴|退職|missed|그리운, 보고 싶은|寂しい|journey|여정|旅
 B|A|1|회의 주도|会議の主導|Let's get down to business. We have a lot to cover.|본론으로 들어가죠. 다룰 내용이 많습니다.|本題に入りましょう。扱う内容が多いです。|Should we start with the marketing updates?|마케팅 업데이트부터 시작할까요?|マーケティングの更新から始めますか？|Yes, please keep your reports concise.|네, 보고는 간결하게 해주세요.|はい、報告は簡潔にお願いします。|I'll stick to the main points to save time.|시간 절약을 위해 요점만 말씀드리겠습니다.|時間を節約するため要点に絞ります。|get down to business|본론으로 들어가다|本題に入る|cover|다루다|扱う|concise|간결한|簡潔な
 B|A|2|건설적 피드백|建設的なフィードバック|Your recent project was good, but it lacked detail.|최근 프로젝트는 좋았지만, 디테일이 부족했어요.|最近のプロジェクトは良かったですが、詳細が欠けていました。|I see. How can I improve for the next one?|그렇군요. 다음엔 어떻게 개선하면 좋을까요?|なるほど。次回はどう改善すればいいですか？|Try to analyze the competitor data more deeply.|경쟁사 데이터를 좀 더 깊이 분석해 보세요.|競合データをもっと深く分析してみてください。|Understood. I'll focus on that moving forward.|알겠습니다. 앞으로 그 부분에 집중할게요.|了解しました。今後はそこに集中します。|lacked|부족했다|欠けていた|improve|개선하다|改善する|moving forward|앞으로|今後は
 B|A|3|지연 설명|遅延の説明|Why is the software release delayed again?|소프트웨어 출시가 왜 또 지연되는 건가요?|ソフトウェアのリリースがなぜまた遅れているのですか？|We found a critical bug during the final testing.|최종 테스트 중에 치명적인 버그를 발견했습니다.|最終テスト中に致命的なバグを発見しました。|How long will it take to fix it?|수정하는 데 얼마나 걸릴까요?|修正にどのくらいかかりますか？|We need at least two more days to patch it.|패치하려면 최소 이틀은 더 필요합니다.|パッチを当てるのに少なくともあと2日は必要です。|delayed|지연된|遅延した|critical|치명적인|致命的な|patch|수정하다, 패치하다|修正する、パッチを当てる
 B|A|4|연봉 협상|給与交渉|I'd like to discuss a salary adjustment.|연봉 조정에 대해 논의하고 싶습니다.|給与調整について話し合いたいです。|Based on your performance, you deserve a raise.|당신의 성과를 볼 때, 인상을 받을 자격이 있습니다.|あなたのパフォーマンスを見ると、昇給に値します。|I'm hoping for a 10 percent increase.|10% 인상을 희망하고 있습니다.|10%の引き上げを希望しています。|Let me review the budget with finance and get back to you.|재무팀과 예산을 검토한 후 다시 연락드릴게요.|財務チームと予算を検討してから後で連絡します。|adjustment|조정|調整|deserve|자격이 있다|値する|increase|인상|引き上げ
-B|A|5|새 툴 제안|新しいツールの提案|We should switch to a new project management tool.|우린 새 프로젝트 관리 툴로 바꿔야 해요.|新しいプロジェクト管理ツールに切り替えるべきです。|What's wrong with the one we are currently using?|지금 쓰고 있는 툴에 무슨 문제가 있나요?|今使っているツールのどこが問題ですか？|It's too slow and lacks integration features.|너무 느리고 연동 기능이 부족합니다.|遅すぎるし連携機能が不足しています。|Send me a proposal with the cost analysis.|비용 분석이 포함된 제안서를 보내주세요.|コスト分析を含めた提案書を送ってください。|switch to|~로 바꾸다|〜에切り替える|currently|현재|現在|integration|연동, 통합|連携、統合
+B|A|5|새 툴 제안|新しいツールの提案|We should switch to a new project management tool.|우린 새 프로젝트 관리 툴로 바꿔야 해요.|新しいプロジェクト管理ツールに切り替えるべきです。|What's wrong with the one we are currently using?|지금 쓰고 있는 툴에 무슨 문제가 있나요?|今使っているツールのどこが問題ですか？|It's too slow and lacks integration features.|너무 느리고 연동 기능이 부족합니다.|遅すぎるし連携機能が不足しています。|Send me a proposal with the cost analysis.|비용 분석이 포함된 제안서를 보내주세요.|コスト分析を含めた提案書を送ってください。|switch to|~로 바꾸다|〜に切り替える|currently|현재|現在|integration|연동, 통합|連携、統合
 B|A|6|까다로운 고객|気難しい顧客|The client is very upset about the new pricing.|고객이 새 가격 정책에 대해 매우 불만입니다.|顧客が新しい価格設定に非常に腹を立てています。|We need to handle this with extreme care.|이 문제를 아주 조심스럽게 다뤄야 합니다.|この問題は非常に慎重に扱う必要があります。|I'll call him personally to explain the value.|제가 직접 전화해서 가치를 설명하겠습니다.|私が直接電話して価値を説明します。|Good. Offer him a free upgrade if necessary.|좋아요. 필요하다면 무료 업그레이드를 제안하세요.|いいですね。必要なら無料アップグレードを提案してください。|upset|불만인, 화가 난|怒っている|handle|다루다|扱う|personally|직접, 개인적으로|直接、個人的に
 B|A|7|데이터 발표|データの発表|Let's look at the sales figures for this quarter.|이번 분기 영업 수치를 살펴봅시다.|今四半期の売上数値を見てみましょう。|There's a significant drop in the European market.|유럽 시장에서 눈에 띄는 하락이 있네요.|ヨーロッパ市場で著しい落ち込みがあります。|Yes, due to new trade regulations.|네, 새로운 무역 규제 때문입니다.|はい、新しい貿易規制のためです。|We need to adjust our strategy there immediately.|그곳의 전략을 즉시 수정해야겠군요.|現地の戦略を直ちに修正する必要がありますね。|figures|수치|数値|significant|눈에 띄는, 상당한|著しい|regulations|규제|規制
 B|A|8|예산 추가 요청|予算追加の要請|I need to request more budget for the ad campaign.|광고 캠페인을 위한 추가 예산을 요청해야 합니다.|広告キャンペーンの追加予算を要請する必要があります。|You've already spent your allocated funds.|당신은 이미 할당된 자금을 다 썼잖아요.|すでに割り当てられた資金は使い果たしていますよ。|But the ROI on this platform is incredibly high.|하지만 이 플랫폼의 투자수익률이 엄청나게 높아요.|しかしこのプラットフォームのROIは驚くほど高いんです。|Write a formal request justifying the extra cost.|추가 비용을 정당화하는 공식 요청서를 쓰세요.|追加費用を正当化する正式な要請書を書いてください。|allocated|할당된|割り当てられた|incredibly|엄청나게|驚くほど|justifying|정당화하는|正当化する
-B|A|9|팀 동기부여|チームのモチベーション|I know it's been a tough week for everyone.|모두에게 힘든 한 주였다는 걸 압니다.|みんなにとって厳しい一週間だったことはわかっています。|We are all feeling a bit burnt out.|우리 모두 약간 번아웃을 느끼고 있어요.|全員少し燃え尽きを感じています。|But your hard work is truly paying off.|하지만 여러분의 노력이 정말 결실을 맺고 있어요.|しかし皆さんの努力は本当に実を結んでいます。|Thanks, we just need to push 구through Friday.|감사합니다, 금요일까지만 잘 버텨보겠습니다.|ありがとう、金曜日まで頑張り抜きます。|tough|힘든|厳しい|burnt out|번아웃된, 지친|燃え尽きた|push through|끝까지 버티다|頑張り抜く
+B|A|9|팀 동기부여|チームのモチベーション|I know it's been a tough week for everyone.|모두에게 힘든 한 주였다는 걸 압니다.|みんなにとって厳しい一週間だったことはわかっています。|We are all feeling a bit burnt out.|우리 모두 약간 번아웃을 느끼고 있어요.|全員少し燃え尽きを感じています。|But your hard work is truly paying off.|하지만 여러분의 노력이 정말 결실을 맺고 있어요.|しかし皆さんの努力は本当に実を結んでいます。|Thanks, we just need to push through Friday.|감사합니다, 금요일까지만 잘 버텨보겠습니다.|ありがとう、金曜日まで頑張り抜きます。|tough|힘든|厳しい|burnt out|번아웃된, 지친|燃え尽きた|push through|끝까지 버티다|頑張り抜く
 B|A|10|실수 논의|ミスの議論|I made a mistake on the financial report.|제가 재무 보고서에 실수를 했습니다.|財務報告書でミスをしてしまいました。|How serious is the discrepancy?|그 차이(불일치)가 얼마나 심각한가요?|その不一致はどのくらい深刻ですか？|It's minor, but it affects the final total.|사소하지만, 최종 합계에 영향을 미칩니다.|些細ですが、最終合計に影響します。|Fix it right now and resend it to the board.|지금 당장 수정해서 이사회에 다시 보내세요.|今すぐ修正して取締役会に再送してください。|mistake|실수|ミス|discrepancy|차이, 불일치|不一致|minor|사소한|些細な
 B|A|11|간단한 설득|簡単なピッチ|Our service cuts your operational costs by half.|저희 서비스는 운영 비용을 절반으로 줄여줍니다.|我々のサービスは運営コストを半分に削減します。|That sounds too good to be true.|그거 너무 좋아서 믿기지가 않네요.|良すぎて信じられませんね。|Let me show you a quick case study.|간단한 성공 사례(케이스 스터디)를 보여드리겠습니다.|簡単なケーススタディをお見せします。|Okay, you have five minutes to impress me.|좋아요, 저를 감명시킬 5분의 시간을 드리죠.|いいでしょう、私を感心させるための5分間を与えます。|operational|운영의|運営の|case study|성공 사례|ケーススタディ|impress|감명시키다|感心させる
 B|A|12|네트워킹|ネットワーキング|Hi, I don't think we've formally met.|안녕하세요, 우리 공식적으로 만난 적은 없는 것 같네요.|こんにちは、正式にお会いするのは初めてだと思います。|I'm David, the new marketing director.|저는 새 마케팅 디렉터인 데이비드입니다.|私は新しいマーケティングディレクターのデイビッドです。|Nice to meet you. I've heard great things about you.|반갑습니다. 당신에 대해 좋은 이야기 많이 들었어요.|はじめまして。あなたについて良い話をたくさん聞いていますよ。|I hope we can collaborate on future projects.|앞으로의 프로젝트에서 협력할 수 있길 바랍니다.|今後のプロジェクトで協力できることを願っています。|formally|공식적으로|正式に|heard great things|좋은 이야기를 많이 듣다|良い話をたくさん聞く|collaborate|협력하다|協力する
 B|A|13|업무 재배치|業務の再配置|John is overwhelmed with his current workload.|존이 현재 업무량 때문에 버거워하고 있어요.|ジョンが現在の仕事量でパンクしています。|We should reassign some of his tasks to Mary.|그의 업무 일부를 메리에게 재배치해야 합니다.|彼のタスクの一部をメアリーに再配置すべきです。|Will Mary have enough bandwidth for that?|메리가 그럴 만한 여유(대역폭)가 있을까요?|メアリーにそれだけの余裕（帯域幅）があるでしょうか？|Yes, her current project is almost wrapped up.|네, 그녀의 현재 프로젝트가 거의 마무리되었거든요.|はい、彼女の現在のプロジェクトはほぼ終わっていますから。|overwhelmed|버거워하는, 압도된|パンクしている、圧倒されている|reassign|재배치하다|再配置する|bandwidth|여유, 대역폭|余裕、帯域幅
 B|A|14|의견 차이|意見の相違|We clearly have different visions for this product.|우리가 이 제품에 대해 분명히 다른 비전을 갖고 있네요.|私たちはこの製品に対して明らかに異なるビジョンを持っていますね。|Yes, but we need to move forward somehow.|네, 하지만 어쨌든 우리는 앞으로 나아가야 합니다.|はい、でもどうにかして前に進まなければなりません。|Let's agree to disagree and test both versions.|서로의 의견 차이를 인정하고, 두 버전을 다 테스트해봅시다.|意見の違いを認めて、両方のバージョンをテストしてみましょう。|That is a very practical solution.|그거 아주 실용적인 해결책이군요.|それはとても実用的な解決策ですね。|clearly|분명히|明らかに|agree to disagree|의견 차이를 인정하다|意見の違いを認める|practical|실용적인|実用的な
-B|A|15|송별사|送別の挨拶|It's hard to believe you are leaving us, Mark.|마크, 당신이 우리를 떠난다는 게 믿기지 않네요.|マーク、あなたが私たちから離れるなんて信じられません。|I'll miss this team, but it's a great opportunity.|이 팀이 그리울 겁니다, 하지만 좋은 기회니까요.|このチームが恋しくなりますが、素晴らしい機会なので。|We wish you the best of luck in your new role.|새로운 직책에서도 행운이 가득하길 바랍니다.|新しい役職でも幸運を祈っています。|Thank you all for the wonderful memories.|멋진 추억을 만들어준 여러분 모두에게 감사합니다.|素晴らしい思い出をくれた皆さん、本当にありがとう。|hard to believe|믿기 힘든|信じ가たい|miss|그리워하다|恋しくなる|role|직책, 역할|役職
+B|A|15|송별사|送別の挨拶|It's hard to believe you are leaving us, Mark.|마크, 당신이 우리를 떠난다는 게 믿기지 않네요.|マーク、あなたが私たちから離れるなんて信じられません。|I'll miss this team, but it's a great opportunity.|이 팀이 그리울 겁니다, 하지만 좋은 기회니까요.|このチームが恋しくなりますが、素晴らしい機会なので。|We wish you the best of luck in your new role.|새로운 직책에서도 행운이 가득하길 바랍니다.|新しい役職でも幸運を祈っています。|Thank you all for the wonderful memories.|멋진 추억을 만들어준 여러분 모두에게 감사합니다.|素晴らしい思い出をくれた皆さん、本当にありがとう。|hard to believe|믿기 힘든|信じがたい|miss|그리워하다|恋しくなる|role|직책, 역할|役職
 K|B|1|한글 기초 & 소리 읽기|ハングル基礎＆発音|안녕하세요, 만나서 반갑습니다.|Hello, nice to meet you.|こんにちは、はじめまして。|제 이름은 에듀펭입니다.|My name is Edupeng.|私の名前はエデュペンです。|숫자 일, 이, 삼을 읽어보세요.|Please read the numbers one, two, three.|数字の1、2、3を読んでみてください。|일, 이, 삼. 맞나요?|One, two, three. Is this right?|1、2、3。合ってますか？|만나다|meet|会う|이름|name|名前|숫자|number|数字
 K|B|2|시계·시간 및 날짜 표현|時間・日付の表現|지금 몇 시예요?|What time is it now?|今何時ですか？|지금은 오후 두 시 삼십 분이에요.|It is 2:30 PM now.|今は午後2時30分です。|오늘이 몇 월 며칠인가요?|What date is it today?|今日は何月何日ですか？|오늘은 시월 구일 한글날입니다.|Today is October 9th, Hangul Proclamation Day.|今日は10月9日、ハングルの日です。|시간|Time|時間|오늘|Today|今日|날짜|Date|日付
 K|B|3|자기소개 & 가족 소개|自己紹介と家族|안녕하세요, 제 이름은 지훈입니다.|Hello, my name is Jihoon.|こんにちは、私の名前はジフンです。|반갑습니다. 취미가 무엇인가요?|Nice to meet you. What is your hobby?|はじめまして。趣味は何ですか？|저는 주말에 요리하는 것을 좋아해요.|I like cooking on weekends.|私は週末に料理をするのが好きです。|가족은 부모님과 여동생이 한 명 있습니다.|My family has my parents and one younger sister.|家族は両親と妹が一人います。|취미|Hobby|趣味|요리하다|To cook|料理する|가족|Family|家族
@@ -1229,13 +1229,18 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             document.getElementById('langSwitch').value = currentLang;
             
             try {
-                const savedUsers = JSON.parse(localStorage.getItem('edupeng_users_db8'));
+                // 키를 db9로 완전히 변경하여 꼬인 데이터 초기화 적용
+                const savedUsers = JSON.parse(localStorage.getItem('edupeng_users_db9'));
                 if(savedUsers) usersDb = savedUsers;
-                const savedCurrent = JSON.parse(localStorage.getItem('edupeng_current_user8'));
+                const savedCurrent = JSON.parse(localStorage.getItem('edupeng_current_user9'));
                 if(savedCurrent) { currentUser = savedCurrent; loadUserData(); }
             } catch(e) {}
             
-            applyStaticI18n(); updateAuthUI(); renderCourses(); updateOverallProgress(); renderHomeStats();
+            applyStaticI18n(); 
+            updateAuthUI(); 
+            renderCourses(); 
+            updateOverallProgress(); 
+            renderHomeStats();
         }
 
         function loadUserData() {
@@ -1248,7 +1253,6 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 currentUser.dailyGoals = uData.dailyGoals || { numbers: 5, dates: 5, times: 5 };
                 currentUser.history = uData.history || {};
                 
-                // 마지학 로그인 시간 갱신
                 uData.lastLogin = new Date().toISOString();
             } else { 
                 completedUnits = new Set(); userNotes = {}; userDecks = {}; 
@@ -1270,8 +1274,8 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             usersDb[currentUser.id].testCounts = currentUser.testCounts;
             usersDb[currentUser.id].dailyGoals = currentUser.dailyGoals;
             usersDb[currentUser.id].history = currentUser.history;
-            localStorage.setItem('edupeng_users_db8', JSON.stringify(usersDb));
-            localStorage.setItem('edupeng_current_user8', JSON.stringify(currentUser));
+            localStorage.setItem('edupeng_users_db9', JSON.stringify(usersDb));
+            localStorage.setItem('edupeng_current_user9', JSON.stringify(currentUser));
         }
 
         function ensureDefaultDeck() {
@@ -1442,7 +1446,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             
             document.getElementById('lbl-blur-toggle').innerText = t.lblBlurToggle; document.getElementById('btn-fc-all').innerText = t.btnFcAll;
             document.getElementById('lbl-blur-toggle-my').innerText = t.lblBlurToggle; 
-            document.getElementById('lbl-auth-name').innerText = t.lblAuthName; document.getElementById('lbl-auth-id').innerText = t.lblAuthId; document.getElementById('lbl-auth-pw').innerText = t.lblAuthPw;
+            
             document.getElementById('newDeckName').placeholder = t.plcDeckName; document.getElementById('btn-create-deck').innerText = t.btnCreateDeck; document.getElementById('btn-back-decks').innerText = t.btnBackDecks; document.getElementById('btn-fc-deck').innerText = t.btnFcDeck; document.getElementById('newWordEn').placeholder = t.plcWordEn; document.getElementById('newWordMean').placeholder = t.plcWordMean; document.getElementById('btn-add-word').innerText = t.btnAddWord;
             document.getElementById('fc-title').innerText = t.fcTitle; document.getElementById('fc-sub').innerText = t.fcSub; document.getElementById('btn-fc-prev').innerText = t.btnFcPrev; document.getElementById('btn-fc-next').innerText = t.btnFcNext;
             
@@ -1519,7 +1523,6 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             const typingSub = document.getElementById('typing-test-sub');
             if (typingSub) typingSub.innerText = t.typingTestSub;
 
-            // Admin
             document.getElementById('cat-admin').innerText = `👑 ${t.navDash ? '관리자 메뉴' : '管理者メニュー'}`;
             document.getElementById('nav-admin').innerText = `👥 ${t.adminTitle}`;
             document.getElementById('admin-title').innerText = `👥 ${t.adminTitle}`;
@@ -1527,58 +1530,23 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
         }
 
         let authMode = 'login';
-        window.openAuthModal = function(mode = 'login') {
-            authMode = mode; const t = i18n[currentLang];
-            document.getElementById('authModal').classList.add('active');
-            document.getElementById('modalTitle').innerText = mode === 'login' ? t.modalLogin : t.modalSignup;
-            document.getElementById('nameGroup').style.display = mode === 'signup' ? 'block' : 'none';
-            document.getElementById('btnAuthSubmit').innerText = mode === 'login' ? t.btnLogin : t.btnSignup;
-        };
-        window.closeAuthModal = function() { document.getElementById('authModal').classList.remove('active'); document.getElementById('authForm').reset(); };
-
-        window.handleAuthSubmit = function(e) {
-            e.preventDefault();
-            const id = document.getElementById('authId').value.trim(); const password = document.getElementById('authPassword').value.trim(); const name = document.getElementById('authName').value.trim() || id;
-            if(authMode === 'signup') {
-                if(usersDb[id]) { customAlert(i18n[currentLang].alertIdExists); return; }
-                
-                // 중복 이름(닉네임) 체크
-                for (let uid in usersDb) {
-                    if (usersDb[uid].name === name) {
-                        customAlert(i18n[currentLang].alertNameExists);
-                        return;
-                    }
-                }
-                
-                usersDb[id] = { password, name, completedUnits: [], userNotes: {}, userDecks: {}, testCounts: { numbers: 0, dates: 0, times: 0 }, dailyGoals: { numbers: 5, dates: 5, times: 5 }, history: {}, lastLogin: new Date().toISOString() }; 
-                currentUser = { id, name, password }; loadUserData(); saveUserData();
-                customAlert(`🎉 welcome!(${name})`);
-            } else {
-                if(!usersDb[id] || usersDb[id].password !== password) { customAlert(i18n[currentLang].alertWrongAuth); return; }
-                currentUser = { id, name: usersDb[id].name, password }; loadUserData(); saveUserData();
-                customAlert(`🎉 welcome!(${currentUser.name})`);
-            }
-            closeAuthModal(); updateAuthUI(); updateOverallProgress(); renderCourses(); renderHomeStats();
-            if(activeTab.startsWith('vocab')) renderVocab(); if(activeTab.startsWith('bookmarks')) { renderDecks(); if(currentDeckId) renderDeckWords(); }
-            if(activeTab === 'admin_panel') renderAdminPanel();
-        };
-
-        window.handleLogout = function() {
-            currentUser = null; localStorage.removeItem('edupeng_current_user8'); loadUserData(); updateAuthUI(); updateOverallProgress(); renderCourses(); renderHomeStats();
-            if(activeTab.startsWith('vocab')) renderVocab(); if(activeTab.startsWith('bookmarks')) { renderDecks(); if(currentDeckId) renderDeckWords(); }
-            if(activeTab === 'admin_panel') nav('dashboard');
-        };
-
+        
         function updateAuthUI() {
             if(currentUser) {
-                document.getElementById('loggedOutUI').style.display = 'none'; document.getElementById('loggedInUI').style.display = 'flex';
-                document.getElementById('userBadge').innerText = currentUser.name.charAt(0).toUpperCase(); document.getElementById('userName').innerText = currentUser.name; document.getElementById('userIdDisplay').innerText = `@${currentUser.id}`;
+                document.getElementById('loggedOutUI').style.display = 'none'; 
+                document.getElementById('loggedInUI').style.display = 'flex';
+                document.getElementById('userBadge').innerText = (currentUser.name || currentUser.id).charAt(0).toUpperCase(); 
+                document.getElementById('userName').innerText = currentUser.name; 
+                document.getElementById('userIdDisplay').innerText = `@${currentUser.id}`;
                 
                 const isAdmin = (currentUser.id === 'LEEGIEUN' || currentUser.name === 'LEEGIEUN');
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdmin ? 'block' : 'none');
             } else { 
-                document.getElementById('loggedOutUI').style.display = 'flex'; document.getElementById('loggedInUI').style.display = 'none'; 
+                document.getElementById('loggedOutUI').style.display = 'flex'; 
+                document.getElementById('loggedInUI').style.display = 'none'; 
+                
                 document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+                // 비로그인 시에도 메뉴가 보이도록 require-login-menu 숨김 처리 제거
             }
         }
 
@@ -1696,6 +1664,11 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
 
         let currentLesson = null;
         window.nav = function(sectionId) {
+            // 로그인 필수 메뉴 체크 (마이단어장, AI 대화)
+            if (sectionId === 'ai_conv' || sectionId === 'bookmarks_eng' || sectionId === 'bookmarks_kor') {
+                if(!checkAuth()) return;
+            }
+
             activeTab = sectionId; document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
             if(event && event.currentTarget) event.currentTarget.classList.add('active');
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
@@ -1731,9 +1704,9 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             } else if (sectionId === 'vocab_kor') {
                 currentVocabLang = 'ko'; document.getElementById('vocab').classList.add('active'); applyStaticI18n(); renderVocab();
             } else if (sectionId === 'bookmarks_eng') {
-                currentVocabLang = 'en'; document.getElementById('bookmarks').classList.add('active'); applyStaticI18n(); if(checkAuth()) { renderDecks(); if(currentDeckId) renderDeckWords(); } else nav('dashboard');
+                currentVocabLang = 'en'; document.getElementById('bookmarks').classList.add('active'); applyStaticI18n(); renderDecks(); if(currentDeckId) renderDeckWords();
             } else if (sectionId === 'bookmarks_kor') {
-                currentVocabLang = 'ko'; document.getElementById('bookmarks').classList.add('active'); applyStaticI18n(); if(checkAuth()) { renderDecks(); if(currentDeckId) renderDeckWords(); } else nav('dashboard');
+                currentVocabLang = 'ko'; document.getElementById('bookmarks').classList.add('active'); applyStaticI18n(); renderDecks(); if(currentDeckId) renderDeckWords();
             } else if (sectionId === 'ai_conv') {
                 document.getElementById('ai_conv').classList.add('active'); applyStaticI18n();
             } else if (sectionId === 'admin_panel') {
@@ -2463,13 +2436,12 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             document.getElementById('ai-conv-chat-input').value = '';
         };
 
-        // 통신 오류 방지를 위한 try-catch 및 abort 처리 강화
         async function callGeminiAPI(history, callback) {
             const apiUrl =`/api/chat`;
             const payload = { contents: history };
             
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 15000); // 15초 제한
+            const timeoutId = setTimeout(() => controller.abort(), 15000); 
 
             try {
                 const response = await fetch(apiUrl, {
@@ -2551,7 +2523,7 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                 current += increment;
                 obj.innerHTML = current;
                 if (current == end) {
-clearInterval(timer);
+                    clearInterval(timer);
                 }
             }, stepTime);
         }
@@ -2573,20 +2545,20 @@ clearInterval(timer);
             var btnEl = document.getElementById('btnAuthSubmit');
             var emailGroup = document.getElementById('emailGroup');
             var emailInput = document.getElementById('authEmail');
-            var nameInput = document.getElementById('authName');
+            var idInput = document.getElementById('authId');
             var pwInput = document.getElementById('authPassword');
             
-            var lblName = document.getElementById('lbl-auth-name');
             var lblEmail = document.getElementById('lbl-auth-email');
+            var lblId = document.getElementById('lbl-auth-id');
             var lblPw = document.getElementById('lbl-auth-pw');
 
-            if (lblName) lblName.innerText = isJa ? "ユーザー名 (ID)" : "유저이름 (아이디)";
-            if (lblEmail) lblEmail.innerText = isJa ? "メールアドレス" : "이메일 주소";
-            if (lblPw) lblPw.innerText = isJa ? "パスワード" : "비밀번호";
+            if (lblEmail) lblEmail.innerText = isJa ? "メールアドレス" : "이메일 (Email)";
+            if (lblId) lblId.innerText = isJa ? "ユーザー名 (ID)" : "아이디 (ID)";
+            if (lblPw) lblPw.innerText = isJa ? "パスワード" : "비밀번호 (Password)";
 
-            if (nameInput) nameInput.placeholder = "edupeng";
             if (emailInput) emailInput.placeholder = "user@example.com";
-            if (pwInput) pwInput.placeholder = isJa ? "6文字以上のパスワード" : "6자리 이상 비밀번호";
+            if (idInput) idInput.placeholder = "edupeng";
+            if (pwInput) pwInput.placeholder = isJa ? "6文字以上のパスワード" : "••••••••";
 
             if (window.authMode === 'login') {
                 if (titleEl) titleEl.innerText = isJa ? "ログイン" : "로그인";
@@ -2610,6 +2582,42 @@ clearInterval(timer);
             var form = document.getElementById('authForm');
             if (form) form.reset();
         };
+
+        window.handleAuthSubmit = function(e) {
+            e.preventDefault();
+            const id = document.getElementById('authId').value.trim(); 
+            const password = document.getElementById('authPassword').value.trim(); 
+            
+            if(authMode === 'signup') {
+                const emailInput = document.getElementById('authEmail');
+                const email = emailInput ? emailInput.value.trim() : '';
+
+                if(usersDb[id]) { customAlert(i18n[currentLang].alertIdExists); return; }
+                
+                usersDb[id] = { 
+                    password, 
+                    email: email,
+                    name: id, 
+                    completedUnits: [], 
+                    userNotes: {}, 
+                    userDecks: {}, 
+                    testCounts: { numbers: 0, dates: 0, times: 0 }, 
+                    dailyGoals: { numbers: 5, dates: 5, times: 5 }, 
+                    history: {}, 
+                    lastLogin: new Date().toISOString() 
+                }; 
+                currentUser = { id, name: id, password, email }; loadUserData(); saveUserData();
+                customAlert(`🎉 welcome!(${id})`);
+            } else {
+                if(!usersDb[id] || usersDb[id].password !== password) { customAlert(i18n[currentLang].alertWrongAuth); return; }
+                currentUser = { id, name: usersDb[id].name, password, email: usersDb[id].email }; loadUserData(); saveUserData();
+                customAlert(`🎉 welcome!(${currentUser.name})`);
+            }
+            closeAuthModal(); updateAuthUI(); updateOverallProgress(); renderCourses(); renderHomeStats();
+            if(activeTab.startsWith('vocab')) renderVocab(); if(activeTab.startsWith('bookmarks')) { renderDecks(); if(currentDeckId) renderDeckWords(); }
+            if(activeTab === 'admin_panel') renderAdminPanel();
+        };
+
     </script>
 
     <script type="module">
@@ -2645,7 +2653,7 @@ clearInterval(timer);
               invalidEmail: isJa ? "正しいメールアドレスの形式を入力してください。" : "올바른 이메일 형식을 입력하세요.",
               userNotFound: isJa ? "存在しないユーザー名です。" : "존재하지 않는 유저이름입니다.",
               loginSuccess: isJa ? "🎉 ログインに成功しました！" : "🎉 로그인 성공!",
-              authFailed: isJa ? "ユーザー名またはパスワードが正しくありません。" : "유저이름 또는 비밀번호가 올바르지 않습니다.",
+              authFailed: isJa ? "ユーザー名またはパスワードが正しくありません。" : "아이디 또는 비밀번호가 올바르지 않습니다.",
               logoutSuccess: isJa ? "ログアウトしました。" : "로그아웃 되었습니다."
           };
           return messages[key] || "";
@@ -2669,11 +2677,17 @@ clearInterval(timer);
           }
       };
 
-      window.loadUserData = async function() {
+     window.loadUserData = async function() {
           if (!window.currentUser || !window.currentUser.uid) {
               if (window.completedUnits) window.completedUnits.clear();
               if (window.userDecks) { for (let k in window.userDecks) delete window.userDecks[k]; }
               if (typeof window.ensureDefaultDeck === 'function') window.ensureDefaultDeck();
+              
+              // [추가됨] 로그아웃 시 화면을 초기 상태로 즉시 갱신
+              if (typeof window.updateOverallProgress === 'function') window.updateOverallProgress();
+              if (typeof window.renderCourses === 'function') window.renderCourses(window.activeTab === 'dashboard' ? 'all' : window.activeTab);
+              if (typeof window.renderHomeStats === 'function') window.renderHomeStats();
+              if (window.activeTab && window.activeTab.startsWith('vocab') && typeof window.renderVocab === 'function') window.renderVocab();
               return;
           }
 
@@ -2708,7 +2722,7 @@ clearInterval(timer);
           }
       };
 
-      window.updateAuthUI = function() {
+     window.updateAuthUI = function() {
           const loggedOut = document.getElementById('loggedOutUI');
           const loggedIn = document.getElementById('loggedInUI');
           if (window.currentUser) {
@@ -2717,23 +2731,24 @@ clearInterval(timer);
               const badge = document.getElementById('userBadge');
               const nameEl = document.getElementById('userName');
               const idEl = document.getElementById('userIdDisplay');
-              if (badge) badge.innerText = (window.currentUser.name || 'U').charAt(0).toUpperCase();
-              if (nameEl) nameEl.innerText = window.currentUser.name;
-              if (idEl) idEl.innerText = window.currentUser.email;
+              if (badge) badge.innerText = (window.currentUser.name || window.currentUser.id || 'U').charAt(0).toUpperCase();
+              if (nameEl) nameEl.innerText = window.currentUser.name || window.currentUser.id;
+              if (idEl) idEl.innerText = `@${window.currentUser.id}`;
 
-              const isAdmin = (window.currentUser.name === 'LEEGIEUN' || window.currentUser.name === 'LEE');
+              const isAdmin = (window.currentUser.id === 'LEEGIEUN' || window.currentUser.name === 'LEEGIEUN');
               document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdmin ? 'block' : 'none');
           } else {
               if (loggedOut) loggedOut.style.display = 'flex';
               if (loggedIn) loggedIn.style.display = 'none';
               document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+              // 비로그인 시에도 메뉴가 보이도록 require-login-menu 숨김 처리 제거
           }
       };
 
       window.handleAuthSubmit = async function(e) {
           e.preventDefault();
-          const nameInput = document.getElementById('authName');
-          const name = nameInput ? nameInput.value.trim() : '';
+          const idInput = document.getElementById('authId');
+          const userId = idInput ? idInput.value.trim() : '';
           const password = document.getElementById('authPassword').value.trim();
 
           if (password.length < 6) {
@@ -2750,36 +2765,42 @@ clearInterval(timer);
                   return;
               }
 
+              // Firestore에서 ID 중복 체크
+              const q = query(collection(db, "users"), where("customId", "==", userId));
+              const querySnapshot = await getDocs(q);
+              if (!querySnapshot.empty) {
+                  alert(i18n[currentLang].alertIdExists);
+                  return;
+              }
+
               try {
                   const cred = await createUserWithEmailAndPassword(auth, email, password);
                   await setDoc(doc(db, "users", cred.user.uid), {
                       uid: cred.user.uid,
                       email: email,
-                      name: name,
+                      customId: userId,
+                      name: userId,
                       createdAt: new Date().toISOString(),
-                      role: (name === 'LEEGIEUN' || name === 'LEE') ? 'admin' : 'user'
+                      role: (userId === 'LEEGIEUN') ? 'admin' : 'user'
                   });
                   alert(getAuthMessage('signupSuccess'));
                   window.closeAuthModal();
               } catch(err) {
                   const msg = err.code === 'auth/email-already-in-use' ? getAuthMessage('emailInUse') :
-                              err.code === 'auth/invalid-email' ? getAuthMessage('invalidEmail') : err.message;
+                            err.code === 'auth/invalid-email' ? getAuthMessage('invalidEmail') : err.message;
                   alert(msg);
               }
           } else {
               try {
                   let targetEmail = "";
-                  if (name.includes('@')) {
-                      targetEmail = name;
-                  } else {
-                      const q = query(collection(db, "users"), where("name", "==", name));
-                      const querySnapshot = await getDocs(q);
-                      if (querySnapshot.empty) {
-                          alert(getAuthMessage('userNotFound'));
-                          return;
-                      }
-                      targetEmail = querySnapshot.docs[0].data().email;
+                  // 로그인 시 이메일 대신 ID를 입력하므로 Firestore에서 해당 ID의 이메일을 찾습니다.
+                  const q = query(collection(db, "users"), where("customId", "==", userId));
+                  const querySnapshot = await getDocs(q);
+                  if (querySnapshot.empty) {
+                      alert(getAuthMessage('authFailed'));
+                      return;
                   }
+                  targetEmail = querySnapshot.docs[0].data().email;
 
                   await signInWithEmailAndPassword(auth, targetEmail, password);
                   alert(getAuthMessage('loginSuccess'));
@@ -2798,15 +2819,15 @@ clearInterval(timer);
 
       onAuthStateChanged(auth, async (user) => {
           if (user) {
-              let userName = user.email.split('@')[0];
+              let displayId = user.email.split('@')[0];
               try {
                   const docSnap = await getDoc(doc(db, "users", user.uid));
-                  if (docSnap.exists() && docSnap.data().name) {
-                      userName = docSnap.data().name;
+                  if (docSnap.exists() && docSnap.data().customId) {
+                      displayId = docSnap.data().customId;
                   }
               } catch(e) {}
 
-              window.currentUser = { email: user.email, id: user.email, uid: user.uid, name: userName };
+              window.currentUser = { email: user.email, id: displayId, uid: user.uid, name: displayId };
               await window.loadUserData();
               window.updateAuthUI();
           } else {
