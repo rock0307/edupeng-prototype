@@ -1218,11 +1218,11 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
         let isBlurMyDecksMode = false;
         let currentVocabLang = 'en'; 
 
-        let userDecks = {}; 
-        let completedUnits = new Set();
-        let userNotes = {};
-        let currentUser = null;
-        let usersDb = {}; 
+        var userDecks = {}; 
+        var completedUnits = new Set();
+        var userNotes = {};
+        var currentUser = null;
+        var usersDb = {};
 
         function initApp() {
             if(isDarkMode) { document.body.classList.add('dark-mode'); document.getElementById('btnDarkMode').innerText = '☀️'; }
