@@ -2555,10 +2555,10 @@ clearInterval(timer);
         }
 
         initApp();
-    </script>
+   </script>
 
-    <!-- 파이어베이스 연동 코드 시작 -->
-   <script type="module">
+    <!-- Firebase 모듈 스크립트 -->
+    <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
       import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
       import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
@@ -2578,161 +2578,169 @@ clearInterval(timer);
       const db = getFirestore(app);
       window.firebaseDb = db;
 
+      // 팝업 열기/닫기 함수 전역 바인딩 (onclick 에러 방지)
+      window.openAuthModal = function(mode = 'login') {
+          window.authMode = mode;
+          const modal = document.getElementById('authModal');
+          if (!modal) return;
+          modal.classList.add('active');
+          const t = (window.i18n && window.currentLang) ? window.i18n[window.currentLang] : null;
+          const titleEl = document.getElementById('modalTitle');
+          const btnEl = document.getElementById('btnAuthSubmit');
+          const nameGroup = document.getElementById('nameGroup');
+
+          if (titleEl) titleEl.innerText = mode === 'login' ? (t ? t.modalLogin : "로그인") : (t ? t.modalSignup : "회원가입");
+          if (btnEl) btnEl.innerText = mode === 'login' ? (t ? t.btnLogin : "로그인") : (t ? t.btnSignup : "회원가입");
+          if (nameGroup) nameGroup.style.display = mode === 'signup' ? 'block' : 'none';
+      };
+
+      window.closeAuthModal = function() {
+          const modal = document.getElementById('authModal');
+          if (modal) modal.classList.remove('active');
+          const form = document.getElementById('authForm');
+          if (form) form.reset();
+      };
+
       window.saveUserData = async function() {
-          if(!window.currentUser || !window.currentUser.uid) return;
+          if (!window.currentUser || !window.currentUser.uid) return;
           const userRef = doc(db, "users", window.currentUser.uid);
-          
           const dataToSave = {
-              completedUnits: Array.from(completedUnits || []),
-              userDecks: userDecks || {},
+              completedUnits: Array.from(window.completedUnits || []),
+              userDecks: window.userDecks || {},
               testCounts: window.currentUser.testCounts || { numbers: 0, dates: 0, times: 0 },
               dailyGoals: window.currentUser.dailyGoals || { numbers: 5, dates: 5, times: 5 },
               history: window.currentUser.history || {},
               lastLogin: new Date().toISOString()
           };
-          
           try {
               await setDoc(userRef, dataToSave, { merge: true });
-          } catch(error) {
-              console.error("데이터 저장 실패:", error);
+          } catch(e) {
+              console.error("저장 실패:", e);
           }
       };
 
       window.loadUserData = async function() {
-          if(!window.currentUser || !window.currentUser.uid) {
-              completedUnits.clear();
-              for (let key in userDecks) delete userDecks[key]; 
-              ensureDefaultDeck();
+          if (!window.currentUser || !window.currentUser.uid) {
+              if (window.completedUnits) window.completedUnits.clear();
+              if (window.userDecks) { for (let k in window.userDecks) delete window.userDecks[k]; }
+              if (typeof window.ensureDefaultDeck === 'function') window.ensureDefaultDeck();
               return;
           }
 
           try {
               const userRef = doc(db, "users", window.currentUser.uid);
               const docSnap = await getDoc(userRef);
-              
               if (docSnap.exists()) {
                   const data = docSnap.data();
-                  
-                  completedUnits.clear();
-                  if(data.completedUnits) {
-                      data.completedUnits.forEach(unit => completedUnits.add(unit));
+                  if (window.completedUnits) {
+                      window.completedUnits.clear();
+                      if (data.completedUnits) data.completedUnits.forEach(u => window.completedUnits.add(u));
                   }
-                  
-                  for (let key in userDecks) delete userDecks[key]; 
-                  if(data.userDecks) {
-                      Object.assign(userDecks, data.userDecks);
+                  if (window.userDecks) {
+                      for (let k in window.userDecks) delete window.userDecks[k];
+                      if (data.userDecks) Object.assign(window.userDecks, data.userDecks);
                   }
-                  
                   window.currentUser.testCounts = data.testCounts || { numbers: 0, dates: 0, times: 0 };
                   window.currentUser.dailyGoals = data.dailyGoals || { numbers: 5, dates: 5, times: 5 };
                   window.currentUser.history = data.history || {};
-              } 
-              
-              ensureDefaultDeck();
-              
-              updateOverallProgress();
-              renderCourses(activeTab === 'dashboard' ? 'all' : activeTab);
-              renderHomeStats();
-              if(activeTab.startsWith('vocab')) renderVocab();
-              if(activeTab.startsWith('bookmarks')) { renderDecks(); if(currentDeckId) renderDeckWords(); }
-              
-          } catch(error) {
-              console.error("데이터 불러오기 실패:", error);
+              }
+              if (typeof window.ensureDefaultDeck === 'function') window.ensureDefaultDeck();
+              if (typeof window.updateOverallProgress === 'function') window.updateOverallProgress();
+              if (typeof window.renderCourses === 'function') window.renderCourses(window.activeTab === 'dashboard' ? 'all' : window.activeTab);
+              if (typeof window.renderHomeStats === 'function') window.renderHomeStats();
+              if (window.activeTab && window.activeTab.startsWith('vocab') && typeof window.renderVocab === 'function') window.renderVocab();
+              if (window.activeTab && window.activeTab.startsWith('bookmarks') && typeof window.renderDecks === 'function') {
+                  window.renderDecks();
+                  if (window.currentDeckId && typeof window.renderDeckWords === 'function') window.renderDeckWords();
+              }
+          } catch(e) {
+              console.error("불러오기 실패:", e);
           }
       };
 
       window.updateAuthUI = function() {
-          if(window.currentUser) {
-              document.getElementById('loggedOutUI').style.display = 'none'; 
-              document.getElementById('loggedInUI').style.display = 'flex';
-              document.getElementById('userBadge').innerText = window.currentUser.name.charAt(0).toUpperCase(); 
-              document.getElementById('userName').innerText = window.currentUser.name; 
-              document.getElementById('userIdDisplay').innerText = window.currentUser.email;
-              
+          const loggedOut = document.getElementById('loggedOutUI');
+          const loggedIn = document.getElementById('loggedInUI');
+          if (window.currentUser) {
+              if (loggedOut) loggedOut.style.display = 'none';
+              if (loggedIn) loggedIn.style.display = 'flex';
+              const badge = document.getElementById('userBadge');
+              const nameEl = document.getElementById('userName');
+              const idEl = document.getElementById('userIdDisplay');
+              if (badge) badge.innerText = (window.currentUser.name || 'U').charAt(0).toUpperCase();
+              if (nameEl) nameEl.innerText = window.currentUser.name;
+              if (idEl) idEl.innerText = window.currentUser.email;
               const isAdmin = (window.currentUser.name === 'LEEGIEUN' || window.currentUser.name === 'LEE');
               document.querySelectorAll('.admin-only').forEach(el => el.style.display = isAdmin ? 'block' : 'none');
-          } else { 
-              document.getElementById('loggedOutUI').style.display = 'flex'; 
-              document.getElementById('loggedInUI').style.display = 'none'; 
+          } else {
+              if (loggedOut) loggedOut.style.display = 'flex';
+              if (loggedIn) loggedIn.style.display = 'none';
               document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
           }
       };
 
       window.handleAuthSubmit = async function(e) {
-        e.preventDefault();
-        const email = document.getElementById('authId').value.trim(); 
-        const password = document.getElementById('authPassword').value.trim();
-        const name = document.getElementById('authName').value.trim() || email.split('@')[0];
+          e.preventDefault();
+          const email = document.getElementById('authId').value.trim();
+          const password = document.getElementById('authPassword').value.trim();
+          const name = document.getElementById('authName').value.trim() || email.split('@')[0];
 
-        if (password.length < 6) {
-            window.customAlert("비밀번호는 6자리 이상이어야 합니다.");
-            return;
-        }
+          if (password.length < 6) {
+              if (typeof window.customAlert === 'function') window.customAlert("비밀번호는 6자리 이상이어야 합니다.");
+              return;
+          }
 
-        if (window.authMode === 'signup') {
-            try {
-                const userCred = await createUserWithEmailAndPassword(auth, email, password);
-                await setDoc(doc(db, "users", userCred.user.uid), {
-                    uid: userCred.user.uid,
-                    email: email,
-                    name: name,
-                    createdAt: new Date().toISOString(),
-                    role: (name === 'LEEGIEUN' || name === 'LEE') ? 'admin' : 'user'
-                });
-                window.customAlert("🎉 가입 성공!");
-                window.closeAuthModal();
-            } catch(error) {
-                if (error.code === 'auth/email-already-in-use') {
-                    window.customAlert("이미 등록된 이메일 주소입니다.");
-                } else if (error.code === 'auth/invalid-email') {
-                    window.customAlert("유효한 이메일 형식(예: name@domain.com)을 입력하세요.");
-                } else {
-                    window.customAlert("가입 실패: " + error.message);
-                }
-            }
-        } else {
-            try {
-                await signInWithEmailAndPassword(auth, email, password);
-                window.customAlert("🎉 로그인 성공!");
-                window.closeAuthModal();
-            } catch(error) {
-                window.customAlert("이메일 또는 비밀번호가 틀립니다.");
-            }
-        }
+          if (window.authMode === 'signup') {
+              try {
+                  const cred = await createUserWithEmailAndPassword(auth, email, password);
+                  await setDoc(doc(db, "users", cred.user.uid), {
+                      uid: cred.user.uid,
+                      email: email,
+                      name: name,
+                      createdAt: new Date().toISOString(),
+                      role: (name === 'LEEGIEUN' || name === 'LEE') ? 'admin' : 'user'
+                  });
+                  if (typeof window.customAlert === 'function') window.customAlert("🎉 가입 성공!");
+                  window.closeAuthModal();
+              } catch(err) {
+                  const msg = err.code === 'auth/email-already-in-use' ? "이미 등록된 이메일입니다." :
+                              err.code === 'auth/invalid-email' ? "올바른 이메일 형식을 입력하세요." : err.message;
+                  if (typeof window.customAlert === 'function') window.customAlert("가입 실패: " + msg);
+              }
+          } else {
+              try {
+                  await signInWithEmailAndPassword(auth, email, password);
+                  if (typeof window.customAlert === 'function') window.customAlert("🎉 로그인 성공!");
+                  window.closeAuthModal();
+              } catch(err) {
+                  if (typeof window.customAlert === 'function') window.customAlert("이메일 또는 비밀번호가 올바르지 않습니다.");
+              }
+          }
       };
 
       window.handleLogout = function() {
-        signOut(auth).then(() => {
-            window.customAlert("로그아웃 되었습니다.");
-        });
+          signOut(auth).then(() => {
+              if (typeof window.customAlert === 'function') window.customAlert("로그아웃 되었습니다.");
+          });
       };
 
       onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            const docRef = doc(db, "users", user.uid);
-            const docSnap = await getDoc(docRef);
-            let userName = user.email.split('@')[0];
-            
-            if(docSnap.exists()) {
-                const data = docSnap.data();
-                if (data.name) userName = data.name;
-            }
+          if (user) {
+              let userName = user.email.split('@')[0];
+              try {
+                  const docSnap = await getDoc(doc(db, "users", user.uid));
+                  if (docSnap.exists() && docSnap.data().name) userName = docSnap.data().name;
+              } catch(e) {}
 
-            window.currentUser = { 
-                email: user.email,
-                id: user.email, 
-                uid: user.uid,
-                name: userName
-            };
-            
-            await window.loadUserData();
-            window.updateAuthUI();
-        } else {
-            window.currentUser = null;
-            await window.loadUserData();
-            window.updateAuthUI();
-            if(typeof window.renderHomeStats === 'function') window.renderHomeStats();
-        }
+              window.currentUser = { email: user.email, id: user.email, uid: user.uid, name: userName };
+              await window.loadUserData();
+              window.updateAuthUI();
+          } else {
+              window.currentUser = null;
+              await window.loadUserData();
+              window.updateAuthUI();
+              if (typeof window.renderHomeStats === 'function') window.renderHomeStats();
+          }
       });
     </script>
 </body>
