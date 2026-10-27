@@ -580,7 +580,7 @@
                         <h2 id="typing-result-title" style="color: var(--primary); margin-bottom: 20px; font-size: 1.8rem;">테스트 결과</h2>
                         <div id="typing-score" style="font-size: 4rem; font-weight: bold; margin-bottom: 24px; color: var(--primary);">0 / 5</div>
                         <div id="typing-result-list"></div>
-                        <button class="btn-start" style="width: auto; margin: 0 auto; padding: 14px 30px; font-size: 1.1rem;" onclick="nav('dashboard')" id="btn-typing-done">홈으로 가기</button>
+                        <button class="btn-start" ... onclick="nav('dashboard'); renderHomeStats();" id="btn-typing-done">홈으로 가기</button>
                     </div>
                 </div>
             </div>
@@ -2047,40 +2047,53 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
         };
 
         window.nextTypingQuestion = function() {
-            if(currentTestIndex < 4) {
-                currentTestIndex++;
-                renderTypingQuestion();
-            } else {
-                document.getElementById('typing-test-content').style.display = 'none';
-                document.getElementById('typing-result-screen').style.display = 'block';
-                document.getElementById('typing-score').innerText = `${correctTypingCount} / 5`;
-                renderTestResultsHistory();
+    if(currentTestIndex < 4) {
+        currentTestIndex++;
+        renderTypingQuestion();
+    } else {
+        document.getElementById('typing-test-content').style.display = 'none';
+        document.getElementById('typing-result-screen').style.display = 'block';
+        document.getElementById('typing-score').innerText = `${correctTypingCount} / 5`;
+        renderTestResultsHistory();
 
-                if(window.currentUser) {
-                    if(window.currentUser.testCounts && window.currentUser.testCounts[currentTestType] !== undefined) {
-                        window.currentUser.testCounts[currentTestType]++;
-                        
-                        const today = getTodayStr();
-                        if(!window.currentUser.history[today]) window.currentUser.history[today] = [];
-                        
-                        const testDetails = userAnswersHistory.map(h => ({
-                            q: h.question,
-                            isCorrect: h.isCorrect
-                        }));
-                        
-                        window.currentUser.history[today].push({
-                            type: currentTestType,
-                            score: correctTypingCount,
-                            total: 5,
-                            details: testDetails
-                        });
-
-                        window.saveUserData();
-                    }
-                }
+        if(window.currentUser) {
+            if (!window.currentUser.testCounts) {
+                window.currentUser.testCounts = { numbers: 0, dates: 0, times: 0 };
             }
-        };
+            if (typeof window.currentUser.testCounts[currentTestType] !== 'number') {
+                window.currentUser.testCounts[currentTestType] = 0;
+            }
+            window.currentUser.testCounts[currentTestType]++;
 
+            if (!window.currentUser.history) {
+                window.currentUser.history = {};
+            }
+
+            const today = getTodayStr();
+            if(!window.currentUser.history[today]) {
+                window.currentUser.history[today] = [];
+            }
+
+            const testDetails = userAnswersHistory.map(h => ({
+                q: h.question,
+                isCorrect: h.isCorrect
+            }));
+
+            window.currentUser.history[today].push({
+                type: currentTestType,
+                score: correctTypingCount,
+                total: 5,
+                details: testDetails
+            });
+
+            window.saveUserData();
+
+            if (typeof window.renderHomeStats === 'function') {
+                window.renderHomeStats();
+            }
+        }
+    }
+};
         function renderTestResultsHistory() {
             const listEl = document.getElementById('typing-result-list');
             listEl.innerHTML = '';
