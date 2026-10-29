@@ -101,9 +101,14 @@
         .dark-mode .progress-badge.achieved { background: #064e3b; color: #6ee7b7; border-color: #047857; }
         .dark-mode .progress-badge.pending { background: #78350f; color: #fde68a; border-color: #b45309; }
 
-        .history-row { position: relative; background: var(--card-bg); padding: 12px 16px; border: 1px solid var(--border); border-radius: 8px; cursor: help; display: inline-block; width: fit-content; margin-bottom: 8px; margin-right: 8px; font-weight: 600; color: var(--text-main); }
-        .history-row:hover { border-color: var(--primary); background: rgba(5, 150, 105, 0.05); }
+        /* History Colors */
+        .history-row { position: relative; padding: 12px 16px; border: 2px solid var(--border); border-radius: 8px; cursor: help; display: inline-block; width: fit-content; margin-bottom: 8px; margin-right: 8px; font-weight: 600; }
         .history-row:hover .history-tooltip { display: block; }
+        
+        .history-achieved { border-color: #10b981; background: rgba(16, 185, 129, 0.05); color: #047857; }
+        .history-pending { border-color: #f59e0b; background: rgba(245, 158, 11, 0.05); color: #b45309; }
+        .dark-mode .history-achieved { border-color: #059669; background: rgba(5, 150, 105, 0.1); color: #34d399; }
+        .dark-mode .history-pending { border-color: #d97706; background: rgba(217, 119, 6, 0.1); color: #fbbf24; }
         
         .history-tooltip { display: none; position: absolute; left: 100%; top: 0; margin-left: 10px; background: #ffffff; color: #1f2937; border: 1px solid #e5e7eb; padding: 14px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); z-index: 100; width: 280px; text-align: left; font-weight: normal; }
         .dark-mode .history-tooltip { background: #1e293b; color: #f8fafc; border-color: #334155; }
@@ -187,8 +192,17 @@
         .add-deck-form, .add-word-form { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px; background: var(--card-bg); padding: 16px; border-radius: 12px; border: 1px solid var(--border); }
         .add-deck-form input, .add-word-form input { flex: 1; min-width: 150px; padding: 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-color); color: var(--text-main); }
         .deck-detail-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
-        .btn-delete-small { padding: 8px 12px; font-size: 0.85rem; background: #fee2e2; color: #dc2626; border: 1px solid #fca5a5; border-radius: 6px; cursor: pointer; font-weight: bold; white-space: nowrap; }
-        .btn-delete-small:hover { background: #fecaca; }
+
+        /* Options Menu */
+        .options-dropdown { position: relative; display: inline-block; }
+        .btn-options { background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); padding: 2px 8px; border-radius: 4px; }
+        .btn-options:hover { background: rgba(0,0,0,0.05); }
+        .dark-mode .btn-options:hover { background: rgba(255,255,255,0.1); }
+        .options-menu { display: none; position: absolute; right: 0; top: 100%; min-width: 110px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 100; flex-direction: column; overflow: hidden; }
+        .options-menu.active { display: flex; }
+        .options-menu button { padding: 12px 16px; text-align: left; background: none; border: none; font-size: 0.9rem; cursor: pointer; color: var(--text-main); font-weight: 600; border-bottom: 1px solid var(--border); }
+        .options-menu button:last-child { border-bottom: none; }
+        .options-menu button:hover { background: var(--bg-color); color: var(--primary); }
 
         /* Typing Test */
         .typing-test-container { max-width: 700px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 30px; text-align: center; }
@@ -395,7 +409,7 @@
             
             <div class="nav-category" id="cat-kor">🇰🇷 한국어 학습</div>
             <div class="nav-item" onclick="nav('korean')" id="nav-korean">🏫 한국어 초급</div>
-            <div class="nav-item" onclick="startTypingTest('numbers')" id="nav-test-num">💯 한국어 숫자 테스트</div>
+            <div class="nav-item" onclick="startTypingTest('numbers')" id="nav-test-num">🔢 한국어 숫자 테스트</div>
             <div class="nav-item" onclick="startTypingTest('dates')" id="nav-test-date">📅 한국어 날짜 테스트</div>
             <div class="nav-item" onclick="startTypingTest('times')" id="nav-test-time">⏰ 한국어 시간 테스트</div>
 
@@ -479,7 +493,7 @@
                             
                             <div style="display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: center;">
                                 <div class="goal-input-group">
-                                    <span id="lbl-goal-num">💯 숫자</span>
+                                    <span id="lbl-goal-num">🔢 숫자</span>
                                     <input type="number" id="goalInput-numbers" min="1" max="100">
                                 </div>
                                 <div class="goal-input-group">
@@ -580,7 +594,7 @@
                         <h2 id="typing-result-title" style="color: var(--primary); margin-bottom: 20px; font-size: 1.8rem;">테스트 결과</h2>
                         <div id="typing-score" style="font-size: 4rem; font-weight: bold; margin-bottom: 24px; color: var(--primary);">0 / 5</div>
                         <div id="typing-result-list"></div>
-                        <button class="btn-start" ... onclick="nav('dashboard'); renderHomeStats();" id="btn-typing-done">홈으로 가기</button>
+                        <button class="btn-start" onclick="nav('dashboard'); renderHomeStats();" id="btn-typing-done">홈으로 가기</button>
                     </div>
                 </div>
             </div>
@@ -594,9 +608,9 @@
                 <div class="vocab-controls">
                     <label style="font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 8px; font-size: 1.05rem;">
                         <input type="checkbox" id="toggleBlurVocab" onchange="toggleBlurMode(this.checked)" style="width: 20px; height: 20px;">
-                        <span id="lbl-blur-toggle">👁️ 뜻 가리기 (마우스를 올리면 뜻 노출)</span>
+                        <span id="lbl-blur-toggle">🫣 뜻 가리기 (마우스를 올리면 뜻 노출)</span>
                     </label>
-                    <button class="btn-control" onclick="openFlashcardModal('all')" id="btn-fc-all" style="font-weight:bold;">🎴 플래시카드 모드</button>
+                    <button class="btn-control" onclick="openFlashcardModal('all')" id="btn-fc-all" style="font-weight:bold;">🗒 플래시카드 모드</button>
                 </div>
                 <div class="table-responsive">
                     <div id="vocabContainer"></div>
@@ -624,9 +638,10 @@
                         <div style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
                             <label style="font-weight: bold; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 1.05rem;">
                                 <input type="checkbox" id="toggleBlurMyDecks" onchange="toggleBlurMyDecksMode(this.checked)" style="width: 20px; height: 20px;">
-                                <span id="lbl-blur-toggle-my">👁️ 뜻 가리기</span>
+                                <span id="lbl-blur-toggle-my">🫣 뜻 가리기</span>
                             </label>
-                            <button class="btn-start" style="width: auto; background: var(--primary);" onclick="openFlashcardModal('deck')" id="btn-fc-deck">🎴 플래시카드 학습</button>
+                            <button class="btn-control" onclick="toggleDeckSort()" id="btn-sort-deck" style="font-weight:bold;">⬇️ 최신순</button>
+                            <button class="btn-start" style="width: auto; background: var(--primary);" onclick="openFlashcardModal('deck')" id="btn-fc-deck">🗒 플래시카드 학습</button>
                         </div>
                     </div>
                     <div class="add-word-form" id="addWordFormArea">
@@ -795,7 +810,7 @@
     <div class="modal-overlay" id="flashcardModal">
         <div class="modal-card" style="max-width: 480px; text-align: center;">
             <button class="modal-close" onclick="closeFlashcardModal()">✕</button>
-            <h3 style="color: var(--primary); margin-bottom: 8px; font-size: 1.4rem;" id="fc-title">🎴 단어 플래시카드</h3>
+            <h3 style="color: var(--primary); margin-bottom: 8px; font-size: 1.4rem;" id="fc-title">🗒 단어 플래시카드</h3>
             <p style="font-size: 0.95rem; color: var(--text-muted);" id="fc-sub">카드를 클릭하면 뜻이 뒤집힙니다.</p>
             <div class="flashcard-wrapper">
                 <div class="flashcard" id="flashcardElement" onclick="flipFlashcard()">
@@ -833,18 +848,29 @@
             <button class="btn-start" style="width: auto; margin: 0 auto; padding: 10px 24px; font-size: 1.05rem;" onclick="document.getElementById('customAlertModal').classList.remove('active')">확인</button>
         </div>
     </div>
+
+    <!-- Edit Word Custom Modal -->
+    <div class="modal-overlay" id="editWordModal" style="z-index: 3500;">
+        <div class="modal-card" style="max-width: 400px;">
+            <button class="modal-close" onclick="closeEditWordModal()">✕</button>
+            <h3 style="color: var(--primary); margin-bottom: 20px; font-size: 1.4rem;">단어/표현 수정</h3>
+            <div class="form-group">
+                <label>단어 (Word/Expression)</label>
+                <input type="text" id="editWordInput" class="form-input" placeholder="수정할 단어 입력">
+            </div>
+            <div class="form-group">
+                <label>뜻 (Meaning)</label>
+                <input type="text" id="editMeanInput" class="form-input" placeholder="수정할 뜻 입력">
+            </div>
+            <button class="btn-start" style="width: 100%; padding: 14px; margin-top: 10px;" onclick="saveEditedWord()">수정 완료 💾</button>
+        </div>
+    </div>
 <script>
         // [보안 패치] XSS 방어를 위한 HTML 이스케이프 함수
         window.escapeHTML = function(str) {
             if (typeof str !== 'string') return str;
             return str.replace(/[&<>'"]/g, function(match) {
-                const escapeRules = {
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                };
+                const escapeRules = { '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' };
                 return escapeRules[match];
             });
         };
@@ -961,7 +987,7 @@ B|A|7|데이터 발표|データの発表|Let's look at the sales figures for th
 B|A|8|예산 추가 요청|予算追加의 要請|I need to request more budget for the ad campaign.|광고 캠페인을 위한 추가 예산을 요청해야 합니다.|広告キャンペーンの追加予算を要請する必要があります。|You've already spent your allocated funds.|당신은 이미 할당된 자금을 다 썼잖아요.|すでに割り当てられた資金は使い果たしていますよ。|But the ROI on this platform is incredibly high.|하지만 이 플랫폼의 투자수익률이 엄청나게 높아요.|しかしこのプラットフォームのROIは驚くほど高いんです。|Write a formal request justifying the extra cost.|추가 비용을 정당화하는 공식 요청서를 쓰세요.|追加費用を正当化する正式な要請書を書いてください。|allocated|할당된|割り当てられた|incredibly|엄청나게|驚くほど|justifying|정당화하는|正当化する
 B|A|9|팀 동기부여|チームのモチベーション|I know it's been a tough week for everyone.|모두에게 힘든 한 주였다는 걸 압니다.|みんなにとって厳しい一週間だったことはわかっています。|We are all feeling a bit burnt out.|우리 모두 약간 번아웃을 느끼고 있어요.|全員少し燃え尽きを感じています。|But your hard work is truly paying off.|하지만 여러분의 노력이 정말 결실을 맺고 있어요.|しかし皆さんの努力は本当に実を結んでいます。|Thanks, we just need to push through Friday.|감사합니다, 금요일까지만 잘 버텨보겠습니다.|ありがとう、金曜日まで頑張り抜きます。|tough|힘든|厳しい|burnt out|번아웃된, 지친|燃え尽きた|push through|끝까지 버티다|頑張り抜く
 B|A|10|실수 논의|ミスの議論|I made a mistake on the financial report.|제가 재무 보고서에 실수를 했습니다.|財務報告書でミスをしてしまいました。|How serious is the discrepancy?|그 차이(불일치)가 얼마나 심각한가요?|その不一致はどのくらい深刻ですか？|It's minor, but it affects the final total.|사소하지만, 최종 합계에 영향을 미칩니다.|些細ですが、最終合計に影響します。|Fix it right now and resend it to the board.|지금 당장 수정해서 이사회에 다시 보내세요.|今すぐ修正して取締役会に再送してください。|mistake|실수|ミス|discrepancy|차이, 불일치|不一致|minor|사소한|些細な
-B|A|11|간단한 설득|簡単なピッチ|Our service cuts your operational costs by half.|저희 서비스는 운영 비용을 절반으로 줄여줍니다.|我々のサービスは運営コストを半分に削減します。|That sounds too good to be true.|그거 너무 좋아서 믿기지가 않네요.|良すぎて信じられませんね。|Let me show you a quick case study.|간단한 성공 사례(케이스 스터디)를 보여드리겠습니다.|簡単なケーススタディをお見せします。|Okay, you have five minutes to impress me.|좋아요, 저를 감명시킬 5분의 시간을 드리죠.|いいでしょう、私を感心させるための5分間を与えます。|operational|운영의|運営の|case study|성공 사례|ケーススタディ|impress|감명시키다|感心させる
+B|A|11|간단한 설득|簡単なピッチ|Our service cuts your operational costs by half.|저문을 절반으로 줄여줍니다.|我々のサービスは運営コストを半分に削減します。|That sounds too good to be true.|그거 너무 좋아서 믿기지가 않네요.|良すぎて信じられませんね。|Let me show you a quick case study.|간단한 성공 사례(케이스 스터디)를 보여드리겠습니다.|簡単なケーススタディをお見せします。|Okay, you have five minutes to impress me.|좋아요, 저를 감명시킬 5분의 시간을 드리죠.|いいでしょう、私を感心させるための5分間を与えます。|operational|운영의|運営の|case study|성공 사례|ケーススタディ|impress|감명시키다|感心させる
 B|A|12|네트워킹|ネットワーキング|Hi, I don't think we've formally met.|안녕하세요, 우리 공식적으로 만난 적은 없는 것 같네요.|こんにちは、正式にお会いするのは初めてだと思います。|I'm David, the new marketing director.|저는 새 마케팅 디렉터인 데이비드입니다.|私は新しいマーケティングディレクターのデイビッドです。|Nice to meet you. I've heard great things about you.|반갑습니다. 당신에 대해 좋은 이야기 많이 들었어요.|はじめまして。あなたについて良い話をたくさん聞いていますよ。|I hope we can collaborate on future projects.|앞으로의 프로젝트에서 협력할 수 있길 바랍니다.|今後のプロジェクトで協力できることを願っています。|formally|공식적으로|正式に|heard great things|좋은 이야기를 많이 듣다|良い話をたくさん聞く|collaborate|협력하다|協力する
 B|A|13|업무 재배치|業務の再配置|John is overwhelmed with his current workload.|존이 현재 업무량 때문에 버거워하고 있어요.|ジョンが現在の仕事量でパンクしています。|We should reassign some of his tasks to Mary.|그의 업무 일부를 메리에게 재배치해야 합니다.|彼のタスクの一部をメアリーに再配置すべきです。|Will Mary have enough bandwidth for that?|메리가 그럴 만한 여유(대역폭)가 있을까요?|メアリーにそれだけの余裕（帯域幅）があるでしょうか？|Yes, her current project is almost wrapped up.|네, 그녀의 현재 프로젝트가 거의 마무리되었거든요.|はい、彼女の現在のプロジェクトはほぼ終わっていますから。|overwhelmed|버거워하는, 압도된|パンクしている、圧倒されている|reassign|재배치하다|再配置する|bandwidth|여유, 대역폭|余裕、帯域幅
 B|A|14|의견 차이|意見の相違|We clearly have different visions for this product.|우리가 이 제품에 대해 분명히 다른 비전을 갖고 있네요.|私たちはこの製品に対して明らかに異なるビジョンを持っていますね。|Yes, but we need to move forward somehow.|네, 하지만 어쨌든 우리는 앞으로 나아가야 합니다.|はい、でもどうにかして前に進まなければなりません。|Let's agree to disagree and test both versions.|서로의 의견 차이를 인정하고, 두 버전을 다 테스트해봅시다.|意見の違いを認めて、両方のバージョンをテストしてみましょう。|That is a very practical solution.|그거 아주 실용적인 해결책이군요.|それはとても実用的な解決策ですね。|clearly|분명히|明らかに|agree to disagree|의견 차이를 인정하다|意見の違いを認める|practical|실용적인|実用的な
@@ -1109,8 +1135,8 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 navDash: "🏠 전체 코스", catEng: "🇺🇸 영어 학습",
                 navCasual: "☕ 일상 회화", navBusiness: "💼 비즈니스 회화",
                 catKor: "🇰🇷 한국어 학습", navKorean: "🏫 한국어 초급",
-                navTestNum: "💯 숫자 테스트", navTestDate: "📅 날짜 테스트", navTestTime: "⏰ 시간 테스트",
-                testTitleNum: "💯 한국어 숫자 테스트", testTitleDate: "📅 한국어 날짜 테스트", testTitleTime: "⏰ 한국어 시간 테스트",
+                navTestNum: "🔢 숫자 테스트", navTestDate: "📅 날짜 테스트", navTestTime: "⏰ 시간 테스트",
+                testTitleNum: "🔢 한국어 숫자 테스트", testTitleDate: "📅 한국어 날짜 테스트", testTitleTime: "⏰ 한국어 시간 테스트",
                 catVocabEng: "🇺🇸 영어 단어장", navVocabEng: "📝 통합 단어장", navBookmarksEng: "📁 MY 단어장",
                 catVocabKor: "🇰🇷 한국어 단어장", navVocabKor: "📝 통합 단어장", navBookmarksKor: "📁 MY 단어장",
                 dashTitle: "edupeng 🐧 어학 학습 포털", dashSub: "초급·중급·고급 단계별 회화 코스와 체계적인 단어 연동 학습을 경험해보세요.",
@@ -1119,14 +1145,14 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 lessonSubboxTitle: "💡 핵심 단어 & 주요 표현 상세 해설", btnComplete: "✅ 학습 완료 테스트 보기",
                 vocabTitleEng: "🇺🇸 영어 통합 단어장", vocabTitleKor: "🇰🇷 한국어 통합 단어장", vocabSub: "학습 과정의 단어와 표현을 확인합니다.",
                 bmTitleEng: "📁 영어 MY 단어장", bmTitleKor: "📁 한국어 MY 단어장", bmSub: "원하는 이름으로 단어장 파일을 만들고 학습하세요.",
-                lblBlurToggle: "👁️ 뜻 가리기", btnFcAll: "🎴 플래시카드",
+                lblBlurToggle: "🫣 뜻 가리기", btnFcAll: "🗒 플래시카드",
                 thBookmark: "저장", thWord: "단어/표현", thMeaning: "뜻 / 설명", thNote: "개인 메모", thSource: "출처 유닛", emptyVocab: "단어가 없습니다.",
                 alertComplete: "🎉 완벽하게 이해하셨군요! 수강을 완료 처리합니다.",
                 tagCasual: "일상영어", tagBusiness: "비즈니스", tagKorean: "한국어",
                 modalLogin: "로그인", modalSignup: "회원가입", lblAuthName: "이름 (닉네임)", lblAuthId: "아이디 (ID)", lblAuthPw: "비밀번호",
-                plcDeckName: "단어장 이름 입력...", btnCreateDeck: "생성 ➕", btnBackDecks: "← 목록", btnFcDeck: "🎴 플래시카드",
+                plcDeckName: "단어장 이름 입력...", btnCreateDeck: "생성 ➕", btnBackDecks: "← 목록", btnFcDeck: "🗒 플래시카드",
                 plcWordEn: "단어 (예: Apple)", plcWordMean: "뜻 (예: 사과)", btnAddWord: "저장 💾", btnAddWordDone: "✅ 추가됨!",
-                fcTitle: "🎴 단어 플래시카드", fcSub: "카드를 클릭하면 뜻이 뒤집힙니다.", btnFcPrev: "← 이전", btnFcNext: "다음 →",
+                fcTitle: "🗒 단어 플래시카드", fcSub: "카드를 클릭하면 뜻이 뒤집힙니다.", btnFcPrev: "← 이전", btnFcNext: "다음 →",
                 defaultDeckNameEng: "⭐ 영어 스크랩", defaultDeckNameKor: "⭐ 한국어 스크랩",
                 testTitle: "🎯 유닛 완료 테스트", testLbl1: "1. 단어 퀴즈 (3문제)", testLbl2: "2. 에듀펭 AI와 실전 대화",
                 testPlaceholder: "배운 표현을 활용해 답해보세요!", btnSubmitTest: "제출 및 평가받기",
@@ -1136,7 +1162,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 homeStatsTitle: "📈 테스트 수강 이력",
                 lblDailyGoal: "🎯 일일 목표 (테스트 완료)", btnSaveGoal: "목표 저장", progressAchieved: "달성", goalSuccess: "🎉 달성!",
                 historyEmpty: "학습 이력이 없습니다.", historyTitle: "📅 날짜별 수강 이력",
-                numLabel: "💯숫자", dateLabel: "📅날짜", timeLabel: "⏰시간", alertSaved: "목표가 저장되었습니다.",
+                numLabel: "🔢숫자", dateLabel: "📅날짜", timeLabel: "⏰시간", alertSaved: "목표가 저장되었습니다.",
                 catAiConv: "🐧 AI 튜터", navAiConv: "💬 에듀펭과 대화", aiConvTitle: "에듀펭과 대화", aiConvSub: "에듀펭과 대화 연습을 해보세요.",
                 lblAiLang: "학습할 언어", lblAiSit: "상황 선택", lblAiCustom: "상황 직접 입력",
                 sitCafe: "☕ 카페에서 주문하기", sitShop: "🛍️ 쇼핑하기", sitDir: "🗺️ 길 찾기", sitCustom: "✏️ 직접 입력 (Custom)",
@@ -1145,7 +1171,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 aiScoreTitle: "📝 대화 평가 결과", aiScoreVocab: "단어/어휘 점수", aiScoreExp: "표현/문법 점수", aiScoreFb: "총평 및 피드백", btnAiRetry: "새로운 대화 시작하기",
                 aiAnalyzing: "에듀펭이 생각 중입니다...",
                 typingPlaceholder: "한국어로 입력하세요", btnCheckTyping: "확인", typingTestSub: "일본어 문제를 보고 올바른 한국어 발음을 입력하세요.",
-                btnBmAdd: "☆ 추가", btnBmAdded: "✅ 추가됨!", btnDelete: "삭제",
+                btnBmAdd: "☆ 추가", btnBmAdded: "✅ 추가됨!", btnDelete: "삭제", btnEdit: "수정",
                 alertNeedLogin: "🔑 로그인이 필요한 기능입니다.",
                 alertIdExists: "이미 존재하는 이메일입니다.",
                 alertNameExists: "이미 사용 중인 닉네임(이름)입니다.",
@@ -1166,8 +1192,8 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             ja: {
                 btnLogin: "ログイン", btnSignup: "会員登録", btnLogout: "ログアウト",
                 navDash: "🏠 全コース", catEng: "🇺🇸 英語学習", navCasual: "☕ 日常会話", navBusiness: "💼 ビジネス会話",
-                catKor: "🇰🇷 韓国語学習", navKorean: "🏫 韓国語初級", navTestNum: "💯 数字テスト", navTestDate: "📅 日付テスト", navTestTime: "⏰ 時間テスト",
-                testTitleNum: "💯 韓国語数字テスト", testTitleDate: "📅 韓国語日付テスト", testTitleTime: "⏰ 韓国語時間テスト",
+                catKor: "🇰🇷 韓国語学習", navKorean: "🏫 韓国語初級", navTestNum: "🔢 数字テスト", navTestDate: "📅 日付テスト", navTestTime: "⏰ 時間テスト",
+                testTitleNum: "🔢 韓国語数字テスト", testTitleDate: "📅 韓国語日付テスト", testTitleTime: "⏰ 韓国語時間テスト",
                 catVocabEng: "🇺🇸 英語単語帳", navVocabEng: "📝 統合単語帳", navBookmarksEng: "📁 MY単語帳",
                 catVocabKor: "🇰🇷 韓国語単語帳", navVocabKor: "📝 統合単語帳", navBookmarksKor: "📁 MY単語帳",
                 dashTitle: "edupeng 🐧 語学学習ポータル", dashSub: "初級・中級・上級レベル別の会話コースと体系的な単語連動学習を体験してください。",
@@ -1176,14 +1202,14 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 lessonSubboxTitle: "💡 重要単語・フレーズ詳細解説", btnComplete: "✅ 完了テストを見る",
                 vocabTitleEng: "🇺🇸 英語統合単語帳", vocabTitleKor: "🇰🇷 韓国語統合単語帳", vocabSub: "学習プロセスの単語と表現を確認します。",
                 bmTitleEng: "📁 英語MY単語帳", bmTitleKor: "📁 韓国語MY単語帳", bmSub: "単語帳ファイルを作成して学習しましょう。",
-                lblBlurToggle: "👁️ 意味を隠す", btnFcAll: "🎴 フラッシュカード",
+                lblBlurToggle: "🫣 意味を隠す", btnFcAll: "🗒 フラッシュカード",
                 thBookmark: "保存", thWord: "単語/表現", thMeaning: "意味 / 解説", thNote: "メモ", thSource: "出典", emptyVocab: "単語がありません。",
                 alertComplete: "🎉 完璧に理解していますね！学習を完了とします。",
                 tagCasual: "日常英語", tagBusiness: "ビジネス", tagKorean: "韓国語",
                 modalLogin: "ログイン", modalSignup: "会員登録", lblAuthName: "名前", lblAuthId: "ユーザーID", lblAuthPw: "パスワード",
-                plcDeckName: "単語帳の名前...", btnCreateDeck: "作成 ➕", btnBackDecks: "← リストへ", btnFcDeck: "🎴 フラッシュカード",
+                plcDeckName: "単語帳の名前...", btnCreateDeck: "作成 ➕", btnBackDecks: "← リストへ", btnFcDeck: "🗒 フラッシュカード",
                 plcWordEn: "単語 (例: Apple)", plcWordMean: "意味 (例: りんご)", btnAddWord: "保存 💾", btnAddWordDone: "✅ 追加完了!",
-                fcTitle: "🎴 フラッシュカード", fcSub: "カードをクリックすると意味が裏返ります。", btnFcPrev: "← 前へ", btnFcNext: "次へ →",
+                fcTitle: "🗒 フラッシュカード", fcSub: "カードをクリックすると意味が裏返ります。", btnFcPrev: "← 前へ", btnFcNext: "次へ →",
                 defaultDeckNameEng: "⭐ 英語保存単語", defaultDeckNameKor: "⭐ 韓国語保存単語",
                 testTitle: "🎯 完了テスト", testLbl1: "1. 単語クイズ (3問題)", testLbl2: "2. エデュペンAIと会話",
                 testPlaceholder: "習った表現を活用して答えてみましょう！", btnSubmitTest: "提出して評価を受ける",
@@ -1193,7 +1219,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 homeStatsTitle: "📈 テスト履歴",
                 lblDailyGoal: "🎯 1日の目標設定", btnSaveGoal: "目標保存", progressAchieved: "達成", goalSuccess: "🎉 達成!",
                 historyEmpty: "履歴がありません。", historyTitle: "📅 日付別履歴",
-                numLabel: "💯数字", dateLabel: "📅日付", timeLabel: "⏰時間", alertSaved: "目標が保存されました。",
+                numLabel: "🔢数字", dateLabel: "📅日付", timeLabel: "⏰時間", alertSaved: "目標が保存されました。",
                 catAiConv: "🐧 AI チューター", navAiConv: "💬 エデュペンと会話", aiConvTitle: "エデュペンと会話", aiConvSub: "様々な状況で会話練習をしましょう。",
                 lblAiLang: "学習する言語", lblAiSit: "シチュエーション", lblAiCustom: "直接入力",
                 sitCafe: "☕ カフェで注文する", sitShop: "🛍️ 買い物する", sitDir: "🗺️ 道を尋ねる", sitCustom: "✏️ 直接入力 (Custom)",
@@ -1202,7 +1228,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 aiScoreTitle: "📝 会話評価結果", aiScoreVocab: "単語スコア", aiScoreExp: "表現スコア", aiScoreFb: "フィードバック", btnAiRetry: "新しい会話を始める",
                 aiAnalyzing: "エデュペンが考え中です...",
                 typingPlaceholder: "韓国語で入力してください", btnCheckTyping: "確認", typingTestSub: "日本語の問題を見て、正しい韓国語の発音を入力してください。",
-                btnBmAdd: "☆ 追加", btnBmAdded: "✅ 追加完了!", btnDelete: "削除",
+                btnBmAdd: "☆ 追加", btnBmAdded: "✅ 追加完了!", btnDelete: "削除", btnEdit: "修正",
                 alertNeedLogin: "🔑 ログインが必要な機能です。",
                 alertIdExists: "既に存在するメールアドレスです。",
                 alertNameExists: "既に使用されている名前(ニックネーム)です。",
@@ -1228,11 +1254,16 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
         let isBlurMode = false;
         let isBlurMyDecksMode = false;
         let currentVocabLang = 'en'; 
+        
+        window.deckSortOrder = 'desc'; // 기본값 최신순
 
         window.userDecks = {}; 
         window.completedUnits = new Set();
         window.currentUser = null;
         window.usersDbCache = {}; // Admin cache
+        
+        // 데이터 로드 확인용 플래그
+        window.isDataLoaded = false;
 
         // 파이어베이스 모듈에서 덮어씌워질 더미 함수
         window.saveUserData = async function() {};
@@ -1359,12 +1390,25 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             }
             
             const t = window.i18n[window.currentLang];
+            const goals = window.currentUser.dailyGoals || { numbers: 5, dates: 5, times: 5 };
+            
             dates.forEach(date => {
                 const dayRecords = window.currentUser.history[date];
                 const totalTests = dayRecords.length;
                 
+                let n = 0, d = 0, timeCount = 0;
+                dayRecords.forEach(r => {
+                    if (r.type === 'numbers') n++;
+                    if (r.type === 'dates') d++;
+                    if (r.type === 'times') timeCount++;
+                });
+                
+                // 목표 달성 여부에 따라 스타일 적용
+                const isAchieved = (n >= goals.numbers && d >= goals.dates && timeCount >= goals.times);
+                const statusClass = isAchieved ? 'history-achieved' : 'history-pending';
+                
                 const row = document.createElement('div');
-                row.className = 'history-row';
+                row.className = `history-row ${statusClass}`;
                 row.innerHTML = `<div>${date} (${totalTests}회)</div>`;
                 
                 let tooltipHtml = `<div class="history-tooltip">
@@ -1557,7 +1601,6 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             const name = input.value.trim(); 
             if(!name) return;
             const deckId = 'deck_' + Date.now(); 
-            // XSS 방지 - 이름 입력값 이스케이프 저장 불필요(출력 시 이스케이프함)
             window.userDecks[deckId] = { name: name, isDefault: false, words: [], lang: currentVocabLang };
             window.saveUserData(); input.value = ''; window.renderDecks();
         };
@@ -1610,16 +1653,14 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             const container = document.getElementById('deckGridContainer'); container.innerHTML = ''; window.ensureDefaultDeck();
             Object.keys(window.userDecks).filter(k => window.userDecks[k].lang === currentVocabLang).forEach(deckId => {
                 const deck = window.userDecks[deckId]; const card = document.createElement('div'); card.className = 'deck-card'; card.onclick = () => window.openDeckDetail(deckId);
-                // XSS 처리
                 card.innerHTML = `<div class="deck-icon">${deck.isDefault ? '⭐' : '📁'}</div><div class="deck-title">${window.escapeHTML(deck.name)}</div><div class="deck-count" style="color:var(--text-muted); font-size:0.9rem;">${deck.words.length} words</div>`;
                 container.appendChild(card);
             });
         };
 
-        window.currentDeckId = null;
         window.openDeckDetail = function(deckId) {
             window.currentDeckId = deckId; const deck = window.userDecks[deckId];
-            document.getElementById('deckListView').style.display = 'none'; document.getElementById('deckDetailView').style.display = 'block'; document.getElementById('currentDeckTitle').innerText = deck.name; // innerText is safe
+            document.getElementById('deckListView').style.display = 'none'; document.getElementById('deckDetailView').style.display = 'block'; document.getElementById('currentDeckTitle').innerText = deck.name; 
             document.getElementById('addWordFormArea').style.display = deck.isDefault ? 'none' : 'flex'; 
             document.getElementById('btn-add-word').innerText = window.i18n[window.currentLang].btnAddWord;
             document.getElementById('btn-add-word').style.background = "var(--primary)";
@@ -1645,22 +1686,120 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             }, 1500);
         };
 
-        window.removeWordFromDeck = function(deckId, wordId) { window.userDecks[deckId].words = window.userDecks[deckId].words.filter(w => w.id !== wordId); window.saveUserData(); window.renderDeckWords(); };
+        // 단어 삭제 확인
+        window.removeWordFromDeck = function(deckId, wordId) { 
+            const msg = window.currentLang === 'ko' ? "이 단어를 정말 삭제하시겠습니까?" : "この単語を本当に削除しますか？";
+            if(confirm(msg)) {
+                window.userDecks[deckId].words = window.userDecks[deckId].words.filter(w => w.id !== wordId); 
+                window.saveUserData(); 
+                window.renderDeckWords(); 
+            }
+        };
+
+        window.toggleDeckSort = function() {
+            window.deckSortOrder = window.deckSortOrder === 'desc' ? 'asc' : 'desc';
+            const btn = document.getElementById('btn-sort-deck');
+            if (btn) {
+                if(window.currentLang === 'ko') btn.innerText = window.deckSortOrder === 'desc' ? '⬇️ 최신순' : '⬆️ 오래된순';
+                else btn.innerText = window.deckSortOrder === 'desc' ? '⬇️ 新着順' : '⬆️ 古い順';
+            }
+            window.renderDeckWords();
+        }
 
         window.toggleBlurMyDecksMode = function(enabled) { isBlurMyDecksMode = enabled; document.getElementById('toggleBlurMyDecks').checked = enabled; if(window.currentDeckId) window.renderDeckWords(); };
+
+        // 옵션 메뉴 열기/닫기 로직
+        window.toggleWordOptions = function(wordId, event) {
+            event.stopPropagation();
+            document.querySelectorAll('.options-menu').forEach(menu => {
+                if (menu.id !== 'options_' + wordId) menu.classList.remove('active');
+            });
+            const menu = document.getElementById('options_' + wordId);
+            if (menu) menu.classList.toggle('active');
+        };
+
+        // 화면 클릭 시 옵션 메뉴 닫기
+        document.addEventListener('click', function() {
+            document.querySelectorAll('.options-menu').forEach(menu => menu.classList.remove('active'));
+        });
 
         window.renderDeckWords = function() {
             const container = document.getElementById('deckWordsContainer'); const deck = window.userDecks[window.currentDeckId]; const t = window.i18n[window.currentLang];
             if(deck.words.length === 0) { container.innerHTML = `<div class="empty-state">${window.escapeHTML(t.emptyVocab)}</div>`; return; }
-            let html = `<table class="vocab-table"><tr><th>${window.escapeHTML(t.thWord)}</th><th>${window.escapeHTML(t.thMeaning)}</th><th style="width: 80px;"></th></tr>`;
-            deck.words.forEach(w => {
+            
+            let wordsArr = [...deck.words];
+            if(window.deckSortOrder === 'desc') wordsArr.reverse();
+
+            let html = `<table class="vocab-table"><tr><th>${window.escapeHTML(t.thWord)}</th><th>${window.escapeHTML(t.thMeaning)}</th><th style="width: 60px; text-align: center;">🔍</th></tr>`;
+            wordsArr.forEach(w => {
                 const meaning = window.currentLang === 'ko' ? w.ko : w.ja;
                 const blurClass = isBlurMyDecksMode ? 'blur-meaning' : '';
-                // [보안 패치] XSS 방어를 위해 커스텀 단어와 뜻을 이스케이프 처리
-                html += `<tr><td style="font-weight: 600; color: var(--primary);">${window.escapeHTML(w.word)}</td><td><span class="${blurClass}">${window.escapeHTML(meaning)}</span></td><td><button class="btn-delete-small" onclick="removeWordFromDeck('${window.currentDeckId}', '${w.id}')">❌ ${window.escapeHTML(t.btnDelete)}</button></td></tr>`;
+                html += `<tr>
+                    <td style="font-weight: 600; color: var(--primary);">${window.escapeHTML(w.word)}</td>
+                    <td><span class="${blurClass}">${window.escapeHTML(meaning)}</span></td>
+                    <td style="text-align: center; overflow: visible;">
+                        <div class="options-dropdown">
+                            <button class="btn-options" onclick="toggleWordOptions('${w.id}', event)">⋮</button>
+                            <div class="options-menu" id="options_${w.id}">
+                                ${!deck.isDefault ? `<button onclick="editWordInDeck('${window.currentDeckId}', '${w.id}')">✏️ 수정</button>` : ''}
+                                <button onclick="removeWordFromDeck('${window.currentDeckId}', '${w.id}')" style="color:#dc2626;">❌ 삭제</button>
+                            </div>
+                        </div>
+                    </td>
+                </tr>`;
             });
             container.innerHTML = html + `</table>`;
-        }
+        };
+
+        // 커스텀 단어 수정 모달 로직
+        let editingDeckId = null;
+        let editingWordId = null;
+
+        window.editWordInDeck = function(deckId, wordId) {
+            const deck = window.userDecks[deckId];
+            const wordObj = deck.words.find(w => w.id === wordId);
+            if(!wordObj) return;
+            
+            editingDeckId = deckId;
+            editingWordId = wordId;
+            
+            document.getElementById('editWordInput').value = wordObj.word;
+            document.getElementById('editMeanInput').value = window.currentLang === 'ko' ? wordObj.ko : wordObj.ja;
+            
+            document.getElementById('editWordModal').classList.add('active');
+            
+            // 수정 모달 열 때 옵션 메뉴 닫기
+            const menu = document.getElementById('options_' + wordId);
+            if(menu) menu.classList.remove('active');
+        };
+
+        window.closeEditWordModal = function() {
+            document.getElementById('editWordModal').classList.remove('active');
+            editingDeckId = null;
+            editingWordId = null;
+        };
+
+        window.saveEditedWord = function() {
+            if(!editingDeckId || !editingWordId) return;
+            
+            const newWord = document.getElementById('editWordInput').value.trim();
+            const newMean = document.getElementById('editMeanInput').value.trim();
+            
+            if(!newWord || !newMean) return window.customAlert("단어와 뜻을 모두 입력해주세요.");
+            
+            const deck = window.userDecks[editingDeckId];
+            const wordObj = deck.words.find(w => w.id === editingWordId);
+            
+            if(wordObj) {
+                wordObj.word = newWord;
+                if(window.currentLang === 'ko') wordObj.ko = newMean;
+                else wordObj.ja = newMean;
+                
+                window.saveUserData();
+                window.renderDeckWords();
+                window.closeEditWordModal();
+            }
+        };
 
         window.currentLesson = null;
         window.nav = function(sectionId) {
@@ -1949,7 +2088,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             window.activeTab = 'typingTest';
             
             let titleText = "";
-            if(type === 'numbers') titleText = (window.currentLang === 'ko' ? "💯 한국어 숫자 테스트" : "💯 韓国語数字テスト");
+            if(type === 'numbers') titleText = (window.currentLang === 'ko' ? "🔢 한국어 숫자 테스트" : "🔢 韓国語数字テスト");
             else if(type === 'dates') titleText = (window.currentLang === 'ko' ? "📅 한국어 날짜 테스트" : "📅 韓国語日付テスト");
             else if(type === 'times') titleText = (window.currentLang === 'ko' ? "⏰ 한국어 시간 테스트" : "⏰ 韓国語時間テスト");
             document.getElementById('typing-test-main-title').innerText = titleText;
@@ -2047,53 +2186,54 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
         };
 
         window.nextTypingQuestion = function() {
-    if(currentTestIndex < 4) {
-        currentTestIndex++;
-        renderTypingQuestion();
-    } else {
-        document.getElementById('typing-test-content').style.display = 'none';
-        document.getElementById('typing-result-screen').style.display = 'block';
-        document.getElementById('typing-score').innerText = `${correctTypingCount} / 5`;
-        renderTestResultsHistory();
+            if(currentTestIndex < 4) {
+                currentTestIndex++;
+                renderTypingQuestion();
+            } else {
+                document.getElementById('typing-test-content').style.display = 'none';
+                document.getElementById('typing-result-screen').style.display = 'block';
+                document.getElementById('typing-score').innerText = `${correctTypingCount} / 5`;
+                renderTestResultsHistory();
 
-        if(window.currentUser) {
-            if (!window.currentUser.testCounts) {
-                window.currentUser.testCounts = { numbers: 0, dates: 0, times: 0 };
+                if(window.currentUser) {
+                    if (!window.currentUser.testCounts) {
+                        window.currentUser.testCounts = { numbers: 0, dates: 0, times: 0 };
+                    }
+                    if (typeof window.currentUser.testCounts[currentTestType] !== 'number') {
+                        window.currentUser.testCounts[currentTestType] = 0;
+                    }
+                    window.currentUser.testCounts[currentTestType]++;
+
+                    if (!window.currentUser.history) {
+                        window.currentUser.history = {};
+                    }
+
+                    const today = getTodayStr();
+                    if(!window.currentUser.history[today]) {
+                        window.currentUser.history[today] = [];
+                    }
+
+                    const testDetails = userAnswersHistory.map(h => ({
+                        q: h.question,
+                        isCorrect: h.isCorrect
+                    }));
+
+                    window.currentUser.history[today].push({
+                        type: currentTestType,
+                        score: correctTypingCount,
+                        total: 5,
+                        details: testDetails
+                    });
+
+                    window.saveUserData();
+
+                    if (typeof window.renderHomeStats === 'function') {
+                        window.renderHomeStats();
+                    }
+                }
             }
-            if (typeof window.currentUser.testCounts[currentTestType] !== 'number') {
-                window.currentUser.testCounts[currentTestType] = 0;
-            }
-            window.currentUser.testCounts[currentTestType]++;
+        };
 
-            if (!window.currentUser.history) {
-                window.currentUser.history = {};
-            }
-
-            const today = getTodayStr();
-            if(!window.currentUser.history[today]) {
-                window.currentUser.history[today] = [];
-            }
-
-            const testDetails = userAnswersHistory.map(h => ({
-                q: h.question,
-                isCorrect: h.isCorrect
-            }));
-
-            window.currentUser.history[today].push({
-                type: currentTestType,
-                score: correctTypingCount,
-                total: 5,
-                details: testDetails
-            });
-
-            window.saveUserData();
-
-            if (typeof window.renderHomeStats === 'function') {
-                window.renderHomeStats();
-            }
-        }
-    }
-};
         function renderTestResultsHistory() {
             const listEl = document.getElementById('typing-result-list');
             listEl.innerHTML = '';
@@ -2165,7 +2305,6 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             
             const userDiv = document.createElement('div');
             userDiv.className = 'chat-message user';
-            // innerText는 XSS에 안전함
             userDiv.innerText = text;
             chatBody.appendChild(userDiv);
             input.value = '';
@@ -2192,7 +2331,6 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 
                 const aiDiv = document.createElement('div');
                 aiDiv.className = 'chat-message ai';
-                // AI 응답도 안전하게 이스케이프 후 br 태그만 허용
                 aiDiv.innerHTML = window.escapeHTML(respText).replace(/\n/g, '<br>');
                 chatBody.appendChild(aiDiv);
                 chatBody.scrollTop = chatBody.scrollHeight;
@@ -2304,13 +2442,11 @@ RULES:
             div.className = 'chat-message ' + sender;
             if(id) div.id = id;
             
-            // [보안 패치] 유저 메시지는 안전하게 이스케이프, AI 텍스트도 이스케이프 후 하이라이트 적용
             let safeText = sender === 'user' ? window.escapeHTML(text) : window.escapeHTML(text);
             
             let formattedText = safeText.replace(/(\[Correction.*?\]:)/gi, '<strong style="color: #ea580c; display:block; margin-top:8px; font-size: 0.85rem;">$1</strong>');
             formattedText = formattedText.replace(/(\[교정.*?\]:)/gi, '<strong style="color: #ea580c; display:block; margin-top:8px; font-size: 0.85rem;">$1</strong>');
             
-            // 로딩 인디케이터인 경우는 예외 처리
             if (text.includes("typing-indicator")) {
                 formattedText = text;
             }
@@ -2372,7 +2508,7 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                 if(data && data.vocabScore !== undefined) {
                     animateValue("ai-score-vocab", 0, data.vocabScore || 0, 1000);
                     animateValue("ai-score-exp", 0, data.expressionScore || 0, 1000);
-                    document.getElementById('ai-score-feedback').innerText = data.feedback || "Feedback generated."; // innerText is safe
+                    document.getElementById('ai-score-feedback').innerText = data.feedback || "Feedback generated."; 
                 } else {
                     document.getElementById('ai-score-feedback').innerText = window.i18n[window.currentLang].alertAiFail;
                 }
@@ -2519,8 +2655,15 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             return messages[key] || "";
         }
 
+        // [버그 패치 완료] 데이터 로딩 전 덮어쓰기 방지
         window.saveUserData = async function() {
             if (!window.currentUser || !window.currentUser.uid) return;
+            
+            if (!window.isDataLoaded) {
+                console.warn("데이터가 아직 로드되지 않아 저장을 차단합니다.");
+                return;
+            }
+
             const userRef = doc(db, "users", window.currentUser.uid);
             
             const dataToSave = {
@@ -2541,6 +2684,7 @@ Provide the response EXACTLY in the following JSON format without any markdown w
 
         window.loadUserData = async function() {
             if (!window.currentUser || !window.currentUser.uid) {
+                window.isDataLoaded = false;
                 if (window.completedUnits) window.completedUnits.clear();
                 if (window.userDecks) { for (let k in window.userDecks) delete window.userDecks[k]; }
                 if (typeof window.ensureDefaultDeck === 'function') window.ensureDefaultDeck();
@@ -2580,8 +2724,12 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                     window.renderDecks();
                     if (window.currentDeckId && typeof window.renderDeckWords === 'function') window.renderDeckWords();
                 }
+
+                window.isDataLoaded = true;
+
             } catch(e) {
                 console.error("데이터 불러오기 실패:", e);
+                window.isDataLoaded = false;
             }
         };
 
@@ -2598,7 +2746,7 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                 const displayName = window.currentUser.name || "User";
                 
                 if (badge) badge.innerText = displayName.charAt(0).toUpperCase();
-                if (nameEl) nameEl.innerText = displayName; // XSS Safe (innerText)
+                if (nameEl) nameEl.innerText = displayName;
                 if (idEl) idEl.innerText = `@${window.currentUser.email.split('@')[0]}`; 
 
                 const isAdmin = (window.currentUser.role === 'admin');
@@ -2637,7 +2785,6 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                         email: email,
                         name: name,
                         createdAt: new Date().toISOString(),
-                        // [보안 패치] 누구나 가입 시 기본 유저 권한만 가짐. (관리자 권한은 DB에서 직접 수정 필요)
                         role: 'user'
                     });
                     window.customAlert(getAuthMessage('signupSuccess'));
@@ -2664,7 +2811,6 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             });
         };
 
-        // 관리자 패널 로직
         window.renderAdminPanel = async function() {
             const tbody = document.getElementById('adminUsersTable');
             if(!tbody) return;
@@ -2753,7 +2899,6 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                 return window.customAlert(t.alertAdminNoDelete);
             }
             
-            // [논리 패치] 완전한 계정 삭제는 클라이언트 단독으로 불가능하므로, 학습 데이터 초기화에 대한 명확한 알림
             if(confirm(`[${u.email}]${t.confirmDelete}`)) {
                 try {
                     await deleteDoc(doc(db, "users", uid));
@@ -2789,8 +2934,10 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                 await window.loadUserData();
                 window.updateAuthUI();
                 
-                // 마지막 접속 시간 업데이트
-                window.saveUserData();
+                const userRef = doc(db, "users", user.uid);
+                try {
+                    await setDoc(userRef, { lastLogin: new Date().toISOString() }, { merge: true });
+                } catch(e) {}
             } else {
                 window.currentUser = null;
                 await window.loadUserData();
@@ -2798,3 +2945,5 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             }
         });
     </script>
+</body>
+</html>
