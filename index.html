@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>edupeng🐧 - 에듀펭 어학 학습 포털</title>
     <style>
         :root {
@@ -24,6 +24,23 @@
             --score-bg-2: rgba(37, 99, 235, 0.1);
             --score-border-2: rgba(37, 99, 235, 0.2);
             --score-text-2: #1d4ed8;
+
+            --success-bg: #dcfce7;
+            --success-text: #166534;
+            --success-border: #86efac;
+            --warning-bg: #fef3c7;
+            --warning-text: #92400e;
+            --warning-border: #fde68a;
+            --danger-bg: #fee2e2;
+            --danger-text: #991b1b;
+            --danger-border: #fca5a5;
+
+            --z-dropdown: 100;
+            --z-backdrop: 1999;
+            --z-sidebar: 2000;
+            --z-fab: 2500;
+            --z-modal: 3000;
+            --z-alert: 4000;
         }
 
         body.dark-mode {
@@ -39,29 +56,64 @@
             --actor-b-text: #fbcfe8;
             --score-text-1: #4ade80;
             --score-text-2: #60a5fa;
+
+            --success-bg: #064e3b;
+            --success-text: #6ee7b7;
+            --success-border: #047857;
+            --warning-bg: #78350f;
+            --warning-text: #fde68a;
+            --warning-border: #b45309;
+            --danger-bg: #7f1d1d;
+            --danger-text: #fca5a5;
+            --danger-border: #991b1b;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Pretendard', -apple-system, sans-serif; }
+        
         body, .sidebar, .top-bar, .card, .progress-card, .lesson-container, .lesson-subbox, .dialogue-row, .modal-card, .stat-card, .goal-container, .history-row, .ai-conv-container, .vocab-table, .deck-card, input, select, textarea, button {
             transition: background-color 0.4s ease, color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease;
         }
 
         body { display: flex; height: 100vh; background-color: var(--bg-color); color: var(--text-main); overflow: hidden; }
 
-        /* Sidebar */
-        .sidebar { width: 260px; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; z-index: 2000; }
+        .sidebar, .btn-control, .btn-start, .nav-item, .logo, .deck-card, .btn-auth, .btn-icon, .btn-ai-action, .options-menu button {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+        
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }
+        .dark-mode ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); }
+
+        .sidebar { width: 260px; background: var(--sidebar-bg); border-right: 1px solid var(--border); display: flex; flex-direction: column; flex-shrink: 0; z-index: var(--z-sidebar); }
         .logo { padding: 20px 24px; font-size: 1.5rem; font-weight: bold; color: var(--primary); border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; cursor: pointer; }
         .nav-menu { padding: 16px 0; flex: 1; overflow-y: auto; }
         .nav-category { padding: 8px 24px; font-size: 0.75rem; font-weight: bold; color: var(--text-muted); margin-top: 12px; border-top: 1px solid var(--border); padding-top: 16px; }
         .nav-category:first-child { border-top: none; padding-top: 8px; }
         .nav-item { padding: 12px 24px 12px 32px; display: flex; align-items: center; gap: 10px; cursor: pointer; color: var(--text-main); font-size: 0.95rem; }
-        .nav-item:hover, .nav-item.active { background: rgba(5, 150, 105, 0.1); color: var(--primary); border-right: 3px solid var(--primary); font-weight: 600; }
         .nav-item.main-tab { padding-left: 24px; font-weight: 600; }
+        .nav-item.active { background: rgba(5, 150, 105, 0.1); color: var(--primary); border-right: 3px solid var(--primary); font-weight: 600; }
 
-        .sidebar-backdrop { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: 1999; }
+        .sidebar-backdrop { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.5); z-index: var(--z-backdrop); }
         .sidebar-backdrop.active { display: block; }
 
-        /* Main Wrapper */
+        @media (hover: hover) and (pointer: fine) {
+            .nav-item:hover { background: rgba(5, 150, 105, 0.1); color: var(--primary); border-right: 3px solid var(--primary); font-weight: 600; }
+            .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+            .deck-card:hover { border-color: var(--primary); background: rgba(5, 150, 105, 0.05); }
+            .btn-icon:hover { transform: scale(1.1); background: var(--primary); color: white; border-color: var(--primary); }
+            .options-menu button:hover { background: var(--bg-color); color: var(--primary); }
+            .history-row:hover .history-tooltip { display: block; }
+            .blur-meaning:hover { filter: blur(0); color: inherit; background: transparent; }
+            .btn-options:hover { background: rgba(0,0,0,0.05); }
+            .dark-mode .btn-options:hover { background: rgba(255,255,255,0.1); }
+            .btn-bm-inactive:hover { border-color: var(--primary); color: var(--primary); }
+            .btn-ai-action:hover:not(:disabled) { background: var(--primary-hover); }
+            .btn-ai-end:hover:not(:disabled) { background: var(--danger-text); }
+            .chat-mic-btn:hover:not(:disabled) { background: var(--primary); color: white; border-color: var(--primary); }
+        }
+
         .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
         .top-bar { height: 64px; background: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 32px; gap: 16px; }
         
@@ -75,7 +127,7 @@
 
         .user-profile { display: flex; align-items: center; gap: 10px; }
         .user-badge { width: 34px; height: 34px; border-radius: 50%; background: var(--actor-a); color: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: bold; border: 1px solid var(--primary); flex-shrink: 0; }
-        .btn-logout { padding: 6px 10px; font-size: 0.8rem; background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; border-radius: 6px; cursor: pointer; }
+        .btn-logout { padding: 6px 10px; font-size: 0.8rem; background: var(--danger-bg); color: var(--danger-text); border: 1px solid var(--danger-border); border-radius: 6px; cursor: pointer; }
 
         .lang-selector select, .filter-select { padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; background: var(--card-bg); color: var(--text-main); font-size: 0.9rem; font-weight: 600; cursor: pointer; outline: none; }
         input, select, textarea { font-size: 16px !important; }
@@ -85,7 +137,6 @@
         .header h1 { font-size: 1.8rem; margin-bottom: 8px; word-break: keep-all; line-height: 1.3; }
         .header p { color: var(--text-muted); line-height: 1.5; }
 
-        /* Stats & Goals */
         .stats-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; margin-bottom: 20px; }
         .stat-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; text-align: center; box-shadow: 0 2px 4px rgba(0,0,0,0.02); }
         .stat-num { font-size: 2rem; font-weight: bold; color: var(--primary); margin-top: 8px; }
@@ -96,30 +147,22 @@
         
         .goal-progress { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; padding: 12px; background: var(--bg-color); border-radius: 8px; font-size: 0.95rem; width: 100%; }
         .progress-badge { padding: 8px 12px; border-radius: 6px; font-weight: bold; border: 1px solid transparent; }
-        .progress-badge.achieved { background: #dcfce7; color: #166534; border-color: #86efac; }
-        .progress-badge.pending { background: #fef3c7; color: #92400e; border-color: #fde68a; }
-        .dark-mode .progress-badge.achieved { background: #064e3b; color: #6ee7b7; border-color: #047857; }
-        .dark-mode .progress-badge.pending { background: #78350f; color: #fde68a; border-color: #b45309; }
+        .progress-badge.achieved { background: var(--success-bg); color: var(--success-text); border-color: var(--success-border); }
+        .progress-badge.pending { background: var(--warning-bg); color: var(--warning-text); border-color: var(--warning-border); }
 
-        /* History Colors */
         .history-row { position: relative; padding: 12px 16px; border: 2px solid var(--border); border-radius: 8px; cursor: help; display: inline-block; width: fit-content; margin-bottom: 8px; margin-right: 8px; font-weight: 600; }
-        .history-row:hover .history-tooltip { display: block; }
-        
-        .history-achieved { border-color: #10b981; background: rgba(16, 185, 129, 0.05); color: #047857; }
+        .history-achieved { border-color: var(--primary); background: rgba(16, 185, 129, 0.05); color: var(--primary-hover); }
         .history-pending { border-color: #f59e0b; background: rgba(245, 158, 11, 0.05); color: #b45309; }
-        .dark-mode .history-achieved { border-color: #059669; background: rgba(5, 150, 105, 0.1); color: #34d399; }
+        .dark-mode .history-achieved { border-color: var(--primary); background: rgba(5, 150, 105, 0.1); color: #34d399; }
         .dark-mode .history-pending { border-color: #d97706; background: rgba(217, 119, 6, 0.1); color: #fbbf24; }
         
-        .history-tooltip { display: none; position: absolute; left: 100%; top: 0; margin-left: 10px; background: #ffffff; color: #1f2937; border: 1px solid #e5e7eb; padding: 14px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); z-index: 100; width: 280px; text-align: left; font-weight: normal; }
+        .history-tooltip { display: none; position: absolute; left: 100%; top: 0; margin-left: 10px; background: #ffffff; color: #1f2937; border: 1px solid #e5e7eb; padding: 14px; border-radius: 8px; box-shadow: 0 10px 25px rgba(0,0,0,0.15); z-index: var(--z-dropdown); width: 280px; text-align: left; font-weight: normal; }
         .dark-mode .history-tooltip { background: #1e293b; color: #f8fafc; border-color: #334155; }
         
         .ox-badge { display: inline-flex; justify-content: center; align-items: center; width: 20px; height: 20px; border-radius: 4px; margin-right: 4px; font-size: 0.8rem; font-weight: bold; }
-        .ox-correct { background: #dcfce7; color: #166534; }
-        .ox-wrong { background: #fee2e2; color: #991b1b; }
-        .dark-mode .ox-correct { background: #064e3b; color: #6ee7b7; }
-        .dark-mode .ox-wrong { background: #7f1d1d; color: #fca5a5; }
+        .ox-correct { background: var(--success-bg); color: var(--success-text); }
+        .ox-wrong { background: var(--danger-bg); color: var(--danger-text); }
 
-        /* Course Grid & Cards */
         .progress-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; margin-bottom: 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.05); }
         .progress-header { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 8px; }
         .progress-bar-bg { width: 100%; height: 10px; background: var(--border); border-radius: 5px; overflow: hidden; }
@@ -130,22 +173,20 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
         .tag { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; margin-bottom: 8px; margin-right: 4px; }
-        .level-beginner { background: #dcfce7; color: #166534; }
-        .level-intermediate { background: #fef3c7; color: #92400e; }
-        .level-advanced { background: #fee2e2; color: #991b1b; }
+        .level-beginner { background: var(--success-bg); color: var(--success-text); }
+        .level-intermediate { background: var(--warning-bg); color: var(--warning-text); }
+        .level-advanced { background: var(--danger-bg); color: var(--danger-text); }
         .tag.casual { background: #dbeafe; color: #1e40af; }
         .tag.business { background: #fce7f3; color: #be185d; }
         .tag.korean { background: #ffedd5; color: #c2410c; }
 
         .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
         .card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 20px; cursor: pointer; position: relative; transition: transform 0.2s; display: flex; flex-direction: column; }
-        .card:hover { transform: translateY(-4px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
         .card h3 { margin-bottom: 6px; font-size: 1.1rem; line-height: 1.4; word-break: keep-all; }
         .card p { color: var(--text-muted); font-size: 0.85rem; margin-bottom: 16px; min-height: 36px; flex: 1; }
         .btn-start { display: block; width: 100%; padding: 10px 16px; background: var(--primary); color: white; border-radius: 6px; font-size: 0.95rem; border: none; cursor: pointer; text-align: center; font-weight: bold; }
         .card-completed-badge { position: absolute; top: 16px; right: 16px; font-size: 1.2rem; }
 
-        /* Lesson & Dialogue */
         .lesson-container { background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column; gap: 24px; padding: 28px; max-width: 850px; margin: 0 auto; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); }
         .btn-control { padding: 8px 12px; background: var(--card-bg); color: var(--text-main); border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-weight: 500; }
         .btn-control.active { background: var(--primary); color: white; border-color: var(--primary); }
@@ -163,16 +204,13 @@
         .en-text.hide-text { filter: blur(6px); user-select: none; opacity: 0.4; background: #cbd5e1; border-radius: 4px; color: transparent; }
 
         .btn-icon { width: 40px; height: 40px; border-radius: 50%; border: 1px solid var(--border); background: var(--bg-color); color: var(--text-main); display: flex; align-items: center; justify-content: center; cursor: pointer; font-size: 1.2rem; flex-shrink: 0; transition: transform 0.2s; }
-        .btn-icon:hover { transform: scale(1.1); background: var(--primary); color: white; border-color: var(--primary); }
 
         .lesson-subbox { background: var(--bg-color); border: 1px solid var(--border); border-radius: 12px; padding: 20px; }
         .lesson-subbox h3 { font-size: 1.1rem; margin-bottom: 16px; color: var(--primary); }
         .vocab-detail-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 16px; margin-bottom: 12px; display: flex; flex-direction: column; }
         .btn-bm-inactive { background: var(--bg-color); border: 1px solid var(--border); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold; color: var(--text-muted); transition: all 0.2s; }
-        .btn-bm-inactive:hover { border-color: var(--primary); color: var(--primary); }
-        .btn-bm-active { background: #fef3c7; border: 1px solid #f59e0b; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold; color: #d97706; transition: all 0.2s; }
+        .btn-bm-active { background: var(--warning-bg); border: 1px solid var(--warning-border); padding: 8px 12px; border-radius: 6px; cursor: pointer; font-size: 0.85rem; font-weight: bold; color: var(--warning-text); transition: all 0.2s; }
 
-        /* Vocab & Decks */
         .vocab-controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; background: var(--card-bg); padding: 16px; border-radius: 12px; border: 1px solid var(--border); flex-wrap: wrap; gap: 12px; }
         
         .table-responsive { width: 100%; overflow-x: auto; }
@@ -181,11 +219,9 @@
         .vocab-table th { background: var(--bg-color); font-weight: 600; }
         
         .blur-meaning { filter: blur(6px); cursor: pointer; user-select: none; background: #cbd5e1; border-radius: 4px; color: transparent; transition: filter 0.2s; }
-        .blur-meaning:hover { filter: blur(0); color: inherit; background: transparent; }
 
         .deck-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin-bottom: 24px; }
         .deck-card { background: var(--card-bg); border: 2px solid var(--border); border-radius: 12px; padding: 24px; cursor: pointer; text-align: center; }
-        .deck-card:hover { border-color: var(--primary); background: rgba(5, 150, 105, 0.05); }
         .deck-icon { font-size: 2.5rem; margin-bottom: 8px; }
         .deck-title { font-weight: bold; font-size: 1.1rem; color: var(--text-main); margin-bottom: 4px; }
         
@@ -193,38 +229,32 @@
         .add-deck-form input, .add-word-form input { flex: 1; min-width: 150px; padding: 12px; border: 1px solid var(--border); border-radius: 6px; background: var(--bg-color); color: var(--text-main); }
         .deck-detail-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 16px; }
 
-        /* Options Menu */
-        .options-dropdown { position: relative; display: inline-block; }
-        .btn-options { background: transparent; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-muted); padding: 2px 8px; border-radius: 4px; }
-        .btn-options:hover { background: rgba(0,0,0,0.05); }
-        .dark-mode .btn-options:hover { background: rgba(255,255,255,0.1); }
-        .options-menu { display: none; position: absolute; right: 0; top: 100%; min-width: 110px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); z-index: 100; flex-direction: column; overflow: hidden; }
-        .options-menu.active { display: flex; }
-        .options-menu button { padding: 12px 16px; text-align: left; background: none; border: none; font-size: 0.9rem; cursor: pointer; color: var(--text-main); font-weight: 600; border-bottom: 1px solid var(--border); }
-        .options-menu button:last-child { border-bottom: none; }
-        .options-menu button:hover { background: var(--bg-color); color: var(--primary); }
+        .btn-options { 
+            background: transparent; border: none; font-size: 1.2rem; cursor: pointer; 
+            color: var(--text-muted); padding: 6px; margin-left: 2px; border-radius: 6px; 
+            transition: transform 0.1s, background 0.2s;
+        }
+        .btn-options:active { transform: scale(0.9); }
 
-        /* Typing Test */
         .typing-test-container { max-width: 700px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 30px; text-align: center; }
         .typing-question { font-size: 2rem; font-weight: bold; color: var(--primary); margin-bottom: 24px; word-break: keep-all; }
-        .typing-explanation { margin-top: 20px; padding: 16px; background: #dcfce7; color: #166534; border-radius: 8px; text-align: left; display: none; font-size: 0.95rem; line-height: 1.5; }
-        .dark-mode .typing-explanation { background: #064e3b; color: #a7f3d0; }
+        .typing-explanation { margin-top: 20px; padding: 16px; background: var(--success-bg); color: var(--success-text); border-radius: 8px; text-align: left; display: none; font-size: 0.95rem; line-height: 1.5; }
+        .dark-mode .typing-explanation { background: var(--success-bg); color: var(--success-text); }
         #typing-result-list { margin-bottom: 20px; max-height: 400px; overflow-y: auto; text-align: left; padding: 15px; background: var(--bg-color); border-radius: 8px; font-size: 0.95rem; }
         
         .result-item { padding: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
         .result-item:last-child { border-bottom: none; }
-        .result-item.correct { color: #059669; }
+        .result-item.correct { color: var(--primary); }
         .result-item.incorrect { color: #dc2626; }
         .dark-mode .result-item.correct { color: #34d399; }
         .dark-mode .result-item.incorrect { color: #f87171; }
         
         .diff-text { font-family: monospace; font-size: 1.1rem; letter-spacing: 1px; margin-top: 10px; padding: 10px; background: rgba(0,0,0,0.05); border-radius: 6px; display: inline-block; word-break: break-all; }
         .diff-correct { color: var(--primary); font-weight: bold; }
-        .diff-wrong { color: #dc2626; background-color: #fee2e2; font-weight: bold; padding: 0 2px; border-radius: 2px; }
+        .diff-wrong { color: #dc2626; background-color: var(--danger-bg); font-weight: bold; padding: 0 2px; border-radius: 2px; }
         .diff-missed { color: #94a3b8; text-decoration: line-through; padding: 0 2px; }
-        .dark-mode .diff-wrong { background-color: #7f1d1d; color: #fca5a5; }
+        .dark-mode .diff-wrong { background-color: var(--danger-bg); color: var(--danger-text); }
 
-        /* AI Conversation UI */
         .ai-conv-container { max-width: 800px; margin: 0 auto; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; height: 75vh; box-shadow: 0 4px 20px rgba(0,0,0,0.05); }
         .ai-conv-header-ui { transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); padding: 20px; background: linear-gradient(135deg, rgba(5, 150, 105, 0.05), transparent); border-bottom: 1px solid var(--border); text-align: center; flex-shrink: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; }
         .ai-conv-header-ui.chat-active { flex-direction: row; justify-content: flex-start; padding: 12px 20px; gap: 12px; }
@@ -233,7 +263,6 @@
         .dark-mode .ai-glass-avatar { border-color: rgba(16, 185, 129, 0.4); box-shadow: 0 8px 32px rgba(0,0,0,0.4); }
         
         .ai-conv-header-ui.chat-active .ai-glass-avatar { width: 44px; height: 44px; font-size: 22px; margin: 0; box-shadow: 0 2px 10px rgba(5, 150, 105, 0.15); border-width: 2px; }
-        
         .ai-conv-header-ui h3 { transition: all 0.5s ease; color: var(--text-main); font-size: 1.2rem; margin-top: 8px; }
         .ai-conv-header-ui.chat-active h3 { margin-top: 0; font-size: 1.1rem; }
         
@@ -242,21 +271,15 @@
         
         .ai-conv-body { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
         .ai-conv-setup { padding: 20px; overflow-y: auto; flex: 1; }
-        
         #ai-conv-chat-area { display: none; flex-direction: column; flex: 1; overflow: hidden; }
         
         .ai-conv-input-area { padding: 15px; border-top: 1px solid var(--border); background: var(--bg-color); display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
         .ai-conv-input-area input { flex: 1; padding: 14px; border: 1px solid var(--border); border-radius: 20px; outline: none; background: var(--card-bg); color: var(--text-main); font-size: 1rem; }
         .ai-conv-input-area input:disabled, .btn-ai-action:disabled, .chat-mic-btn:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-ai-action { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 20px; cursor: pointer; font-weight: bold; font-size: 0.95rem; white-space: nowrap; transition: background 0.2s; }
-        .btn-ai-action:hover:not(:disabled) { background: var(--primary-hover); }
         .btn-ai-end { background: #ef4444; }
-        .btn-ai-end:hover:not(:disabled) { background: #dc2626; }
-        
         .chat-mic-btn { background: var(--bg-color); border: 1px solid var(--border); border-radius: 50%; width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; transition: all 0.2s ease; flex-shrink: 0; color: var(--text-main); }
-        .chat-mic-btn:hover:not(:disabled) { background: var(--primary); color: white; border-color: var(--primary); }
 
-        /* Score Area */
         .ai-conv-score-area { display: none; padding: 30px 20px; overflow-y: auto; flex-direction: column; align-items: center; background: var(--bg-color); }
         .score-card-grid { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; width: 100%; max-width: 600px; margin-bottom: 24px; }
         .score-card-box { background: var(--card-bg); flex: 1; min-width: 180px; padding: 24px 16px; border-radius: 16px; text-align: center; border: 2px solid transparent; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
@@ -271,8 +294,7 @@
         .score-feedback-box h3 { margin-bottom: 16px; color: var(--text-main); font-size: 1.2rem; border-bottom: 2px solid var(--border); padding-bottom: 12px; }
         #ai-score-feedback { font-size: 1.05rem; line-height: 1.7; white-space: pre-wrap; color: var(--text-main); }
 
-        /* Modals */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: 3000; justify-content: center; align-items: center; }
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); backdrop-filter: blur(4px); z-index: var(--z-modal); justify-content: center; align-items: center; }
         .modal-overlay.active { display: flex; }
         .modal-card { background: var(--card-bg); width: 95%; max-width: 520px; border-radius: 16px; padding: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); position: relative; max-height: 90vh; overflow-y: auto; }
         .modal-close { position: absolute; top: 16px; right: 16px; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); padding: 4px; }
@@ -281,7 +303,6 @@
         .form-group label { display: block; font-weight: 600; font-size: 0.9rem; margin-bottom: 8px; }
         .form-input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 6px; outline: none; background: var(--bg-color); color: var(--text-main); }
 
-        /* Flashcard */
         .flashcard-wrapper { perspective: 1000px; width: 100%; max-width: 400px; height: 260px; margin: 20px auto; }
         .flashcard { width: 100%; height: 100%; position: relative; transform-style: preserve-3d; transition: transform 0.6s ease; cursor: pointer; border-radius: 16px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
         .flashcard.flipped { transform: rotateY(180deg); }
@@ -289,8 +310,7 @@
         .flashcard-back { transform: rotateY(180deg); background: var(--actor-a); color: var(--actor-a-text); }
         .empty-state { text-align: center; padding: 48px 20px; color: var(--text-muted); background: var(--card-bg); border-radius: 12px; border: 1px dashed var(--border); }
 
-        /* Chatbot Widget */
-        #ai-fab-container { position: fixed; bottom: 30px; right: 30px; z-index: 2500; display: flex; flex-direction: column; align-items: flex-end; }
+        #ai-fab-container { position: fixed; bottom: 30px; right: 30px; z-index: var(--z-fab); display: flex; flex-direction: column; align-items: flex-end; }
         #ai-speech-bubble { background: white; color: var(--text-main); padding: 10px 14px; border-radius: 12px; box-shadow: 0 8px 16px rgba(0,0,0,0.15); font-size: 0.9rem; font-weight: bold; margin-bottom: 12px; white-space: nowrap; opacity: 0; visibility: hidden; transform: translateY(10px); transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); position: relative; border: 1px solid var(--border); }
         #ai-speech-bubble::after { content: ''; position: absolute; bottom: -6px; right: 20px; border-width: 6px 6px 0; border-style: solid; border-color: white transparent transparent transparent; }
         .dark-mode #ai-speech-bubble { background: var(--card-bg); border-color: var(--border); }
@@ -306,7 +326,7 @@
         #ai-penguin { display: inline-block; transition: transform 0.2s; }
         #ai-fab-container:hover #ai-penguin { animation: bounceSide 0.5s infinite ease-in-out; }
         
-        #ai-chat-window { position: fixed; bottom: 100px; right: 30px; width: 360px; height: 500px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: 2500; overflow: hidden; }
+        #ai-chat-window { position: fixed; bottom: 100px; right: 30px; width: 360px; height: 500px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: none; flex-direction: column; z-index: var(--z-fab); overflow: hidden; }
         #ai-chat-window.active { display: flex; }
         .chat-header { background: var(--primary); color: white; padding: 16px; font-weight: bold; display: flex; justify-content: space-between; align-items: center; font-size: 1.1rem; }
         .chat-header button { background: none; border: none; color: white; cursor: pointer; font-size: 1.5rem; padding: 0 8px; }
@@ -316,7 +336,6 @@
         .chat-message.ai { align-self: flex-start; background: #dbeafe; color: #1e40af; border-bottom-left-radius: 4px; margin-left: 10px; }
         .dark-mode .chat-message.ai { background: #1e3a8a; color: #dbeafe; }
         
-        /* Typing indicator */
         .typing-indicator { display: inline-flex; align-items: center; gap: 4px; }
         .typing-dot { width: 6px; height: 6px; background-color: currentColor; border-radius: 50%; opacity: 0.6; animation: typingBounce 1.4s infinite ease-in-out both; }
         .typing-dot:nth-child(1) { animation-delay: -0.32s; }
@@ -327,70 +346,80 @@
         .chat-input input { flex: 1; padding: 12px 16px; border: 1px solid var(--border); border-radius: 24px; outline: none; background: var(--card-bg); color: var(--text-main); }
         .chat-input button { padding: 12px 20px; background: var(--primary); color: white; border: none; border-radius: 24px; cursor: pointer; font-weight: bold; }
 
-        /* Responsive Mobile */
         @media (max-width: 768px) {
             .btn-menu { display: block; }
             .mobile-logo { display: block; }
             .sidebar { position: fixed; left: -280px; top: 0; bottom: 0; width: 280px; transition: left 0.3s ease; box-shadow: 2px 0 12px rgba(0,0,0,0.15); }
             .sidebar.open { left: 0; }
             .logo { display: none; }
-            
-            .main-content { padding: 16px; }
-            
-            .top-bar { padding: 0 12px; gap: 6px; height: 56px; }
-            .top-controls { gap: 6px; }
+            .main-content { padding: 16px; padding-bottom: 120px; }
+            .top-bar { padding: 0 8px; gap: 4px; height: 56px; flex-wrap: nowrap; overflow-x: auto; overflow-y: hidden; }
+            .top-bar::-webkit-scrollbar { display: none; }
+            .top-controls { gap: 4px; flex-shrink: 0; }
+            .mobile-logo { font-size: 1.1rem; white-space: nowrap; letter-spacing: -0.5px; margin-right: 4px; }
+            .top-bar > div:nth-child(2) { gap: 4px !important; flex-shrink: 0; }
             #userIdDisplay { display: none !important; }
-            .btn-auth { padding: 6px 10px; font-size: 0.75rem; white-space: nowrap; }
-            .user-profile { gap: 4px; }
-            
-            .btn-logout { padding: 6px 8px; font-size: 0.7rem; white-space: nowrap; }
-            .user-badge { width: 28px; height: 28px; font-size: 0.8rem; }
-            #userName { font-size: 0.85rem !important; }
-            
-            .lang-selector select { width: auto; padding: 6px 16px 6px 8px; font-size: 0.8rem; }
-            
+            .btn-auth { padding: 6px 8px; font-size: 0.75rem; white-space: nowrap; flex-shrink: 0; }
+            .user-profile { gap: 4px; flex-shrink: 0; }
+            .btn-logout { padding: 6px 6px; font-size: 0.7rem; white-space: nowrap; flex-shrink: 0; }
+            .user-badge { width: 26px; height: 26px; font-size: 0.75rem; }
+            #userName { font-size: 0.8rem !important; white-space: nowrap; max-width: 65px; overflow: hidden; text-overflow: ellipsis; }
+            #btnDarkMode { padding: 4px 6px !important; font-size: 1rem; flex-shrink: 0; }
+            .lang-selector select { width: auto; padding: 4px 18px 4px 6px; font-size: 0.75rem; height: 28px; }
             .grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
             .card { padding: 10px; }
             .card h3 { font-size: 0.95rem; margin-bottom: 4px; line-height: 1.2; }
             .card p { font-size: 0.75rem; margin-bottom: 8px; min-height: 28px; line-height: 1.3; }
             .card .btn-start { padding: 8px; font-size: 0.85rem; }
             .tag { font-size: 0.65rem; padding: 2px 4px; margin-bottom: 4px; }
-
             .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
             .stat-card { padding: 12px 6px; }
             .stat-card > div[style*="color: var(--text-muted)"] { font-size: 0.65rem !important; letter-spacing: -0.5px; word-break: keep-all; line-height: 1.2; }
             .stat-num { font-size: 1.4rem; margin-top: 6px; }
-            
             .deck-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; }
-            
             .lesson-container { padding: 16px; }
             .dialogue-row { flex-direction: column; align-items: flex-start; gap: 12px; }
             .dialogue-row .btn-icon { align-self: flex-end; margin-top: -30px; }
-
             .typing-test-container { padding: 16px; }
             .typing-question { font-size: 1.6rem; }
             #typing-answer-input { font-size: 16px; }
-
             .add-deck-form, .add-word-form { flex-direction: column; }
             .add-deck-form button, .add-word-form button { width: 100%; }
-
             .ai-conv-input-area { flex-wrap: wrap; justify-content: center; }
             #ai-conv-chat-input { width: 100%; order: -1; margin-bottom: 8px; flex: none; }
-            
             .score-card-box { min-width: 140px; padding: 16px 12px; }
             .score-card-box .score-number { font-size: 2.5rem; }
-            
             #ai-chat-window { width: 92%; right: 4%; bottom: 90px; height: 65vh; max-height: 500px; }
             #ai-fab-container { bottom: 20px; right: 20px; }
-            
             .modal-card { width: 95%; padding: 20px; }
             .flashcard-wrapper { height: 220px; }
-
             .vocab-detail-card { padding: 12px; align-items: flex-start; }
             .vocab-detail-card button { padding: 8px; font-size: 0.8rem; margin-top: 8px; width: 100%; }
             .vocab-detail-card > div:first-child { flex-direction: column; align-items: flex-start; gap: 4px; width: 100%; }
             .lesson-subbox { padding: 16px 12px; }
             .lesson-subbox h3 { font-size: 1rem; word-break: keep-all; }
+            .table-responsive { overflow-x: visible; }
+            .vocab-table { display: block; min-width: 100%; border: none; background: transparent; box-shadow: none; margin-bottom: 32px; }
+            .vocab-table thead, .vocab-table th { display: none; }
+            .vocab-table tbody { display: flex; flex-direction: column; gap: 8px; }
+            .vocab-table tr { 
+                display: flex; flex-wrap: nowrap; align-items: center; gap: 10px; 
+                background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px 14px; 
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
+            }
+            .vocab-table td { border: none !important; padding: 0 !important; width: auto !important; margin: 0 !important; order: unset !important; }
+            #vocabContainer .vocab-table td:nth-child(1) { flex-shrink: 0; }
+            #vocabContainer .vocab-table td:nth-child(2) { flex: 1; word-break: break-word; font-size: 1.05rem; font-weight: 600; }
+            #vocabContainer .vocab-table td:nth-child(3) { flex: 1; word-break: break-word; color: var(--text-muted); }
+            #vocabContainer .vocab-table td:nth-child(4) { display: none; }
+            #deckWordsContainer .vocab-table td:nth-child(1) { flex: 1; word-break: break-word; font-size: 1.05rem; font-weight: 600; }
+            #deckWordsContainer .vocab-table td:nth-child(2) { flex: 1; word-break: break-word; color: var(--text-muted); }
+            #deckWordsContainer .vocab-table td:nth-child(3) { flex-shrink: 0; margin-left: auto; display: flex; justify-content: flex-end; }
+            #adminUsersTable.vocab-table { display: table; min-width: 600px; }
+            #adminUsersTable.vocab-table thead, #adminUsersTable.vocab-table th { display: table-cell; }
+            #adminUsersTable.vocab-table tbody { display: table-row-group; }
+            #adminUsersTable.vocab-table tr { display: table-row; }
+            #adminUsersTable.vocab-table td { display: table-cell; border-bottom: 1px solid var(--border); }
         }
     </style>
 </head>
@@ -402,11 +431,9 @@
         <div class="logo" onclick="nav('dashboard')">edupeng🐧</div>
         <div class="nav-menu">
             <div class="nav-item main-tab active" onclick="nav('dashboard')" id="nav-dashboard">🏠 전체 코스</div>
-            
             <div class="nav-category" id="cat-eng">🇺🇸 영어 학습</div>
             <div class="nav-item" onclick="nav('casual')" id="nav-casual">☕ 일상 회화</div>
             <div class="nav-item" onclick="nav('business')" id="nav-business">💼 비즈니스 회화</div>
-            
             <div class="nav-category" id="cat-kor">🇰🇷 한국어 학습</div>
             <div class="nav-item" onclick="nav('korean')" id="nav-korean">🏫 한국어 초급</div>
             <div class="nav-item" onclick="startTypingTest('numbers')" id="nav-test-num">🔢 한국어 숫자 테스트</div>
@@ -469,12 +496,11 @@
                     <p id="admin-sub">전체 회원의 학습 현황을 확인하고 관리할 수 있습니다.</p>
                 </div>
                 <div class="table-responsive">
-                    <table class="vocab-table" id="adminUsersTable">
-                        <!-- JS에서 렌더링 -->
-                    </table>
+                    <table class="vocab-table" id="adminUsersTable"></table>
                 </div>
             </div>
 
+            <!-- Dashboard Section -->
             <div id="dashboard" class="section active">
                 <div class="header">
                     <h1 id="dash-title">edupeng 🐧 어학 학습 포털</h1>
@@ -490,7 +516,6 @@
                     <div id="statsContainer" style="display: none; margin-bottom: 32px;">
                         <div class="goal-container">
                             <div style="width: 100%; font-weight: bold; margin-bottom: 8px; font-size: 1.05rem;" id="lbl-daily-goal">🎯 일일 목표 설정 (테스트 완료 횟수)</div>
-                            
                             <div style="display: flex; flex-wrap: wrap; gap: 12px; width: 100%; align-items: center;">
                                 <div class="goal-input-group">
                                     <span id="lbl-goal-num">🔢 숫자</span>
@@ -506,9 +531,7 @@
                                 </div>
                                 <button class="btn-start" style="width: auto; padding: 10px 20px; flex-shrink: 0;" onclick="saveDailyGoals()" id="btn-save-goal">저장</button>
                             </div>
-                            
-                            <div class="goal-progress" id="dailyProgressContainer">
-                            </div>
+                            <div class="goal-progress" id="dailyProgressContainer"></div>
                         </div>
 
                         <div class="stats-grid" id="statsGrid">
@@ -527,8 +550,7 @@
                         </div>
                         
                         <h3 id="home-history-title" style="margin-bottom: 12px; font-size: 1.2rem; color: var(--text-main); margin-top: 10px;">📅 날짜별 수강 이력 (결과 확인)</h3>
-                        <div id="dateHistoryContainer" style="display: flex; flex-wrap: wrap;">
-                        </div>
+                        <div id="dateHistoryContainer" style="display: flex; flex-wrap: wrap;"></div>
                     </div>
                 </div>
 
@@ -546,9 +568,10 @@
                 <div class="grid" id="courseGrid"></div>
             </div>
 
+            <!-- Lesson Section -->
             <div id="lesson" class="section">
                 <div class="header" style="max-width: 850px; margin: 0 auto 24px auto;">
-                    <button class="btn-control" onclick="nav('dashboard')" style="margin-bottom: 16px; font-weight:bold;" id="btn-back">← 뒤로 가기</button>
+                    <button class="btn-control" onclick="goBackFromLesson()" style="margin-bottom: 16px; font-weight:bold;" id="btn-back">← 뒤로 가기</button>
                     <div style="display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
                         <span id="lessonLevelTag" class="tag">난이도</span>
                         <span id="lessonCategoryTag" class="tag">카테고리</span>
@@ -654,8 +677,7 @@
                     </div>
                 </div>
             </div>
-
-            <!-- AI Conversation Section -->
+<!-- AI Conversation Section -->
             <div id="ai_conv" class="section">
                 <div class="header" style="text-align: center; position: relative;">
                     <button class="btn-control" onclick="nav('dashboard')" style="position: absolute; left: 0; top: 0; font-weight:bold;" id="btn-back-ai-conv">← 뒤로</button>
@@ -836,13 +858,12 @@
         <div class="modal-card" style="max-width: 600px;">
             <button class="modal-close" onclick="closeAdminUserModal()">✕</button>
             <h2 id="adminUserTitle" style="color: var(--primary); margin-bottom: 16px;">유저 상세 정보</h2>
-            <div id="adminUserDetails" style="font-size: 0.95rem; line-height: 1.6; max-height: 60vh; overflow-y: auto;">
-            </div>
+            <div id="adminUserDetails" style="font-size: 0.95rem; line-height: 1.6; max-height: 60vh; overflow-y: auto;"></div>
         </div>
     </div>
 
     <!-- Custom Alert Overlay -->
-    <div class="modal-overlay" id="customAlertModal" style="z-index: 4000;">
+    <div class="modal-overlay" id="customAlertModal" style="z-index: var(--z-alert);">
         <div class="modal-card" style="max-width: 320px; text-align: center;">
             <p id="customAlertMessage" style="margin-bottom: 24px; font-size: 1.1rem; line-height: 1.5;"></p>
             <button class="btn-start" style="width: auto; margin: 0 auto; padding: 10px 24px; font-size: 1.05rem;" onclick="document.getElementById('customAlertModal').classList.remove('active')">확인</button>
@@ -865,8 +886,11 @@
             <button class="btn-start" style="width: 100%; padding: 14px; margin-top: 10px;" onclick="saveEditedWord()">수정 완료 💾</button>
         </div>
     </div>
-<script>
-        // [보안 패치] XSS 방어를 위한 HTML 이스케이프 함수
+
+    <script>
+        // 🔑 Gemini API Key 직접 연동 설정 (테스트 시 본인의 API 키 입력)
+        window.GEMINI_API_KEY = ""; 
+
         window.escapeHTML = function(str) {
             if (typeof str !== 'string') return str;
             return str.replace(/[&<>'"]/g, function(match) {
@@ -906,7 +930,7 @@ C|B|1|인사와 안부|挨拶と近況|Hello, how are you today?|안녕하세요
 C|B|2|자기소개|自己紹介|Nice to meet you. I'm Alex.|만나서 반가워요. 알렉스입니다.|はじめまして。アレックスです。|I'm Sarah. I'm from Canada.|저는 사라예요. 캐나다에서 왔어요.|私はサラです。カナダから来ました。|Oh, I visited Canada last year.|오, 작년에 캐나다 갔었어요.|あ、昨年カナダに行きました。|Really? I hope you liked it!|정말요? 맘에 들었길 바라요!|本当？気に入ってくれたといいな！|nice to meet you|만나서 반가워요|はじめまして|visited|방문했다|訪れた|last year|작년|昨年
 C|B|3|날씨 묻기|天気を尋ねる|Is it going to rain today?|오늘 비가 올까요?|今日雨が降るかな？|Yes, take an umbrella.|네, 우산 챙기세요.|はい、傘を持っていって。|Thanks, I almost forgot it.|고마워요, 하마터면 잊을 뻔했네요.|ありがとう、危うく忘れるところだった。|No problem. Stay dry!|천만에요. 비 맞지 마세요!|どういたしまして。濡れないようにね！|going to rain|비가 올 것이다|雨が降る|take an umbrella|우산을 챙기다|傘を持っていく|almost forgot|하마터면 잊을 뻔한|危うく忘れるところだった
 C|B|4|음식 주문|食べ物の注文|Can I get a burger and fries?|버거랑 감자튀김 주시겠어요?|バーガーとポテトをいただけますか？|Sure. For here or to go?|네. 드시고 가시나요, 포장인가요?|はい。店内ですか、お持ち帰りですか？|To go, please. How much is it?|포장할게요. 얼마인가요?|お持ち帰りで。いくらですか？|That will be ten dollars.|10달러입니다.|10ドルになります。|can I get|~주실 수 있나요|〜いただけますか|for here or to go|매장 식사 아님 포장|店内かお持ち帰り|how much|얼마|いくら
-C|B|5|길 찾기|道案内|Where is the nearest station?|가장 가까운 역이 어디죠?|一番近い駅는 どこですか？|Go straight and turn left.|직진하다가 왼쪽으로 도세요.|まっすぐ行って左に曲がってください。|How long does it take?|얼마나 걸리나요?|どのくらいかかりますか？|About five minutes on foot.|걸어서 5분 정도 걸려요.|歩いて5分くらいです。|nearest|가장 가까운|一番近い|go straight|직진하다|まっすぐ行く|on foot|걸어서|歩いて
+C|B|5|길 찾기|道案内|Where is the nearest station?|가장 가까운 역이 어디죠?|一番近い駅はどこですか？|Go straight and turn left.|직진하다가 왼쪽으로 도세요.|まっすぐ行って左に曲がってください。|How long does it take?|얼마나 걸리나요?|どのくらいかかりますか？|About five minutes on foot.|걸어서 5분 정도 걸려요.|歩いて5分くらいです。|nearest|가장 가까운|一番近い|go straight|직진하다|まっすぐ行く|on foot|걸어서|歩いて
 C|B|6|주말 계획|週末の計画|Do you have plans this weekend?|이번 주말 계획 있어요?|今週末予定ある？|I am just going to relax.|그냥 쉴 거예요.|ただリラックスするつもり。|That sounds really nice.|정말 좋겠네요.|それすごくいいね。|Yeah, I had a busy week.|네, 바쁜 한 주였거든요.|うん、忙しい一週間だったから。|have plans|계획이 있다|予定がある|relax|쉬다|休む|busy week|바쁜 한 주|忙しい一週間
 C|B|7|취미|趣味|What do you do in your free time?|여가 시간에 뭐 하세요?|暇な時何してるの？|I enjoy reading and watching movies.|독서랑 영화 보는 걸 즐겨요.|読書と映画を見るのが好き。|What kind of movies?|어떤 장르의 영화요?|どんな映画？|Mostly action and comedy.|주로 액션과 코미디요.|主にアクションとコメディだよ。|free time|여가 시간|暇な時間|enjoy reading|독서를 즐기다|読書を楽しむ|mostly|주로|主に
 C|B|8|쇼핑|ショッピング|How much is this shirt?|이 셔츠 얼마예요?|このシャツいくら？|It is twenty dollars on sale.|할인해서 20달러입니다.|セールで20ドルだよ。|Do you have this in blue?|파란색도 있나요?|これの青色はある？|Let me check the stock for you.|재고를 확인해 드릴게요.|在庫を確認してみます。|how much|얼마|いくら|on sale|할인 중|セール中|check the stock|재고를 확인하다|在庫を確認する
@@ -924,7 +948,7 @@ C|I|4|병원 진료|診察|My throat has been sore for days.|며칠째 목이 �
 C|I|5|집세|家賃|Is the utility bill included in the rent?|공과금이 월세에 포함되나요?|光熱費は家賃に含まれますか？|Water is included, electricity is separate.|수도는 포함, 전기는 별도입니다.|水道は込み、電気は別です。|Is there a parking space available?|주차 공간이 있나요?|駐車スペースはありますか？|Yes, one spot per apartment.|네, 가구당 한 자리 있습니다.|はい、1部屋につき1台分あります。|utility bill|공과금|光熱費|included|포함된|含まれている|separate|별도의|別の
 C|I|6|파티 준비|パーティーの準備|Who is handling the catering for Friday?|금요일 출장 뷔페는 누가 담당해?|金曜日のケータリングは誰が担当？|I booked a local bakery for desserts.|내가 디저트용 빵집을 예약했어.|私がデザート用のパン屋を予約したよ。|What about the main dishes?|메인 요리는 어떻게 할까?|メイン料理はどうする？|We are ordering pizza and salad.|피자랑 샐러드를 주문할 거야.|ピザとサラダを注文するよ。|handling|담당하다|担当する|catering|출장 뷔페|ケータリング|main dishes|메인 요리|メイン料理
 C|I|7|레시피|レシピ|How do you make this so creamy?|어떻게 이렇게 부드럽게 만들었어?|どうやってこんなにクリーミーに作ったの？|The secret is adding pasta water.|면수를 살짝 넣는 게 비법이야.|茹で汁を加えるのが秘訣だよ。|I never thought of that!|그건 전혀 생각 못 했네!|それは思いつかなかった！|Try it next time you cook.|다음에 요리할 때 해봐.|次に料理する時試してみて。|creamy|부드러운|クリーミーな|secret|비법, 비밀|秘訣|pasta water|면수|パスタの茹で汁
-C|I|8|분실물|忘れ物|I left my phone. Has anyone turned it in?|폰을 두고 왔어요. 맡긴 단 사람 없나요?|スマホを忘れました。届いていませんか？|Let me check the lost and found box.|분실물 보관함을 확인해 볼게요.|忘れ物箱を確認してみます。|It has a red case.|빨간색 케이스가 씌워져 있어요.|赤いケースが付いています。|Ah, here it is! You're lucky.|아, 여기 있네요! 운이 좋으세요.|あ、ありました！ラッキーですね。|left|두고 왔다|忘れた|turned it in|맡기다, 제출하다|届ける|lost and found|분실물 보관함|忘れ物箱
+C|I|8|분실물|忘れ物|I left my phone. Has anyone turned it in?|폰을 두고 왔어요. 맡긴 사람 없나요?|スマホを忘れました。届いていませんか？|Let me check the lost and found box.|분실물 보관함을 확인해 볼게요.|忘れ物箱を確認してみます。|It has a red case.|빨간색 케이스가 씌워져 있어요.|赤いケースが付いています。|Ah, here it is! You're lucky.|아, 여기 있네요! 운이 좋으세요.|あ、ありました！ラッキーですね。|left|두고 왔다|忘れた|turned it in|맡기다, 제출하다|届ける|lost and found|분실물 보관함|忘れ物箱
 C|I|9|와이파이|Wi-Fi|The connection keeps dropping.|연결이 자꾸 끊기네요.|接続が何度も切れます。|The password is on the router in uppercase.|라우터에 대문자로 비번이 있어요.|ルーターに大文字でパスワードがあります。|I typed it, but it still fails.|쳤는데도 계속 실패해요.|入力したのにまだ失敗します。|Let me restart the router for you.|제가 라우터를 재부팅해 드릴게요.|ルーターを再起動してみますね。|keeps dropping|계속 끊기다|途切れ続ける|router|공유기, 라우터|ルーター|uppercase|대문자|大文字
 C|I|10|운동|運動|Do you prefer lifting weights or cardio?|근력이랑 유산소 중 뭘 더 좋아해?|筋トレと有酸素、どっちが好き？|I warm up with cardio and then lift.|유산소로 몸 풀고 근력 운동 해.|有酸素でアップして筋トレするよ。|I hate cardio, to be honest.|솔직히 난 유산소 너무 싫어.|正直、有酸素はすごく嫌い。|You still need it for heart health!|그래도 심장 건강엔 필요해!|それでも心臓の健康には必要だよ！|lifting weights|근력 운동|筋トレ|cardio|유산소 운동|有酸素運動|heart health|심장 건강|心臓の健康
 C|I|11|영화|映画|The plot twist totally caught me off guard.|마지막 반전에 완전 허를 찔렸어.|どんでん返しに完全に不意を突かれた。|Right? The acting was phenomenal.|그치? 연기력도 경이로웠어.|だよね？演技も驚異的だった。|I want to watch it again.|다시 한 번 더 보고 싶어.|もう一度見たいな。|Let's go together next weekend.|다음 주말에 같이 가자.|来週末一緒に行こう。|plot twist|반전|どんでん返し|caught me off guard|허를 찌르다|不意を突かれた|phenomenal|경이로운|驚異的な
@@ -937,7 +961,7 @@ C|A|2|면접 질문|面接の質問|What would you say is your greatest weakness
 C|A|3|깊은 사과|深い謝罪|I am so sorry I missed your wedding ceremony.|너의 결혼식에 참석하지 못해서 정말 미안해.|結婚式に出席できなくて本当にごめんなさい。|I was a bit sad, but I know you were sick.|조금 서운했지만, 네가 아팠던 걸 아니까.|少し寂しかったけど、病気だったのを知ってるから。|I feel terrible. Let me treat you to dinner soon.|정말 미안해. 조만간 저녁 한 번 살게.|本当に申し訳ない。近いうちに夕食をご馳走させて。|That would be lovely. Don't worry too much.|그거 좋지. 너무 걱정하지 마.|それはいいね。あまり気にしないで。|missed|참석하지 못했다|出席できなかった|feel terrible|기분이 참담하다(정말 미안하다)|本当に申し訳ない|treat you to|~에게 대접하다|〜をご馳走する
 C|A|4|의견 내기|意見を述べる|I honestly think remote work is more productive.|솔직히 원격 근무가 더 생산적이라고 생각해요.|正直、リモートワークの方が生産的だと思います。|I see your point, but we lose team chemistry.|무슨 말인지 알지만, 팀워크가 떨어지잖아요.|言いたいことはわかりますが、チームワークが落ちますよね。|We can maintain it with weekly video calls.|매주 화상 통화를 하면 유지할 수 있어요.|毎週のビデオ通話で維持できますよ。|Fair enough, but it's not the same as in-person.|일리 있네요, 하지만 대면하는 것과는 다르죠.|一理ありますが、対面とは違いますよ。|honestly|솔직히|正直に|productive|생산적인|生産的な|chemistry|케미, 팀워크|チームワーク
 C|A|5|친구 위로|友人を慰める|I completely messed up my presentation today.|오늘 프레젠테이션 완전히 망쳤어.|今日プレゼン完全に失敗した。|Don't be so hard on yourself. It happens.|너무 자책하지 마. 그럴 수 있지.|自分を責めないで。よくあることだよ。|But my boss looked really disappointed.|하지만 상사님이 정말 실망하신 것 같았어.|でも上司が本当にがっかりしていたみたい。|You are overthinking it. Tomorrow is a new day.|네가 너무 많이 생각하는 거야. 내일은 내일의 태양이 뜬다구.|考えすぎだよ。明日は明日の風が吹くさ。|messed up|망치다|失敗した|hard on yourself|스스로를 자책하다|自分を責める|overthinking|너무 많이 생각하다|考えすぎ
-C|A|6|문화 차이|文化の違い|I'm still not used to tipping at restaurants here.|난 아직도 여기 식당에서 팁 주는 게 익숙하지 않아.|ここのレストランでチップを払うのにまだ慣れないな。|It's customary because waitstaff rely on it.|서빙 직원들이 거기에 의존하기 때문에 관례야.|ウェイターがそれに頼っているから習慣なんだよ。|In my country, the service charge is included.|우리나라에선 서비스 요금이 포함되어 있거든.|私の国ではサービス料が含まれているから。|It definitely takes some time to adjust.|적응하는 데 확실히 시간이 좀 걸리지.|慣れるのには確かに少し時間がかかるね。|not used to|~에 익숙하지 않다|〜에 慣れていない|customary|관례적인, 습관적인|習慣的な|adjust|적응하다|適応する
+C|A|6|문화 차이|文化の違い|I'm still not used to tipping at restaurants here.|난 아직도 여기 식당에서 팁 주는 게 익숙하지 않아.|ここのレストランでチップを払うのにまだ慣れないな。|It's customary because waitstaff rely on it.|서빙 직원들이 거기에 의존하기 때문에 관례야.|ウェイターがそれに頼っているから習慣なんだよ。|In my country, the service charge is included.|우리나라에선 서비스 요금이 포함되어 있거든.|私の国ではサービス料が含まれているから。|It definitely takes some time to adjust.|적응하는 데 확실히 시간이 좀 걸리지.|慣れるのには確かに少し時間がかかるね。|not used to|~에 익숙하지 않다|〜に慣れていない|customary|관례적인, 습관적인|習慣的な|adjust|적응하다|適応する
 C|A|7|호텔 항의|ホテルのクレーム|Excuse me, the AC in my room isn't working.|실례합니다, 제 방 에어컨이 작동하지 않네요.|すみません、部屋のエアコンが動きません。|I apologize for the inconvenience. Let me check.|불편을 드려 죄송합니다. 확인해 보겠습니다.|ご不便をおかけして申し訳ありません。確認します。|It's quite hot, so I'd appreciate a quick fix.|꽤 더워서요, 빨리 고쳐주시면 감사하겠습니다.|結構暑いので、早く直してもらえると助かります。|We will send a maintenance guy right away.|수리 기사를 지금 바로 올려보내겠습니다.|すぐに修理担当者を向かわせます。|inconvenience|불편|不便|appreciate|감사하다|感謝する|maintenance|유지보수, 수리|修理
 C|A|8|유행 이야기|流行の話題|Have you noticed everyone is using that new app?|다들 그 새 앱 쓰는 거 눈치챘어?|みんなあの新しいアプリ使ってるの気づいた？|Yeah, it went viral overnight.|응, 하룻밤 새에 완전히 입소문 났잖아.|うん、一晩でバズったよね。|I downloaded it, but I don't really get the hype.|다운받긴 했는데, 왜 그렇게 열광하는지 모르겠어.|ダウンロードしたけど、なんでそんなに騒がれてるのかわからない。|It's just a passing trend. It'll fade soon.|그냥 지나가는 유행이야. 곧 식을 걸.|ただの通り過ぎる流行だよ。すぐに廃れるさ。|noticed|알아채다|気づく|viral|입소문이 난|バズる|hype|과대광고, 열광|誇大広告、大騒ぎ
 C|A|9|장소 추천|場所の推薦|Any recommendations for a good Italian place?|괜찮은 이탈리안 식당 추천해 줄 데 있어?|いいイタリアンの店、おすすめある？|You should definitely try 'Luigi's' downtown.|시내에 있는 '루이지스'에 꼭 가봐야 해.|市内の「ルイジズ」に絶対行った方がいいよ。|Do I need to make a reservation in advance?|미리 예약을 해야 할까?|事前に予約する必要ある？|Yes, it's always packed on weekends.|응, 주말엔 항상 꽉 차거든.|うん、週末はいつも満席だから。|recommendations|추천|おすすめ|in advance|미리, 사전에|事前に|packed|꽉 찬, 만원의|満席の
@@ -951,7 +975,7 @@ B|B|1|회의 시작|会議の開始|Let's get down to business. Can you hear me?
 B|B|2|명함 교환|名刺交換|Here is my business card.|제 명함입니다.|私の名刺です。|Thank you. Let me give you mine.|감사합니다. 제 명함도 드릴게요.|ありがとうございます。私の名刺もどうぞ。|It is a pleasure to finally meet you.|마침내 뵙게 되어 기쁩니다.|やっとお会いできて嬉しいです。|Likewise. I look forward to working with you.|저도요. 함께 일하게 되길 고대합니다.|こちらこそ。一緒に働くのを楽しみにしています。|business card|명함|名刺|pleasure|기쁨|喜び|look forward to|~을 고대하다|〜を楽しみにする
 B|B|3|미팅 일정|ミーティング調整|Are you available for a quick meeting tomorrow?|내일 잠깐 미팅 가능하신가요?|明日少しミーティングの時間はありますか？|Sure, 10 AM works best for me.|네, 오전 10시가 가장 좋습니다.|はい、午前10時が一番都合がいいです。|Perfect. I will send a calendar invite.|완벽해요. 캘린더 초대장을 보낼게요.|完璧です。カレンダーの招待を送ります。|I'll see you in the conference room.|회의실에서 뵙겠습니다.|会議室でお会いしましょう。|available|시간이 가능한|時間が空いている|works best|가장 좋은|一番都合がいい|calendar invite|캘린더 초대장|カレンダーの招待
 B|B|4|도움 요청|助けを求める|Could you give me a hand with this report?|이 보고서 좀 도와주시겠어요?|この報告書を手伝っていただけますか？|No problem. What do you need help with?|문제없어요. 뭐가 필요하신가요?|問題ありません。何が必要ですか？|I need someone to proofread the final draft.|최종본 교정 봐줄 사람이 필요해요.|最終稿の校正をしてくれる人が必要です。|I can do that after lunch.|점심 식사 후에 해드릴 수 있습니다.|昼食後ならできます。|give me a hand|도와주다|手伝う|proofread|교정하다|校正する|final draft|최종본|最終稿
-B|B|5|메시지 남기기|伝言を残す|Mr. Kim is not at his desk right now.|김 선생님은 지금 자리에 안 계십니다.|キムさんは現在席を外しています。|Can I leave a message for him, please?|그분께 메시지 좀 남길 수 있을까요?|伝言をお願いできますか？|Of course. I have a pen and paper ready.|물론이죠. 펜과 종이 준비되었습니다.|もちろんです。ペンと紙の準備ができています。|Please tell him to call the client back.|고객에게 다시 전화해 달라고 전해주세요.|顧客に折り返し電話するよう伝えてください。|at his desk|자리에 있는|席에いる|leave a message|메시지를 남기다|伝言を残す|call back|다시 전화하다|折り返し電話する
+B|B|5|메시지 남기기|伝言を残す|Mr. Kim is not at his desk right now.|김 선생님은 지금 자리에 안 계십니다.|キムさんは現在席を外しています。|Can I leave a message for him, please?|그분께 메시지 좀 남길 수 있을까요?|伝言をお願いできますか？|Of course. I have a pen and paper ready.|물론이죠. 펜과 종이 준비되었습니다.|もちろんです。ペンと紙の準備ができています。|Please tell him to call the client back.|고객에게 다시 전화해 달라고 전해주세요.|顧客に折り返し電話するよう伝えてください。|at his desk|자리에 있는|席にいる|leave a message|메시지를 남기다|伝言を残す|call back|다시 전화하다|折り返し電話する
 B|B|6|사무용품|事務用品|We are running out of printer paper.|프린터 용지가 다 떨어져 가요.|プリンターの用紙が少なくなっています。|I will order some more today.|오늘 추가로 주문해 놓겠습니다.|今日追加注文しておきます。|Also, we need black ink cartridges.|그리고 검은색 잉크 카트리지도 필요해요.|あと、黒インクのカートリッジも必要です。|Got it. I will add that to the list.|알겠습니다. 목록에 추가할게요.|了解しました。リストに追加します。|running out of|다 떨어져 가는|不足している|order|주문하다|注文する|cartridges|카트리지|カートリッジ
 B|B|7|안건 확인|アジェンダ確認|What's on our agenda for today's meeting?|오늘 회의 안건이 무엇인가요?|今日の会議のアジェンダは何ですか？|We need to discuss the new marketing plan.|새 마케팅 계획을 논의해야 합니다.|新しいマーケティング計画を議論する必要があります。|Will the CEO join the discussion?|CEO도 논의에 참석하시나요?|CEOも議論に参加しますか？|No, she is out of town this week.|아뇨, 이번 주는 출장 중이십니다.|いいえ、今週は出張中です。|agenda|안건, 의제|アジェンダ|discuss|논의하다|議論する|out of town|출장 중인, 부재중인|出張中
 B|B|8|손님 맞이|来客対応|Welcome to our office. Can I get you anything?|저희 사무실에 오신 걸 환영합니다. 뭐 드릴까요?|弊社へようこそ。何かお持ちしましょうか？|Just a glass of water would be fine.|물 한 잔이면 충분합니다.|お水だけで結構です。|Please have a seat in the lobby.|로비에 앉아 기다려 주세요.|ロビーにお掛けになってお待ちください。|Mr. Lee will be right with you.|이 선생님이 곧 오실 겁니다.|イさんがすぐ参ります。|get you anything|무언가 가져다주다|何かお持ちする|have a seat|자리에 앉다|席に座る|right with you|곧 갈 것이다|すぐに参ります
@@ -961,7 +985,7 @@ B|B|11|이메일|メール|I'm writing to confirm our appointment.|약속을 확
 B|B|12|출퇴근|通勤|How was your commute this morning?|오늘 아침 출퇴근 어땠어요?|今朝の通勤はどうでしたか？|Traffic was terrible. I almost missed the meeting.|차가 너무 막혔어요. 회의 늦을 뻔했죠.|道がひどく混んでいて、会議に遅れそうでした。|Taking the subway is much faster.|지하철 타는 게 훨씬 빠를 텐데요.|地下鉄に乗る方がはるかに早いですよ。|I think I will do that tomorrow.|내일은 그래야겠어요.|明日はそうしようと思います。|commute|출퇴근, 통근|通勤|terrible|끔찍한, 심한|ひどい|missed|놓친, 늦은|遅れるところだった
 B|B|13|IT 지원|ITサポート|My computer keeps freezing. What should I do?|컴퓨터가 자꾸 멈추네요. 어쩌죠?|パソコンが何度もフリーズします。どうすれば？|Try restarting it first.|먼저 재부팅해 보세요.|まずは再起動してみてください。|I did, but the screen is still black.|해봤는데 화면이 여전히 까매요.|やりましたが、画面はまだ真っ暗です。|Call the IT help desk right away.|당장 IT 헬프 데스크에 연락하세요.|すぐにITヘルプデスクに連絡してください。|freezing|멈추는 현상|フリーズする|restarting|재부팅|再起動|help desk|헬프 데스크|ヘルプデスク
 B|B|14|지시 확인|指示の再確認|Could you clarify the deadline for this task?|이 업무 마감 기한을 명확히 해주시겠어요?|この業務の締め切りを明確にしていただけますか？|It should be done by the end of the day.|오늘 일과가 끝날 때까지 다 되어야 해요.|今日の業務終了までに完了させてください。|Does that mean 5 PM sharp?|정각 5시를 말씀하시는 건가요?|5時ちょうどということですか？|Yes, before the office closes.|네, 사무실 문 닫기 전까지요.|はい、オフィスが閉まる前までです。|clarify|명확히 하다|明確にする|deadline|마감 기한|締め切り|sharp|정각|ちょうど
-B|B|15|마무리|一日の終わり|Let's wrap up for today. Good work.|오늘은 이만 마무리합시다. 수고했어요.|今日はこの辺で終わりにしましょう。お疲れ様。|Have a great evening! See you tomorrow.|좋은 저녁 보내세요! 내일 뵙겠습니다.|良い夜を！また明日。|Don't forget to lock the door.|문 잠그는 거 잊지 말고요.|ドア의鍵を閉めるのを忘れないで。|I locked it. Good night!|잠갔습니다. 안녕히 계세요!|閉めました。おやすみなさい！|wrap up|마무리하다|締めくくる|lock|잠그다|鍵を閉める|forget to|~하는 것을 잊다|〜するのを忘れる
+B|B|15|마무리|一日の終わり|Let's wrap up for today. Good work.|오늘은 이만 마무리합시다. 수고했어요.|今日はこの辺で終わりにしましょう。お疲れ様。|Have a great evening! See you tomorrow.|좋은 저녁 보내세요! 내일 뵙겠습니다.|良い夜を！また明日。|Don't forget to lock the door.|문 잠그는 거 잊지 말고요.|ドアの鍵を閉めるのを忘れないで。|I locked it. Good night!|잠갔습니다. 안녕히 계세요!|閉めました。おやすみなさい！|wrap up|마무리하다|締めくくる|lock|잠그다|鍵を閉める|forget to|~하는 것을 잊다|〜するのを忘れる
 B|I|1|마감 연장|締め切り延長|Can we push the deadline to next Tuesday?|마감일을 다음 주 화요일로 미룰 수 있을까요?|締め切りを来週火曜に延ばすことは可能ですか？|I'll expedite the process and send a draft.|진행을 서둘러서 초안을 보낼게요.|作業を急がせて草案を送ります。|Please ensure the quality doesn't drop.|품질이 떨어지지 않게 확실히 해주세요.|品質が落ちないように確実にしてください。|Absolutely. Our team is on it.|물론입니다. 저희 팀이 맡고 있습니다.|もちろんです。我々のチームが対応しています。|push the deadline|마감일을 미루다|締め切りを延ばす|expedite|신속히 처리하다|迅速に処理する|ensure|확실하게 하다|確実にする
 B|I|2|성과 리뷰|成果レビュー|Your sales figures exceeded our Q2 targets.|당신 영업 실적이 2분기 목표를 초과했어요.|あなたの営業成績が第2四半期の目標を上回りました。|The new strategy really paid off.|새로운 전략이 정말 효과를 봤어요.|新しい戦略が本当に功を奏しました。|We are considering you for a promotion.|당신의 승진을 고려하고 있습니다.|あなたの昇進を検討しています。|That is wonderful news, thank you!|정말 멋진 소식이네요, 감사합니다!|それは素晴らしい知らせです、ありがとうございます！|exceeded|초과했다|上回った|paid off|성과를 올리다|功を奏した|promotion|승진|昇進
 B|I|3|불만 처리|クレーム対応|The client is furious about the delivery delay.|고객이 배송 지연에 대해 매우 화가 났어요.|顧客が配達の遅れに激怒しています。|Offer a 10% discount to smooth things over.|상황을 수습하기 위해 10% 할인을 제안하세요.|状況を丸く収めるため10%の割引を提案して。|I will draft an apology email now.|지금 사과 이메일 초안을 작성하겠습니다.|今すぐ謝罪メールの草案を作成します。|Make sure the tone is extremely polite.|말투가 아주 정중한지 반드시 확인하세요.|非常に丁寧な口調になるよう確認してください。|furious|격분한|激怒した|smooth things over|수습하다|丸く収める|draft|초안을 작성하다|草案を作成する
@@ -984,10 +1008,10 @@ B|A|4|연봉 협상|給与交渉|I'd like to discuss a salary adjustment.|연봉
 B|A|5|새 툴 제안|新しいツールの提案|We should switch to a new project management tool.|우린 새 프로젝트 관리 툴로 바꿔야 해요.|新しいプロジェクト管理ツールに切り替えるべきです。|What's wrong with the one we are currently using?|지금 쓰고 있는 툴에 무슨 문제가 있나요?|今使っているツールのどこが問題ですか？|It's too slow and lacks integration features.|너무 느리고 연동 기능이 부족합니다.|遅すぎるし連携機能が不足しています。|Send me a proposal with the cost analysis.|비용 분석이 포함된 제안서를 보내주세요.|コスト分析を含めた提案書を送ってください。|switch to|~로 바꾸다|〜に切り替える|currently|현재|現在|integration|연동, 통합|連携、統合
 B|A|6|까다로운 고객|気難しい顧客|The client is very upset about the new pricing.|고객이 새 가격 정책에 대해 매우 불만입니다.|顧客が新しい価格設定に非常に腹を立てています。|We need to handle this with extreme care.|이 문제를 아주 조심스럽게 다뤄야 합니다.|この問題は非常に慎重に扱う必要があります。|I'll call him personally to explain the value.|제가 직접 전화해서 가치를 설명하겠습니다.|私が直接電話して価値を説明します。|Good. Offer him a free upgrade if necessary.|좋아요. 필요하다면 무료 업그레이드를 제안하세요.|いいですね。必要なら無料アップグレードを提案してください。|upset|불만인, 화가 난|怒っている|handle|다루다|扱う|personally|직접, 개인적으로|直接、個人的に
 B|A|7|데이터 발표|データの発表|Let's look at the sales figures for this quarter.|이번 분기 영업 수치를 살펴봅시다.|今四半期の売上数値を見てみましょう。|There's a significant drop in the European market.|유럽 시장에서 눈에 띄는 하락이 있네요.|ヨーロッパ市場で著しい落ち込みがあります。|Yes, due to new trade regulations.|네, 새로운 무역 규제 때문입니다.|はい、新しい貿易規制のためです。|We need to adjust our strategy there immediately.|그곳의 전략을 즉시 수정해야겠군요.|現地の戦略を直ちに修正する必要がありますね。|figures|수치|数値|significant|눈에 띄는, 상당한|著しい|regulations|규제|規制
-B|A|8|예산 추가 요청|予算追加의 要請|I need to request more budget for the ad campaign.|광고 캠페인을 위한 추가 예산을 요청해야 합니다.|広告キャンペーンの追加予算を要請する必要があります。|You've already spent your allocated funds.|당신은 이미 할당된 자금을 다 썼잖아요.|すでに割り当てられた資金は使い果たしていますよ。|But the ROI on this platform is incredibly high.|하지만 이 플랫폼의 투자수익률이 엄청나게 높아요.|しかしこのプラットフォームのROIは驚くほど高いんです。|Write a formal request justifying the extra cost.|추가 비용을 정당화하는 공식 요청서를 쓰세요.|追加費用を正当化する正式な要請書を書いてください。|allocated|할당된|割り当てられた|incredibly|엄청나게|驚くほど|justifying|정당화하는|正当化する
+B|A|8|예산 추가 요청|予算追加の要請|I need to request more budget for the ad campaign.|광고 캠페인을 위한 추가 예산을 요청해야 합니다.|広告キャンペーンの追加予算を要請する必要があります。|You've already spent your allocated funds.|당신은 이미 할당된 자금을 다 썼잖아요.|すでに割り当てられた資金は使い果たしていますよ。|But the ROI on this platform is incredibly high.|하지만 이 플랫폼의 투자수익률이 엄청나게 높아요.|しかしこのプラットフォームのROIは驚くほど高いんです。|Write a formal request justifying the extra cost.|추가 비용을 정당화하는 공식 요청서를 쓰세요.|追加費用を正当化する正式な要請書を書いてください。|allocated|할당된|割り当てられた|incredibly|엄청나게|驚くほど|justifying|정당화하는|正当化する
 B|A|9|팀 동기부여|チームのモチベーション|I know it's been a tough week for everyone.|모두에게 힘든 한 주였다는 걸 압니다.|みんなにとって厳しい一週間だったことはわかっています。|We are all feeling a bit burnt out.|우리 모두 약간 번아웃을 느끼고 있어요.|全員少し燃え尽きを感じています。|But your hard work is truly paying off.|하지만 여러분의 노력이 정말 결실을 맺고 있어요.|しかし皆さんの努力は本当に実を結んでいます。|Thanks, we just need to push through Friday.|감사합니다, 금요일까지만 잘 버텨보겠습니다.|ありがとう、金曜日まで頑張り抜きます。|tough|힘든|厳しい|burnt out|번아웃된, 지친|燃え尽きた|push through|끝까지 버티다|頑張り抜く
 B|A|10|실수 논의|ミスの議論|I made a mistake on the financial report.|제가 재무 보고서에 실수를 했습니다.|財務報告書でミスをしてしまいました。|How serious is the discrepancy?|그 차이(불일치)가 얼마나 심각한가요?|その不一致はどのくらい深刻ですか？|It's minor, but it affects the final total.|사소하지만, 최종 합계에 영향을 미칩니다.|些細ですが、最終合計に影響します。|Fix it right now and resend it to the board.|지금 당장 수정해서 이사회에 다시 보내세요.|今すぐ修正して取締役会に再送してください。|mistake|실수|ミス|discrepancy|차이, 불일치|不一致|minor|사소한|些細な
-B|A|11|간단한 설득|簡単なピッチ|Our service cuts your operational costs by half.|저문을 절반으로 줄여줍니다.|我々のサービスは運営コストを半分に削減します。|That sounds too good to be true.|그거 너무 좋아서 믿기지가 않네요.|良すぎて信じられませんね。|Let me show you a quick case study.|간단한 성공 사례(케이스 스터디)를 보여드리겠습니다.|簡単なケーススタディをお見せします。|Okay, you have five minutes to impress me.|좋아요, 저를 감명시킬 5분의 시간을 드리죠.|いいでしょう、私を感心させるための5分間を与えます。|operational|운영의|運営の|case study|성공 사례|ケーススタディ|impress|감명시키다|感心させる
+B|A|11|간단한 설득|簡単なピッチ|Our service cuts your operational costs by half.|저희 서비스는 운영 비용을 절반으로 줄여줍니다.|我々のサービスは運営コストを半分に削減します。|That sounds too good to be true.|그거 너무 좋아서 믿기지가 않네요.|良すぎて信じられませんね。|Let me show you a quick case study.|간단한 성공 사례(케이스 스터디)를 보여드리겠습니다.|簡単なケーススタディをお見せします。|Okay, you have five minutes to impress me.|좋아요, 저를 감명시킬 5분의 시간을 드리죠.|いいでしょう、私を感心させるための5分間を与えます。|operational|운영의|運営の|case study|성공 사례|ケーススタディ|impress|감명시키다|感心させる
 B|A|12|네트워킹|ネットワーキング|Hi, I don't think we've formally met.|안녕하세요, 우리 공식적으로 만난 적은 없는 것 같네요.|こんにちは、正式にお会いするのは初めてだと思います。|I'm David, the new marketing director.|저는 새 마케팅 디렉터인 데이비드입니다.|私は新しいマーケティングディレクターのデイビッドです。|Nice to meet you. I've heard great things about you.|반갑습니다. 당신에 대해 좋은 이야기 많이 들었어요.|はじめまして。あなたについて良い話をたくさん聞いていますよ。|I hope we can collaborate on future projects.|앞으로의 프로젝트에서 협력할 수 있길 바랍니다.|今後のプロジェクトで協力できることを願っています。|formally|공식적으로|正式に|heard great things|좋은 이야기를 많이 듣다|良い話をたくさん聞く|collaborate|협력하다|協力する
 B|A|13|업무 재배치|業務の再配置|John is overwhelmed with his current workload.|존이 현재 업무량 때문에 버거워하고 있어요.|ジョンが現在の仕事量でパンクしています。|We should reassign some of his tasks to Mary.|그의 업무 일부를 메리에게 재배치해야 합니다.|彼のタスクの一部をメアリーに再配置すべきです。|Will Mary have enough bandwidth for that?|메리가 그럴 만한 여유(대역폭)가 있을까요?|メアリーにそれだけの余裕（帯域幅）があるでしょうか？|Yes, her current project is almost wrapped up.|네, 그녀의 현재 프로젝트가 거의 마무리되었거든요.|はい、彼女の現在のプロジェクトはほぼ終わっていますから。|overwhelmed|버거워하는, 압도된|パンクしている、圧倒されている|reassign|재배치하다|再配置する|bandwidth|여유, 대역폭|余裕、帯域幅
 B|A|14|의견 차이|意見の相違|We clearly have different visions for this product.|우리가 이 제품에 대해 분명히 다른 비전을 갖고 있네요.|私たちはこの製品に対して明らかに異なるビジョンを持っていますね。|Yes, but we need to move forward somehow.|네, 하지만 어쨌든 우리는 앞으로 나아가야 합니다.|はい、でもどうにかして前に進まなければなりません。|Let's agree to disagree and test both versions.|서로의 의견 차이를 인정하고, 두 버전을 다 테스트해봅시다.|意見の違いを認めて、両方のバージョンをテストしてみましょう。|That is a very practical solution.|그거 아주 실용적인 해결책이군요.|それはとても実用的な解決策ですね。|clearly|분명히|明らかに|agree to disagree|의견 차이를 인정하다|意見の違いを認める|practical|실용적인|実用的な
@@ -995,11 +1019,11 @@ B|A|15|송별사|送別の挨拶|It's hard to believe you are leaving us, Mark.|
 K|B|1|한글 기초 & 소리 읽기|ハングル基礎＆発音|안녕하세요, 만나서 반갑습니다.|Hello, nice to meet you.|こんにちは、はじめまして。|제 이름은 에듀펭입니다.|My name is Edupeng.|私の名前はエデュペンです。|숫자 일, 이, 삼을 읽어보세요.|Please read the numbers one, two, three.|数字の1、2、3を読んでみてください。|일, 이, 삼. 맞나요?|One, two, three. Is this right?|1、2、3。合ってますか？|만나다|meet|会う|이름|name|名前|숫자|number|数字
 K|B|2|시계·시간 및 날짜 표현|時間・日付の表現|지금 몇 시예요?|What time is it now?|今何時ですか？|지금은 오후 두 시 삼십 분이에요.|It is 2:30 PM now.|今は午後2時30分です。|오늘이 몇 월 며칠인가요?|What date is it today?|今日は何月何日ですか？|오늘은 시월 구일 한글날입니다.|Today is October 9th, Hangul Proclamation Day.|今日は10月9日、ハングルの日です。|시간|Time|時間|오늘|Today|今日|날짜|Date|日付
 K|B|3|자기소개 & 가족 소개|自己紹介と家族|안녕하세요, 제 이름은 지훈입니다.|Hello, my name is Jihoon.|こんにちは、私の名前はジフンです。|반갑습니다. 취미가 무엇인가요?|Nice to meet you. What is your hobby?|はじめまして。趣味は何ですか？|저는 주말에 요리하는 것을 좋아해요.|I like cooking on weekends.|私は週末に料理をするのが好きです。|가족은 부모님과 여동생이 한 명 있습니다.|My family has my parents and one younger sister.|家族は両親と妹が一人います。|취미|Hobby|趣味|요리하다|To cook|料理する|가족|Family|家族
-K|B|4|일상생활 어휘 & 대화|日常生活の語彙|이 옷은 얼마예요?|How much are these clothes?|この服은いくらですか？|오만 원입니다. 파란색도 있어요.|It's 50,000 won. We also have it in blue.|5万ウォンです。青色もあります。|식당은 오른쪽으로 가시면 있습니다.|The restaurant is to your right.|レストランは右側にあります。|감사합니다. 김치찌개 하나 주세요.|Thank you. One Kimchi stew, please.|ありがとうございます。キムチチゲを一つください。|얼마예요|How much is it|いくらですか|오른쪽|Right|右|식당|Restaurant|食堂
-K|B|5|핵심 한국어 문법|コア韓国語文法|어제 무엇을 했어요?|What did you do yesterday?|昨日は何をしましたか？|친구를 만났지만, 영화는 못 봤어요.|I met a friend, but couldn't watch a movie.|友達に会ったけど、영화は見られませんでした。|내일은 비가 올 거예요.|It will rain tomorrow.|明日は雨が降るでしょう。|그래서 집에서 쉬고 싶어요.|So I want to rest at home.|だから家で休みたいです。|어제|Yesterday|昨日|못|Cannot (unable to)|できない|그래서|So, therefore|だから
+K|B|4|일상생활 어휘 & 대화|日常生活の語彙|이 옷은 얼마예요?|How much are these clothes?|この服はいくらですか？|오만 원입니다. 파란색도 있어요.|It's 50,000 won. We also have it in blue.|5万ウォンです。青色もあります。|식당은 오른쪽으로 가시면 있습니다.|The restaurant is to your right.|レストランは右側にあります。|감사합니다. 김치찌개 하나 주세요.|Thank you. One Kimchi stew, please.|ありがとうございます。キムチチゲを一つください。|얼마예요|How much is it|いくらですか|오른쪽|Right|右|식당|Restaurant|食堂
+K|B|5|핵심 한국어 문법|コア韓国語文法|어제 무엇을 했어요?|What did you do yesterday?|昨日は何をしましたか？|친구를 만났지만, 영화는 못 봤어요.|I met a friend, but couldn't watch a movie.|友達に会ったけど、映画は見られませんでした。|내일은 비가 올 거예요.|It will rain tomorrow.|明日は雨が降るでしょう。|그래서 집에서 쉬고 싶어요.|So I want to rest at home.|だから家で休みたいです。|어제|Yesterday|昨日|못|Cannot (unable to)|できない|그래서|So, therefore|だから
 K|B|6|중급 실전 상황별 대화|中級実践会話|프로젝트 진행 상황은 어떻습니까?|How is the project progress?|プロジェクトの進捗はどうですか？|현재 일정대로 순조롭게 진행 중입니다.|It is currently proceeding smoothly on schedule.|現在、予定通り順調に進んでいます。|호텔 예약을 내일로 변경할 수 있을까요?|Can I change my hotel reservation to tomorrow?|ホテルの予約を明日に変更できますか？|네, 추가 비용 없이 변경해 드렸습니다.|Yes, I changed it without any extra cost.|はい、追加費用なしで変更いたしました。|진행 상황|Progress|進捗状況|일정|Schedule|日程|예약|Reservation|予約
 K|B|7|경어법 체계 및 높임 표현|敬語体系と表現|할아버지, 식사 드셨어요?|Grandfather, did you have your meal?|おじいさん、お食事は召し上がりましたか？|네, 방금 맛있게 먹었단다.|Yes, I just had a delicious meal.|ええ、たった今美味しくいただいたよ。|사장님은 지금 회의 중이십니다.|The CEO is currently in a meeting.|社長は現在会議中です。|끝나시면 제게 연락 달라고 전해주세요.|Please tell him to contact me when he finishes.|終わったら私に連絡するように伝えてください。|식사|Meal|食事|드시다|To eat (honorific)|召し上がる|회의|Meeting|会議
-K|B|8|필수 중급 문법 확장|必須中級文法拡張|비가 오는데 우산이 없어요.|It's raining, but I don't have an umbrella.|雨가降っているのに傘がありません。|시간이 있으면 같이 쓰고 갈까요?|If you have time, shall we share it?|時間があれば、一緒に差して行きますか？|네, 도서관에 책을 빌리러 가는 길이에요.|Yes, I'm on my way to the library to borrow a book.|はい、図書館에本を借りに行く途中です。|그럼 제가 도서관까지 데려다줄 수 있어요.|Then I can take you to the library.|それなら、私が図書館まで送っていけますよ。|우산|Umbrella|傘|빌리다|To borrow|借りる|데려다주다|To take (someone)|送っていく
+K|B|8|필수 중급 문법 확장|必須中級文法拡張|비가 오는데 우산이 없어요.|It's raining, but I don't have an umbrella.|雨が降っているのに傘がありません。|시간이 있으면 같이 쓰고 갈까요?|If you have time, shall we share it?|時間があれば、一緒に差して行きますか？|네, 도서관에 책을 빌리러 가는 길이에요.|Yes, I'm on my way to the library to borrow a book.|はい、図書館に本を借りに行く途中です。|그럼 제가 도서관까지 데려다줄 수 있어요.|Then I can take you to the library.|それなら、私が図書館まで送っていけますよ。|우산|Umbrella|傘|빌리다|To borrow|借りる|데려다주다|To take (someone)|送っていく
 K|B|9|실생활 문제 해결|日常生活の問題解決|머리가 아프고 열이 나요.|My head hurts and I have a fever.|頭が痛くて熱があります。|이 약을 식후 30분에 드세요.|Take this medicine 30 minutes after meals.|この薬を食後30分に飲んでください。|지하철역으로 가려면 어떻게 환승하나요?|How do I transfer to get to the subway station?|地下鉄の駅に行くにはどう乗り換えますか？|다음 정류장에서 2번 버스로 갈아타세요.|Transfer to bus number 2 at the next stop.|次の停留所で2番のバスに乗り換えてください。|머리가 아프다|Head hurts|頭が痛い|약|Medicine|薬|환승하다|To transfer|乗り換える
 K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰에게 잡혔습니다.|The thief was caught by the police.|泥棒が警察に捕まりました。|엄마가 아이에게 옷을 입혔어요.|The mother dressed the child.|お母さんが子供に服を着せました。|학생들이 학교에서 한자를 배웁니다.|Students learn Hanja at school.|学生たちが学校で漢字を学びます。|식은 죽 먹기처럼 정말 쉬워요!|It's a piece of cake (very easy)!|朝飯前のように本当に簡単です！|잡히다|To be caught|捕まる|입히다|To make/let wear|着せる|학생|Student|学生
 `;
@@ -1109,7 +1133,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 let mStr = m === 0 ? '정각' : numToKo(m) + '분';
                 let id = m === 0 ? `${h}時` : `${h}時${m}分`;
                 if(!times.some(x => x.ja === id)) {
-                    times.push({ ja: id, ko: m === 0 ? `${hStr} ${mStr}` : `${hStr} ${mStr}`, exp_ko: `시간은 고유어 '${hours[h]}시', 분은 한자어 '${m === 0 ? '정각' : numToKo(m) + '분'}'으로 읽습니다.`, exp_ja: `時間は固有語「${hours[h]}시」、分は漢字語「${m === 0 ? '정각' : numToKo(m) + '분'}」で読みます。` });
+                    times.push({ ja: id, ko: `${hStr} ${mStr}`, exp_ko: `시간은 고유어 '${hours[h]}시', 분은 한자어 '${m === 0 ? '정각' : numToKo(m) + '분'}'으로 읽습니다.`, exp_ja: `時間は固有語「${hours[h]}시」、分は漢字語「${m === 0 ? '정각' : numToKo(m) + '분'}」で読みます。` });
                 }
             }
             window.testPools.times = times;
@@ -1119,10 +1143,29 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             if (!('speechSynthesis' in window)) return;
             window.speechSynthesis.cancel();
             const msg = new SpeechSynthesisUtterance(text);
-            msg.lang = isKorean ? 'ko-KR' : 'en-US';
-            msg.pitch = actor === 'A' ? 1.2 : 0.8;
+            msg.rate = 0.85;
+            const targetLang = isKorean ? 'ko-KR' : 'en-US';
+            msg.lang = targetLang;
+            msg.pitch = actor === 'A' ? 1.1 : 0.9;
+
+            const voices = window.speechSynthesis.getVoices();
+            if (voices && voices.length > 0) {
+                const langVoices = voices.filter(v => v.lang.startsWith(targetLang.split('-')[0]));
+                if (langVoices.length > 0) {
+                    const premiumVoice = langVoices.find(v => 
+                        v.name.includes('Premium') || v.name.includes('Google') || v.name.includes('Siri') || v.name.includes('Natural')
+                    );
+                    msg.voice = premiumVoice ? premiumVoice : langVoices[0];
+                }
+            }
             window.speechSynthesis.speak(msg);
         };
+        
+        if ('speechSynthesis' in window) {
+            window.speechSynthesis.onvoiceschanged = function() {
+                window.speechSynthesis.getVoices(); 
+            };
+        }
 
         const levelNames = {
             ko: { beginner: '초급', intermediate: '중급', advanced: '고급' },
@@ -1254,29 +1297,23 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
         let isBlurMode = false;
         let isBlurMyDecksMode = false;
         let currentVocabLang = 'en'; 
-        
-        window.deckSortOrder = 'desc'; // 기본값 최신순
+        window.deckSortOrder = 'desc';
 
         window.userDecks = {}; 
         window.completedUnits = new Set();
         window.currentUser = null;
-        window.usersDbCache = {}; // Admin cache
-        
-        // 데이터 로드 확인용 플래그
+        window.usersDbCache = {}; 
         window.isDataLoaded = false;
-
-        // 파이어베이스 모듈에서 덮어씌워질 더미 함수
         window.saveUserData = async function() {};
 
         window.initApp = function() {
             if(window.isDarkMode) { document.body.classList.add('dark-mode'); document.getElementById('btnDarkMode').innerText = '☀️'; }
             document.getElementById('langSwitch').value = window.currentLang;
-            
             applyStaticI18n(); 
             renderCourses(); 
             updateOverallProgress(); 
             renderHomeStats();
-        }
+        };
 
         window.ensureDefaultDeck = function() {
             if(!window.userDecks['default_eng']) window.userDecks['default_eng'] = { name: window.i18n[window.currentLang].defaultDeckNameEng, isDefault: true, words: [], lang: 'en' };
@@ -1284,7 +1321,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
 
             if(!window.userDecks['default_kor']) window.userDecks['default_kor'] = { name: window.i18n[window.currentLang].defaultDeckNameKor, isDefault: true, words: [], lang: 'ko' };
             else window.userDecks['default_kor'].name = window.i18n[window.currentLang].defaultDeckNameKor;
-        }
+        };
 
         window.toggleDarkMode = function() {
             window.isDarkMode = !window.isDarkMode;
@@ -1325,7 +1362,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             window.saveUserData();
             renderHomeStats();
             window.customAlert(window.i18n[window.currentLang].alertSaved);
-        }
+        };
 
         window.renderHomeStats = function() {
             if(window.currentUser) {
@@ -1376,7 +1413,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 document.getElementById('statsLoginReq').style.display = 'block';
                 document.getElementById('statsContainer').style.display = 'none';
             }
-        }
+        };
 
         function renderDateHistory() {
             const container = document.getElementById('dateHistoryContainer');
@@ -1403,7 +1440,6 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                     if (r.type === 'times') timeCount++;
                 });
                 
-                // 목표 달성 여부에 따라 스타일 적용
                 const isAchieved = (n >= goals.numbers && d >= goals.dates && timeCount >= goals.times);
                 const statusClass = isAchieved ? 'history-achieved' : 'history-pending';
                 
@@ -1426,7 +1462,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                         <strong style="display:block; margin-bottom:4px;">${idx+1}. ${typeName} (${r.score}/${r.total})</strong>
                         <div style="display:flex; flex-wrap:wrap; gap:4px;">
                     `;
-                    r.details.forEach((d, i) => {
+                    r.details.forEach((d) => {
                         const oxClass = d.isCorrect ? 'ox-correct' : 'ox-wrong';
                         const mark = d.isCorrect ? 'O' : 'X';
                         tooltipHtml += `<span class="ox-badge ${oxClass}">${mark}</span>`;
@@ -1441,29 +1477,61 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
 
         function applyStaticI18n() {
             const t = window.i18n[window.currentLang];
-            document.getElementById('btn-login-top').innerText = t.btnLogin; document.getElementById('btn-signup-top').innerText = t.btnSignup; document.getElementById('btn-logout-top').innerText = t.btnLogout;
-            document.getElementById('nav-dashboard').innerText = t.navDash; document.getElementById('cat-eng').innerText = t.catEng; document.getElementById('nav-casual').innerText = t.navCasual; document.getElementById('nav-business').innerText = t.navBusiness;
-            
-            document.getElementById('cat-kor').innerText = t.catKor; document.getElementById('nav-korean').innerText = t.navKorean;
+            document.getElementById('btn-login-top').innerText = t.btnLogin; 
+            document.getElementById('btn-signup-top').innerText = t.btnSignup; 
+            document.getElementById('btn-logout-top').innerText = t.btnLogout;
+            document.getElementById('nav-dashboard').innerText = t.navDash; 
+            document.getElementById('cat-eng').innerText = t.catEng; 
+            document.getElementById('nav-casual').innerText = t.navCasual; 
+            document.getElementById('nav-business').innerText = t.navBusiness;
+            document.getElementById('cat-kor').innerText = t.catKor; 
+            document.getElementById('nav-korean').innerText = t.navKorean;
             
             let idNum = document.getElementById('nav-test-num'); if(idNum) idNum.innerText = t.navTestNum;
             let idDate = document.getElementById('nav-test-date'); if(idDate) idDate.innerText = t.navTestDate;
             let idTime = document.getElementById('nav-test-time'); if(idTime) idTime.innerText = t.navTestTime;
 
-            document.getElementById('cat-vocab-eng').innerText = t.catVocabEng; document.getElementById('nav-vocab-eng').innerText = t.navVocabEng; document.getElementById('nav-bookmarks-eng').innerText = t.navBookmarksEng;
-            document.getElementById('cat-vocab-kor').innerText = t.catVocabKor; document.getElementById('nav-vocab-kor').innerText = t.navVocabKor; document.getElementById('nav-bookmarks-kor').innerText = t.navBookmarksKor;
+            document.getElementById('cat-vocab-eng').innerText = t.catVocabEng; 
+            document.getElementById('nav-vocab-eng').innerText = t.navVocabEng; 
+            document.getElementById('nav-bookmarks-eng').innerText = t.navBookmarksEng;
+            document.getElementById('cat-vocab-kor').innerText = t.catVocabKor; 
+            document.getElementById('nav-vocab-kor').innerText = t.navVocabKor; 
+            document.getElementById('nav-bookmarks-kor').innerText = t.navBookmarksKor;
 
-            document.getElementById('dash-title').innerText = t.dashTitle; document.getElementById('dash-sub').innerText = t.dashSub; document.getElementById('prog-label').innerText = t.progLabel;
+            document.getElementById('dash-title').innerText = t.dashTitle; 
+            document.getElementById('dash-sub').innerText = t.dashSub; 
+            document.getElementById('prog-label').innerText = t.progLabel;
             document.getElementById('levelFilter').innerHTML = `<option value="all">${t.filterAll}</option><option value="beginner">${t.filterBeg}</option><option value="intermediate">${t.filterInt}</option><option value="advanced">${t.filterAdv}</option>`;
-            document.getElementById('btn-back').innerText = t.btnBack; document.getElementById('rp-label').innerText = t.rpLabel; document.getElementById('rp-all').innerText = t.rpAll; document.getElementById('rp-a').innerText = t.rpA; document.getElementById('rp-b').innerText = t.rpB; document.getElementById('lesson-subbox-title').innerText = t.lessonSubboxTitle; document.getElementById('btn-complete').innerText = t.btnComplete;
+            document.getElementById('btn-back').innerText = t.btnBack; 
+            document.getElementById('rp-label').innerText = t.rpLabel; 
+            document.getElementById('rp-all').innerText = t.rpAll; 
+            document.getElementById('rp-a').innerText = t.rpA; 
+            document.getElementById('rp-b').innerText = t.rpB; 
+            document.getElementById('lesson-subbox-title').innerText = t.lessonSubboxTitle; 
+            document.getElementById('btn-complete').innerText = t.btnComplete;
             
-            document.getElementById('lbl-blur-toggle').innerText = t.lblBlurToggle; document.getElementById('btn-fc-all').innerText = t.btnFcAll;
+            document.getElementById('lbl-blur-toggle').innerText = t.lblBlurToggle; 
+            document.getElementById('btn-fc-all').innerText = t.btnFcAll;
             document.getElementById('lbl-blur-toggle-my').innerText = t.lblBlurToggle; 
             
-            document.getElementById('newDeckName').placeholder = t.plcDeckName; document.getElementById('btn-create-deck').innerText = t.btnCreateDeck; document.getElementById('btn-back-decks').innerText = t.btnBackDecks; document.getElementById('btn-fc-deck').innerText = t.btnFcDeck; document.getElementById('newWordEn').placeholder = t.plcWordEn; document.getElementById('newWordMean').placeholder = t.plcWordMean; document.getElementById('btn-add-word').innerText = t.btnAddWord;
-            document.getElementById('fc-title').innerText = t.fcTitle; document.getElementById('fc-sub').innerText = t.fcSub; document.getElementById('btn-fc-prev').innerText = t.btnFcPrev; document.getElementById('btn-fc-next').innerText = t.btnFcNext;
+            document.getElementById('newDeckName').placeholder = t.plcDeckName; 
+            document.getElementById('btn-create-deck').innerText = t.btnCreateDeck; 
+            document.getElementById('btn-back-decks').innerText = t.btnBackDecks; 
+            document.getElementById('btn-fc-deck').innerText = t.btnFcDeck; 
+            document.getElementById('newWordEn').placeholder = t.plcWordEn; 
+            document.getElementById('newWordMean').placeholder = t.plcWordMean; 
+            document.getElementById('btn-add-word').innerText = t.btnAddWord;
             
-            document.getElementById('test-title').innerText = t.testTitle; document.getElementById('test-lbl-1').innerText = t.testLbl1; document.getElementById('test-lbl-2').innerText = t.testLbl2; document.getElementById('testUserAnswer').placeholder = t.testPlaceholder; document.getElementById('btn-submit-test').innerText = t.btnSubmitTest;
+            document.getElementById('fc-title').innerText = t.fcTitle; 
+            document.getElementById('fc-sub').innerText = t.fcSub; 
+            document.getElementById('btn-fc-prev').innerText = t.btnFcPrev; 
+            document.getElementById('btn-fc-next').innerText = t.btnFcNext;
+            
+            document.getElementById('test-title').innerText = t.testTitle; 
+            document.getElementById('test-lbl-1').innerText = t.testLbl1; 
+            document.getElementById('test-lbl-2').innerText = t.testLbl2; 
+            document.getElementById('testUserAnswer').placeholder = t.testPlaceholder; 
+            document.getElementById('btn-submit-test').innerText = t.btnSubmitTest;
 
             document.getElementById('ai-chat-header-text').innerText = t.chatHeader;
             document.getElementById('ai-chat-input').placeholder = t.chatPlaceholder;
@@ -1534,7 +1602,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             const typingSub = document.getElementById('typing-test-sub');
             if (typingSub) typingSub.innerText = t.typingTestSub;
 
-            document.getElementById('cat-admin').innerText = `👑 ${t.navDash ? '관리자 메뉴' : '管理者メニュー'}`;
+            document.getElementById('cat-admin').innerText = `👑 ${window.currentLang === 'ko' ? '관리자 메뉴' : '管理者メニュー'}`;
             document.getElementById('nav-admin').innerText = `👥 ${t.adminTitle}`;
             document.getElementById('admin-title').innerText = `👥 ${t.adminTitle}`;
             document.getElementById('admin-sub').innerText = t.adminSub;
@@ -1547,9 +1615,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             modal.style.display = 'flex';
             modal.classList.add('active');
 
-            var lang = window.currentLang;
-            var isJa = (lang === 'ja');
-
+            var isJa = (window.currentLang === 'ja');
             var titleEl = document.getElementById('modalTitle');
             var btnEl = document.getElementById('btnAuthSubmit');
             var nameGroup = document.getElementById('nameGroup');
@@ -1591,9 +1657,13 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
         };
 
         window.checkAuth = function() {
-            if(!window.currentUser) { window.customAlert(window.i18n[window.currentLang].alertNeedLogin); window.openAuthModal('login'); return false; }
+            if(!window.currentUser) { 
+                window.customAlert(window.i18n[window.currentLang].alertNeedLogin); 
+                window.openAuthModal('login'); 
+                return false; 
+            }
             return true;
-        }
+        };
 
         window.createNewDeck = function() {
             if(!window.checkAuth()) return;
@@ -1649,32 +1719,50 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
         }
 
         window.renderDecks = function() {
-            if(!window.checkAuth()) return; document.getElementById('deckListView').style.display = 'block'; document.getElementById('deckDetailView').style.display = 'none';
-            const container = document.getElementById('deckGridContainer'); container.innerHTML = ''; window.ensureDefaultDeck();
+            if(!window.checkAuth()) return; 
+            document.getElementById('deckListView').style.display = 'block'; 
+            document.getElementById('deckDetailView').style.display = 'none';
+            const container = document.getElementById('deckGridContainer'); 
+            container.innerHTML = ''; 
+            window.ensureDefaultDeck();
             Object.keys(window.userDecks).filter(k => window.userDecks[k].lang === currentVocabLang).forEach(deckId => {
-                const deck = window.userDecks[deckId]; const card = document.createElement('div'); card.className = 'deck-card'; card.onclick = () => window.openDeckDetail(deckId);
+                const deck = window.userDecks[deckId]; 
+                const card = document.createElement('div'); 
+                card.className = 'deck-card'; 
+                card.onclick = () => window.openDeckDetail(deckId);
                 card.innerHTML = `<div class="deck-icon">${deck.isDefault ? '⭐' : '📁'}</div><div class="deck-title">${window.escapeHTML(deck.name)}</div><div class="deck-count" style="color:var(--text-muted); font-size:0.9rem;">${deck.words.length} words</div>`;
                 container.appendChild(card);
             });
         };
 
         window.openDeckDetail = function(deckId) {
-            window.currentDeckId = deckId; const deck = window.userDecks[deckId];
-            document.getElementById('deckListView').style.display = 'none'; document.getElementById('deckDetailView').style.display = 'block'; document.getElementById('currentDeckTitle').innerText = deck.name; 
+            window.currentDeckId = deckId; 
+            const deck = window.userDecks[deckId];
+            document.getElementById('deckListView').style.display = 'none'; 
+            document.getElementById('deckDetailView').style.display = 'block'; 
+            document.getElementById('currentDeckTitle').innerText = deck.name; 
             document.getElementById('addWordFormArea').style.display = deck.isDefault ? 'none' : 'flex'; 
             document.getElementById('btn-add-word').innerText = window.i18n[window.currentLang].btnAddWord;
             document.getElementById('btn-add-word').style.background = "var(--primary)";
             window.renderDeckWords();
         };
-        window.showDeckList = function() { window.currentDeckId = null; window.renderDecks(); };
+
+        window.showDeckList = function() { 
+            window.currentDeckId = null; 
+            window.renderDecks(); 
+        };
 
         window.addWordToCurrentDeck = function() {
             if(!window.currentDeckId || window.userDecks[window.currentDeckId].isDefault) return;
-            const enInput = document.getElementById('newWordEn'); const meanInput = document.getElementById('newWordMean');
-            const word = enInput.value.trim(); const mean = meanInput.value.trim(); if(!word || !mean) return;
+            const enInput = document.getElementById('newWordEn'); 
+            const meanInput = document.getElementById('newWordMean');
+            const word = enInput.value.trim(); 
+            const mean = meanInput.value.trim(); 
+            if(!word || !mean) return;
             window.userDecks[window.currentDeckId].words.push({ id: 'cw_' + Date.now(), word: word, ko: mean, ja: mean, isCourseWord: false });
             window.saveUserData(); 
-            enInput.value = ''; meanInput.value = ''; 
+            enInput.value = ''; 
+            meanInput.value = ''; 
             window.renderDeckWords();
 
             const btn = document.getElementById('btn-add-word');
@@ -1686,7 +1774,6 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             }, 1500);
         };
 
-        // 단어 삭제 확인
         window.removeWordFromDeck = function(deckId, wordId) { 
             const msg = window.currentLang === 'ko' ? "이 단어를 정말 삭제하시겠습니까?" : "この単語を本当に削除しますか？";
             if(confirm(msg)) {
@@ -1704,54 +1791,44 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 else btn.innerText = window.deckSortOrder === 'desc' ? '⬇️ 新着順' : '⬆️ 古い順';
             }
             window.renderDeckWords();
-        }
-
-        window.toggleBlurMyDecksMode = function(enabled) { isBlurMyDecksMode = enabled; document.getElementById('toggleBlurMyDecks').checked = enabled; if(window.currentDeckId) window.renderDeckWords(); };
-
-        // 옵션 메뉴 열기/닫기 로직
-        window.toggleWordOptions = function(wordId, event) {
-            event.stopPropagation();
-            document.querySelectorAll('.options-menu').forEach(menu => {
-                if (menu.id !== 'options_' + wordId) menu.classList.remove('active');
-            });
-            const menu = document.getElementById('options_' + wordId);
-            if (menu) menu.classList.toggle('active');
         };
 
-        // 화면 클릭 시 옵션 메뉴 닫기
-        document.addEventListener('click', function() {
-            document.querySelectorAll('.options-menu').forEach(menu => menu.classList.remove('active'));
-        });
+        window.toggleBlurMyDecksMode = function(enabled) { 
+            isBlurMyDecksMode = enabled; 
+            document.getElementById('toggleBlurMyDecks').checked = enabled; 
+            if(window.currentDeckId) window.renderDeckWords(); 
+        };
 
         window.renderDeckWords = function() {
-            const container = document.getElementById('deckWordsContainer'); const deck = window.userDecks[window.currentDeckId]; const t = window.i18n[window.currentLang];
-            if(deck.words.length === 0) { container.innerHTML = `<div class="empty-state">${window.escapeHTML(t.emptyVocab)}</div>`; return; }
+            const container = document.getElementById('deckWordsContainer'); 
+            const deck = window.userDecks[window.currentDeckId]; 
+            const t = window.i18n[window.currentLang];
+            if(!deck || deck.words.length === 0) { 
+                container.innerHTML = `<div class="empty-state">${window.escapeHTML(t.emptyVocab)}</div>`; 
+                return; 
+            }
             
             let wordsArr = [...deck.words];
             if(window.deckSortOrder === 'desc') wordsArr.reverse();
 
-            let html = `<table class="vocab-table"><tr><th>${window.escapeHTML(t.thWord)}</th><th>${window.escapeHTML(t.thMeaning)}</th><th style="width: 60px; text-align: center;">🔍</th></tr>`;
+            let html = `<table class="vocab-table"><tr><th>${window.escapeHTML(t.thWord)}</th><th>${window.escapeHTML(t.thMeaning)}</th><th style="width: 80px; text-align: right;">🔍</th></tr>`;
+            
             wordsArr.forEach(w => {
                 const meaning = window.currentLang === 'ko' ? w.ko : w.ja;
                 const blurClass = isBlurMyDecksMode ? 'blur-meaning' : '';
+
                 html += `<tr>
                     <td style="font-weight: 600; color: var(--primary);">${window.escapeHTML(w.word)}</td>
                     <td><span class="${blurClass}">${window.escapeHTML(meaning)}</span></td>
-                    <td style="text-align: center; overflow: visible;">
-                        <div class="options-dropdown">
-                            <button class="btn-options" onclick="toggleWordOptions('${w.id}', event)">⋮</button>
-                            <div class="options-menu" id="options_${w.id}">
-                                ${!deck.isDefault ? `<button onclick="editWordInDeck('${window.currentDeckId}', '${w.id}')">✏️ 수정</button>` : ''}
-                                <button onclick="removeWordFromDeck('${window.currentDeckId}', '${w.id}')" style="color:#dc2626;">❌ 삭제</button>
-                            </div>
-                        </div>
+                    <td style="text-align: right; white-space: nowrap;">
+                        ${!deck.isDefault ? `<button class="btn-options" onclick="editWordInDeck('${window.currentDeckId}', '${w.id}')">✏️</button>` : ''}
+                        <button class="btn-options" onclick="removeWordFromDeck('${window.currentDeckId}', '${w.id}')">❌</button>
                     </td>
                 </tr>`;
             });
             container.innerHTML = html + `</table>`;
         };
 
-        // 커스텀 단어 수정 모달 로직
         let editingDeckId = null;
         let editingWordId = null;
 
@@ -1765,12 +1842,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             
             document.getElementById('editWordInput').value = wordObj.word;
             document.getElementById('editMeanInput').value = window.currentLang === 'ko' ? wordObj.ko : wordObj.ja;
-            
             document.getElementById('editWordModal').classList.add('active');
-            
-            // 수정 모달 열 때 옵션 메뉴 닫기
-            const menu = document.getElementById('options_' + wordId);
-            if(menu) menu.classList.remove('active');
         };
 
         window.closeEditWordModal = function() {
@@ -1781,15 +1853,12 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
 
         window.saveEditedWord = function() {
             if(!editingDeckId || !editingWordId) return;
-            
             const newWord = document.getElementById('editWordInput').value.trim();
             const newMean = document.getElementById('editMeanInput').value.trim();
-            
             if(!newWord || !newMean) return window.customAlert("단어와 뜻을 모두 입력해주세요.");
             
             const deck = window.userDecks[editingDeckId];
             const wordObj = deck.words.find(w => w.id === editingWordId);
-            
             if(wordObj) {
                 wordObj.word = newWord;
                 if(window.currentLang === 'ko') wordObj.ko = newMean;
@@ -1807,8 +1876,9 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 if(!window.checkAuth()) return;
             }
 
-            window.activeTab = sectionId; document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            if(event && event.currentTarget) event.currentTarget.classList.add('active');
+            window.activeTab = sectionId; 
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            if(window.event && window.event.currentTarget) window.event.currentTarget.classList.add('active');
             document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active'));
             
             if(window.innerWidth <= 768) {
@@ -1828,11 +1898,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 
                 const statsWrapper = document.getElementById('statsSectionWrapper');
                 if(statsWrapper) {
-                    if(sectionId === 'dashboard' || sectionId === 'korean') {
-                        statsWrapper.style.display = 'block';
-                    } else {
-                        statsWrapper.style.display = 'none';
-                    }
+                    statsWrapper.style.display = (sectionId === 'dashboard' || sectionId === 'korean') ? 'block' : 'none';
                 }
                 
                 window.renderCourses(sectionId === 'dashboard' ? 'all' : sectionId); 
@@ -1854,13 +1920,15 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 document.getElementById(sectionId).classList.add('active'); 
             }
             window.updateOverallProgress();
-            
             document.getElementById('mainContentScroll').scrollTop = 0;
         };
 
         window.renderCourses = function(catFilter = 'all') {
-            const container = document.getElementById('courseGrid'); if(!container) return; container.innerHTML = '';
-            const levelVal = document.getElementById('levelFilter').value || 'all'; let list = window.coursesData;
+            const container = document.getElementById('courseGrid'); 
+            if(!container) return; 
+            container.innerHTML = '';
+            const levelVal = document.getElementById('levelFilter').value || 'all'; 
+            let list = window.coursesData;
             
             if (catFilter !== 'all') list = list.filter(c => c.cat === catFilter); 
             else list = list.filter(c => c.cat !== 'korean'); 
@@ -1869,46 +1937,70 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
 
             const t = window.i18n[window.currentLang];
             list.forEach(item => {
-                const isCompleted = window.completedUnits.has(item.id); const topic = window.currentLang === 'ko' ? item.topicKo : item.topicJa; const lvlName = levelNames[window.currentLang][item.level]; 
+                const isCompleted = window.completedUnits.has(item.id); 
+                const topic = window.currentLang === 'ko' ? item.topicKo : item.topicJa; 
+                const lvlName = levelNames[window.currentLang][item.level]; 
                 const catName = item.cat === 'casual' ? t.tagCasual : (item.cat === 'business' ? t.tagBusiness : t.tagKorean);
                 const tagColorClass = item.cat === 'korean' ? 'korean' : item.cat;
-                const title = `${lvlName} ${catName} Unit ${item.unit}: ${topic}`; const desc = `${lvlName} ${item.unit} ${topic} ${window.currentLang === 'ko' ? '학습' : '学習'}`;
+                const title = `${lvlName} ${catName} Unit ${item.unit}: ${topic}`; 
+                const desc = `${lvlName} ${item.unit} ${topic} ${window.currentLang === 'ko' ? '학습' : '学習'}`;
                 
-                const card = document.createElement('div'); card.className = 'card'; card.onclick = () => window.openLesson(item.id);
-                card.innerHTML = `${isCompleted ? '<span class="card-completed-badge">✅</span>' : ''}<div><span class="tag level-${item.level}">${lvlName}</span><span class="tag ${tagColorClass}">${catName}</span></div><h3>${title}</h3><p>${desc}</p><button class="btn-start">${t.btnStart}</button>`;
+                const card = document.createElement('div'); 
+                card.className = 'card'; 
+                card.onclick = () => window.openLesson(item.id);
+                card.innerHTML = `${isCompleted ? '<span class="card-completed-badge">✅</span>' : ''}<div><span class="tag level-${item.level}">${lvlName}</span><span class="tag ${tagColorClass}">${catName}</span></div><h3>${window.escapeHTML(title)}</h3><p>${window.escapeHTML(desc)}</p><button class="btn-start">${t.btnStart}</button>`;
                 container.appendChild(card);
             });
         };
 
         window.openLesson = function(unitId) {
-            window.currentLesson = window.coursesData.find(c => c.id === unitId); if(!window.currentLesson) return;
-            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active')); document.getElementById('lesson').classList.add('active');
-            const t = window.i18n[window.currentLang]; const topic = window.currentLang === 'ko' ? window.currentLesson.topicKo : window.currentLesson.topicJa; const lvlName = levelNames[window.currentLang][window.currentLesson.level]; 
+            window.currentLesson = window.coursesData.find(c => c.id === unitId); 
+            if(!window.currentLesson) return;
+            document.querySelectorAll('.section').forEach(sec => sec.classList.remove('active')); 
+            document.getElementById('lesson').classList.add('active');
+            const t = window.i18n[window.currentLang]; 
+            const topic = window.currentLang === 'ko' ? window.currentLesson.topicKo : window.currentLesson.topicJa; 
+            const lvlName = levelNames[window.currentLang][window.currentLesson.level]; 
             const catName = window.currentLesson.cat === 'casual' ? t.tagCasual : (window.currentLesson.cat === 'business' ? t.tagBusiness : t.tagKorean);
             const tagColorClass = window.currentLesson.cat === 'korean' ? 'korean' : window.currentLesson.cat;
             
             document.getElementById('lessonTitle').innerText = `${lvlName} Unit ${window.currentLesson.unit}: ${topic}`;
-            const lvlTag = document.getElementById('lessonLevelTag'); lvlTag.className = `tag level-${window.currentLesson.level}`; lvlTag.innerText = lvlName;
-            const catTag = document.getElementById('lessonCategoryTag'); catTag.className = `tag ${tagColorClass}`; catTag.innerText = catName;
-            window.setRoleplay('all'); renderDialogue(); renderLessonVocab();
+            const lvlTag = document.getElementById('lessonLevelTag'); 
+            lvlTag.className = `tag level-${window.currentLesson.level}`; 
+            lvlTag.innerText = lvlName;
+            const catTag = document.getElementById('lessonCategoryTag'); 
+            catTag.className = `tag ${tagColorClass}`; 
+            catTag.innerText = catName;
+            window.setRoleplay('all'); 
+            renderDialogue(); 
+            renderLessonVocab();
             document.getElementById('mainContentScroll').scrollTop = 0;
         };
 
+        window.goBackFromLesson = function() {
+            if (window.currentLesson && window.currentLesson.cat) {
+                window.nav(window.currentLesson.cat); 
+            } else {
+                window.nav('dashboard');
+            }
+        };
+
         function renderDialogue() {
-            const container = document.getElementById('dialogueContainer'); container.innerHTML = '';
+            const container = document.getElementById('dialogueContainer'); 
+            container.innerHTML = '';
             const isKor = window.currentLesson.cat === 'korean';
             window.currentLesson.dialogue.forEach(line => {
                 let mainText = line.en;
                 let subText = window.currentLang === 'ko' ? line.ko : line.ja; 
-                const row = document.createElement('div'); row.className = `dialogue-row actor-${line.actor}`;
-                
+                const row = document.createElement('div'); 
+                row.className = `dialogue-row actor-${line.actor}`;
                 const safeText = mainText.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/"/g, '&quot;');
                 
                 row.innerHTML = `
                     <div class="actor-badge">${line.actor}</div>
                     <div class="text-content" data-actor="${line.actor}">
-                        <div class="en-text">${mainText}</div>
-                        <div class="tr-text">${subText}</div>
+                        <div class="en-text">${window.escapeHTML(mainText)}</div>
+                        <div class="tr-text">${window.escapeHTML(subText)}</div>
                     </div>
                     <button class="btn-icon" onclick="speakTextByActor('${safeText}', '${line.actor}', ${isKor})" title="음성 듣기">🔊</button>
                 `;
@@ -1917,19 +2009,21 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
         }
 
         function renderLessonVocab() {
-            const container = document.getElementById('lessonVocabContainer'); container.innerHTML = '';
+            const container = document.getElementById('lessonVocabContainer'); 
+            container.innerHTML = '';
             const t = window.i18n[window.currentLang];
             window.currentLesson.vocab.forEach(v => {
                 const isBm = isBookmarked(v.id);
                 const btnClass = isBm ? 'btn-bm-active' : 'btn-bm-inactive';
                 const btnText = isBm ? (t.btnBmAdded || "✅ 추가됨!") : (t.btnBmAdd || "☆ 추가");
-                const card = document.createElement('div'); card.className = 'vocab-detail-card';
+                const card = document.createElement('div'); 
+                card.className = 'vocab-detail-card';
                 card.innerHTML = `
                     <div style="display:flex; justify-content:space-between; align-items:center;">
-                        <strong style="font-size: 1.05rem;">${v.word}</strong>
+                        <strong style="font-size: 1.05rem;">${window.escapeHTML(v.word)}</strong>
                         <button class="${btnClass}" onclick="toggleCourseBookmark('${v.id}', this)">${btnText}</button>
                     </div>
-                    <div style="color: var(--primary); margin-top: 6px; font-weight: 600;">📌 ${window.currentLang === 'ko' ? v.ko : v.ja}</div>
+                    <div style="color: var(--primary); margin-top: 6px; font-weight: 600;">📌 ${window.escapeHTML(window.currentLang === 'ko' ? v.ko : v.ja)}</div>
                 `;
                 container.appendChild(card);
             });
@@ -1937,9 +2031,17 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
 
         window.setRoleplay = function(hideActor) {
             document.querySelectorAll('.roleplay-toggles .btn-control').forEach(b => b.classList.remove('active'));
-            if(hideActor === 'all') document.getElementById('rp-all').classList.add('active'); if(hideActor === 'A') document.getElementById('rp-a').classList.add('active'); if(hideActor === 'B') document.getElementById('rp-b').classList.add('active');
+            if(hideActor === 'all') document.getElementById('rp-all').classList.add('active'); 
+            if(hideActor === 'A') document.getElementById('rp-a').classList.add('active'); 
+            if(hideActor === 'B') document.getElementById('rp-b').classList.add('active');
             document.querySelectorAll('.en-text').forEach(el => el.classList.remove('hide-text'));
-            if(hideActor !== 'all') { document.querySelectorAll('.text-content').forEach(el => { if (el.getAttribute('data-actor') === hideActor) { el.querySelector('.en-text').classList.add('hide-text'); } }); }
+            if(hideActor !== 'all') { 
+                document.querySelectorAll('.text-content').forEach(el => { 
+                    if (el.getAttribute('data-actor') === hideActor) { 
+                        el.querySelector('.en-text').classList.add('hide-text'); 
+                    } 
+                }); 
+            }
         };
 
         let testAnswers = [];
@@ -1947,7 +2049,8 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             if(!window.checkAuth() || !window.currentLesson) return;
             document.getElementById('testModal').classList.add('active');
             const vList = [...window.currentLesson.vocab].sort(()=>0.5-Math.random()).slice(0, 3);
-            testAnswers = []; let html = '';
+            testAnswers = []; 
+            let html = '';
             
             vList.forEach((targetV, i) => {
                 const qText = window.currentLang === 'ko' ? `Q${i+1}. '${targetV.word}' 의 올바른 뜻은?` : `Q${i+1}. '${targetV.word}' の正しい意味は？`;
@@ -1955,10 +2058,10 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 let options = [targetV, ...pool].sort(()=>0.5-Math.random());
                 testAnswers.push(options.findIndex(o => o.id === targetV.id));
                 
-                html += `<div style="margin-bottom: 20px;"><p style="font-weight: bold; margin-bottom: 12px; font-size: 1.05rem;">${qText}</p><div style="display: flex; flex-direction: column; gap: 8px;">`;
+                html += `<div style="margin-bottom: 20px;"><p style="font-weight: bold; margin-bottom: 12px; font-size: 1.05rem;">${window.escapeHTML(qText)}</p><div style="display: flex; flex-direction: column; gap: 8px;">`;
                 options.forEach((opt, idx) => {
                     const mean = window.currentLang === 'ko' ? opt.ko : opt.ja;
-                    html += `<label class="test-option-label"><input type="radio" name="testQ${i}" value="${idx}"> <span>${mean}</span></label>`;
+                    html += `<label class="test-option-label"><input type="radio" name="testQ${i}" value="${idx}"> <span>${window.escapeHTML(mean)}</span></label>`;
                 });
                 html += `</div></div>`;
             });
@@ -1967,7 +2070,6 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             const aiPromptText = window.currentLesson.dialogue[0].en;
             document.getElementById('testAiPrompt').innerText = aiPromptText;
             document.getElementById('testUserAnswer').value = '';
-            
             setTimeout(() => window.speakTestPrompt(), 500);
         };
 
@@ -1983,7 +2085,8 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             if(recognitionTest && isRecordingTest) { recognitionTest.stop(); }
         };
 
-        let recognitionTest = null; let isRecordingTest = false;
+        let recognitionTest = null; 
+        let isRecordingTest = false;
         window.toggleVoiceRecognitionTest = function() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if(!SpeechRecognition) return window.customAlert(window.i18n[window.currentLang].alertNoSpeech);
@@ -1994,7 +2097,11 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             recognitionTest.interimResults = false;
             
             recognitionTest.onstart = () => { isRecordingTest = true; btn.style.background = '#dc2626'; btn.innerText = '🛑'; };
-            recognitionTest.onresult = (e) => { const text = e.results[0][0].transcript; const input = document.getElementById('testUserAnswer'); input.value = input.value ? input.value + ' ' + text : text; };
+            recognitionTest.onresult = (e) => { 
+                const text = e.results[0][0].transcript; 
+                const input = document.getElementById('testUserAnswer'); 
+                input.value = input.value ? input.value + ' ' + text : text; 
+            };
             recognitionTest.onerror = () => { isRecordingTest = false; btn.style.background = 'var(--primary)'; btn.innerText = '🎙️'; };
             recognitionTest.onend = () => { isRecordingTest = false; btn.style.background = 'var(--primary)'; btn.innerText = '🎙️'; };
             recognitionTest.start();
@@ -2010,64 +2117,113 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             if(ans.length < 3) return window.customAlert(window.i18n[window.currentLang].alertShortAns);
             
             window.customAlert(window.i18n[window.currentLang].alertComplete);
-            window.closeTestModal(); window.completedUnits.add(window.currentLesson.id); window.saveUserData(); window.updateOverallProgress(); window.nav('dashboard');
+            window.closeTestModal(); 
+            window.completedUnits.add(window.currentLesson.id); 
+            window.saveUserData(); 
+            window.updateOverallProgress(); 
+            window.nav('dashboard');
         };
 
         window.updateOverallProgress = function() {
-            const total = window.coursesData.length; const count = window.completedUnits.size; const percent = total > 0 ? Math.round((count / total) * 100) : 0;
-            document.getElementById('overallProgressBar').style.width = percent + '%'; document.getElementById('overallProgressText').innerText = `${percent}% (${count}/${total})`;
-        }
+            const total = window.coursesData.length; 
+            const count = window.completedUnits.size; 
+            const percent = total > 0 ? Math.round((count / total) * 100) : 0;
+            document.getElementById('overallProgressBar').style.width = percent + '%'; 
+            document.getElementById('overallProgressText').innerText = `${percent}% (${count}/${total})`;
+        };
 
-        window.toggleBlurMode = function(enabled) { isBlurMode = enabled; document.getElementById('toggleBlurVocab').checked = enabled; if(window.activeTab.startsWith('vocab')) window.renderVocab(); };
+        window.toggleBlurMode = function(enabled) { 
+            isBlurMode = enabled; 
+            document.getElementById('toggleBlurVocab').checked = enabled; 
+            if(window.activeTab.startsWith('vocab')) window.renderVocab(); 
+        };
 
         window.renderVocab = function() {
-            const container = document.getElementById('vocabContainer'); const t = window.i18n[window.currentLang]; 
+            const container = document.getElementById('vocabContainer'); 
+            const t = window.i18n[window.currentLang]; 
             const items = window.vocabDb.filter(v => currentVocabLang === 'en' ? v.cat !== 'korean' : v.cat === 'korean');
             
-            if(items.length === 0) { container.innerHTML = `<div class="empty-state">${window.escapeHTML(t.emptyVocab)}</div>`; return; }
+            if(items.length === 0) { 
+                container.innerHTML = `<div class="empty-state">${window.escapeHTML(t.emptyVocab)}</div>`; 
+                return; 
+            }
             let html = `<table class="vocab-table"><tr><th style="width: 60px; text-align: center;">${window.escapeHTML(t.thBookmark)}</th><th>${window.escapeHTML(t.thWord)}</th><th>${window.escapeHTML(t.thMeaning)}</th><th>${window.escapeHTML(t.thSource)}</th></tr>`;
             items.forEach(v => {
                 const isBm = isBookmarked(v.id);
                 const btnContent = isBm ? '<span style="color:#f59e0b; font-size:1.5rem;">★</span>' : '<span style="font-size:1.5rem;">☆</span>';
-                const lvlName = levelNames[window.currentLang][v.level]; const meaning = window.currentLang === 'ko' ? v.ko : v.ja; const blurClass = isBlurMode ? 'blur-meaning' : '';
+                const lvlName = levelNames[window.currentLang][v.level]; 
+                const meaning = window.currentLang === 'ko' ? v.ko : v.ja; 
+                const blurClass = isBlurMode ? 'blur-meaning' : '';
+
                 html += `<tr><td style="text-align: center;"><button style="background:none; border:none; cursor:pointer;" onclick="toggleCourseBookmark('${v.id}')">${btnContent}</button></td><td style="font-weight: 600; color: var(--primary); font-size:1.1rem;">${window.escapeHTML(v.word)}</td><td><span class="${blurClass}">${window.escapeHTML(meaning)}</span></td><td><span class="tag level-${v.level}">${window.escapeHTML(lvlName)}</span> Unit ${v.unit}</td></tr>`;
             });
             container.innerHTML = html + `</table>`;
         };
 
-        let flashcardPool = []; let currentFcIndex = 0;
+        let flashcardPool = []; 
+        let currentFcIndex = 0;
         window.openFlashcardModal = function(type = 'all') {
-            if(type === 'all') { flashcardPool = window.vocabDb.filter(v => currentVocabLang === 'en' ? v.cat !== 'korean' : v.cat === 'korean'); } 
-            else if (type === 'deck') { if(!window.currentDeckId) return; flashcardPool = window.userDecks[window.currentDeckId].words; }
-            if(flashcardPool.length === 0) { window.customAlert(window.i18n[window.currentLang].alertNoVocab); return; }
-            currentFcIndex = 0; document.getElementById('flashcardModal').classList.add('active'); renderFlashcardContent();
+            if(type === 'all') { 
+                flashcardPool = window.vocabDb.filter(v => currentVocabLang === 'en' ? v.cat !== 'korean' : v.cat === 'korean'); 
+            } else if (type === 'deck') { 
+                if(!window.currentDeckId) return; 
+                flashcardPool = window.userDecks[window.currentDeckId].words; 
+            }
+            if(flashcardPool.length === 0) { 
+                window.customAlert(window.i18n[window.currentLang].alertNoVocab); 
+                return; 
+            }
+            currentFcIndex = 0; 
+            document.getElementById('flashcardModal').classList.add('active'); 
+            renderFlashcardContent();
         };
-        window.closeFlashcardModal = function() { document.getElementById('flashcardModal').classList.remove('active'); };
+
+        window.closeFlashcardModal = function() { 
+            document.getElementById('flashcardModal').classList.remove('active'); 
+        };
         
         function renderFlashcardContent() {
             const item = flashcardPool[currentFcIndex];
-            document.getElementById('fcWord').innerText = item.word; document.getElementById('fcMeaning').innerText = window.currentLang === 'ko' ? item.ko : item.ja;
-            if(item.isCourseWord === undefined) { const lvlName = levelNames[window.currentLang][item.level]; document.getElementById('fcTag').innerText = `${lvlName} Unit ${item.unit}`; }
-            else { document.getElementById('fcTag').innerText = item.isCourseWord ? 'Course Word' : 'Custom Word'; }
+            document.getElementById('fcWord').innerText = item.word; 
+            document.getElementById('fcMeaning').innerText = window.currentLang === 'ko' ? item.ko : item.ja;
+            if(item.isCourseWord === undefined) { 
+                const lvlName = levelNames[window.currentLang][item.level]; 
+                document.getElementById('fcTag').innerText = `${lvlName} Unit ${item.unit}`; 
+            } else { 
+                document.getElementById('fcTag').innerText = item.isCourseWord ? 'Course Word' : 'Custom Word'; 
+            }
             document.getElementById('fcProgress').innerText = `${currentFcIndex + 1} / ${flashcardPool.length}`;
         }
-        window.flipFlashcard = function() { document.getElementById('flashcardElement').classList.toggle('flipped'); };
+
+        window.flipFlashcard = function() { 
+            document.getElementById('flashcardElement').classList.toggle('flipped'); 
+        };
+
         window.nextFlashcard = function() { 
             if(currentFcIndex < flashcardPool.length - 1) { 
                 const cardEl = document.getElementById('flashcardElement');
-                if(cardEl.classList.contains('flipped')) { cardEl.classList.remove('flipped'); setTimeout(() => { currentFcIndex++; renderFlashcardContent(); }, 300); } 
-                else { currentFcIndex++; renderFlashcardContent(); }
-            } 
-        };
-        window.prevFlashcard = function() { 
-            if(currentFcIndex > 0) { 
-                const cardEl = document.getElementById('flashcardElement');
-                if(cardEl.classList.contains('flipped')) { cardEl.classList.remove('flipped'); setTimeout(() => { currentFcIndex--; renderFlashcardContent(); }, 300); } 
-                else { currentFcIndex--; renderFlashcardContent(); }
+                if(cardEl.classList.contains('flipped')) { 
+                    cardEl.classList.remove('flipped'); 
+                    setTimeout(() => { currentFcIndex++; renderFlashcardContent(); }, 300); 
+                } else { 
+                    currentFcIndex++; renderFlashcardContent(); 
+                }
             } 
         };
 
-        // Typing Test
+        window.prevFlashcard = function() { 
+            if(currentFcIndex > 0) { 
+                const cardEl = document.getElementById('flashcardElement');
+                if(cardEl.classList.contains('flipped')) { 
+                    cardEl.classList.remove('flipped'); 
+                    setTimeout(() => { currentFcIndex--; renderFlashcardContent(); }, 300); 
+                } else { 
+                    currentFcIndex--; renderFlashcardContent(); 
+                }
+            } 
+        };
+
+        // Typing Test Logic
         let currentTestType = '';
         let currentTestQuestions = [];
         let currentTestIndex = 0;
@@ -2142,18 +2298,18 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             return `<div class="diff-text">${html}</div>`;
         }
 
+        // 공백 검증 로직 최적화 반영
         window.checkTypingAnswer = function() {
             const rawInput = document.getElementById('typing-answer-input').value;
             if(!rawInput.trim()) return;
 
-            let inputForCheck = rawInput.replace(/\s+/g, '');
-            let correctForCheck = currentTestQuestions[currentTestIndex].ko.replace(/\s+/g, '');
+            let inputForCheck = rawInput.trim().replace(/\s+/g, ' ');
+            let correctForCheck = currentTestQuestions[currentTestIndex].ko.trim().replace(/\s+/g, ' ');
 
             const t = window.i18n[window.currentLang];
             const isCorrect = (inputForCheck === correctForCheck);
             const explanation = window.currentLang === 'ko' ? currentTestQuestions[currentTestIndex].exp_ko : currentTestQuestions[currentTestIndex].exp_ja;
             const displayCorrect = currentTestQuestions[currentTestIndex].ko;
-
             const diffHtmlOutput = getDiffHTML(inputForCheck, correctForCheck);
 
             userAnswersHistory.push({
@@ -2168,12 +2324,12 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             if(isCorrect) {
                 correctTypingCount++;
                 document.getElementById('typing-explanation-box').innerHTML = `✅ <b>${window.escapeHTML(t.typingCorrect)}</b><br><br>${window.escapeHTML(explanation)}`;
-                document.getElementById('typing-explanation-box').style.background = '#dcfce7'; 
-                document.getElementById('typing-explanation-box').style.color = '#166534';
+                document.getElementById('typing-explanation-box').style.background = 'var(--success-bg)'; 
+                document.getElementById('typing-explanation-box').style.color = 'var(--success-text)';
             } else {
                 document.getElementById('typing-explanation-box').innerHTML = `❌ <b>${window.escapeHTML(t.typingWrong)}</b><br>${window.escapeHTML(t.diffAnalysis || (window.currentLang === 'ko' ? '비교:' : '比較:'))}<br>${diffHtmlOutput}<br><br>${window.escapeHTML(explanation)}`;
-                document.getElementById('typing-explanation-box').style.background = '#fee2e2'; 
-                document.getElementById('typing-explanation-box').style.color = '#991b1b';
+                document.getElementById('typing-explanation-box').style.background = 'var(--danger-bg)'; 
+                document.getElementById('typing-explanation-box').style.color = 'var(--danger-text)';
             }
 
             document.getElementById('typing-explanation-box').style.display = 'block';
@@ -2196,22 +2352,13 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                 renderTestResultsHistory();
 
                 if(window.currentUser) {
-                    if (!window.currentUser.testCounts) {
-                        window.currentUser.testCounts = { numbers: 0, dates: 0, times: 0 };
-                    }
-                    if (typeof window.currentUser.testCounts[currentTestType] !== 'number') {
-                        window.currentUser.testCounts[currentTestType] = 0;
-                    }
+                    if (!window.currentUser.testCounts) window.currentUser.testCounts = { numbers: 0, dates: 0, times: 0 };
+                    if (typeof window.currentUser.testCounts[currentTestType] !== 'number') window.currentUser.testCounts[currentTestType] = 0;
                     window.currentUser.testCounts[currentTestType]++;
 
-                    if (!window.currentUser.history) {
-                        window.currentUser.history = {};
-                    }
-
+                    if (!window.currentUser.history) window.currentUser.history = {};
                     const today = getTodayStr();
-                    if(!window.currentUser.history[today]) {
-                        window.currentUser.history[today] = [];
-                    }
+                    if(!window.currentUser.history[today]) window.currentUser.history[today] = [];
 
                     const testDetails = userAnswersHistory.map(h => ({
                         q: h.question,
@@ -2226,10 +2373,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
                     });
 
                     window.saveUserData();
-
-                    if (typeof window.renderHomeStats === 'function') {
-                        window.renderHomeStats();
-                    }
+                    if (typeof window.renderHomeStats === 'function') window.renderHomeStats();
                 }
             }
         };
@@ -2302,7 +2446,6 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             if(!text) return;
             
             const chatBody = document.getElementById('ai-chat-body');
-            
             const userDiv = document.createElement('div');
             userDiv.className = 'chat-message user';
             userDiv.innerText = text;
@@ -2337,7 +2480,7 @@ K|B|10|피동·사동 및 한자어|受身・使役・漢字語|도둑이 경찰
             });
         };
 
-        // AI Conversation
+        // AI Conversation Tutor
         let aiConvHistory = [];
         let aiConvTargetLang = 'en';
         let aiConvUiLang = 'ko';
@@ -2442,14 +2585,11 @@ RULES:
             div.className = 'chat-message ' + sender;
             if(id) div.id = id;
             
-            let safeText = sender === 'user' ? window.escapeHTML(text) : window.escapeHTML(text);
-            
+            let safeText = window.escapeHTML(text);
             let formattedText = safeText.replace(/(\[Correction.*?\]:)/gi, '<strong style="color: #ea580c; display:block; margin-top:8px; font-size: 0.85rem;">$1</strong>');
             formattedText = formattedText.replace(/(\[교정.*?\]:)/gi, '<strong style="color: #ea580c; display:block; margin-top:8px; font-size: 0.85rem;">$1</strong>');
             
-            if (text.includes("typing-indicator")) {
-                formattedText = text;
-            }
+            if (text.includes("typing-indicator")) formattedText = text;
             
             div.innerHTML = formattedText;
             list.appendChild(div);
@@ -2467,7 +2607,7 @@ RULES:
             aiConvRecognition.lang = aiConvTargetLang === 'ko' ? 'ko-KR' : 'en-US';
             aiConvRecognition.interimResults = false;
             
-            aiConvRecognition.onstart = () => { isAiConvRecording = true; btn.style.background = '#dc2626'; btn.style.color = 'white'; };
+            aiConvRecognition.onstart = () => { isAiConvRecording = true; btn.style.background = 'var(--danger-bg)'; btn.style.color = 'var(--danger-text)'; };
             aiConvRecognition.onresult = (e) => { 
                 const text = e.results[0][0].transcript; 
                 const input = document.getElementById('ai-conv-chat-input'); 
@@ -2486,13 +2626,11 @@ RULES:
             
             document.getElementById('ai-conv-chat-area').style.display = 'none';
             document.getElementById('ai-conv-score-area').style.display = 'flex';
-            
             document.getElementById('ai-score-vocab').innerText = "-";
             document.getElementById('ai-score-exp').innerText = "-";
             document.getElementById('ai-score-feedback').innerHTML = `<div class="typing-indicator" style="font-size:1.5rem; color:var(--primary);"><span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span></div><br><br><span style="color:var(--text-muted);">${window.i18n[window.currentLang].aiAnalyzing}</span>`;
 
             const uiLangName = window.currentLang === 'ko' ? 'Korean' : 'Japanese';
-            
             const prompt = `The conversation has ended. Please evaluate the user's performance throughout the conversation.
 Analyze all of the user's messages.
 Provide the response EXACTLY in the following JSON format without any markdown wrapper:
@@ -2522,10 +2660,14 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             document.getElementById('ai-conv-chat-input').value = '';
         };
 
+        // Gemini API 호출 엔드포인트 분기 처리 (API 키 직접 사용 가능)
         async function callGeminiAPI(history, callback) {
-            const apiUrl =`/api/chat`;
+            let apiUrl = '/api/chat';
+            if (window.GEMINI_API_KEY && window.GEMINI_API_KEY.trim() !== '') {
+                apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${window.GEMINI_API_KEY}`;
+            }
+
             const payload = { contents: history };
-            
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 15000); 
 
@@ -2539,7 +2681,6 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                 clearTimeout(timeoutId);
                 
                 if (!response.ok) throw new Error("API Response Error");
-                
                 const result = await response.json();
                 if(result.candidates && result.candidates[0].content) {
                     callback(result.candidates[0].content.parts[0].text);
@@ -2554,7 +2695,11 @@ Provide the response EXACTLY in the following JSON format without any markdown w
         }
 
         async function callGeminiJSON(history, callback) {
-            const apiUrl = `/api/chat`;
+            let apiUrl = '/api/chat';
+            if (window.GEMINI_API_KEY && window.GEMINI_API_KEY.trim() !== '') {
+                apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${window.GEMINI_API_KEY}`;
+            }
+
             const payload = { 
                 contents: history,
                 generationConfig: {
@@ -2583,7 +2728,6 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                 clearTimeout(timeoutId);
                 
                 if (!response.ok) throw new Error("API Response Error");
-                
                 const result = await response.json();
                 if(result.candidates && result.candidates[0].content) {
                     const jsonStr = result.candidates[0].content.parts[0].text;
@@ -2598,18 +2742,23 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             }
         }
 
+        // Interval 메모리 누수 방지 픽스
+        const timerRegistry = {};
         function animateValue(id, start, end, duration) {
+            if (timerRegistry[id]) clearInterval(timerRegistry[id]);
             if (start === end) { document.getElementById(id).innerHTML = end; return; }
             let range = end - start;
             let current = start;
-            let increment = end > start? 1 : -1;
+            let increment = end > start ? 1 : -1;
             let stepTime = Math.abs(Math.floor(duration / range));
             let obj = document.getElementById(id);
-            let timer = setInterval(function() {
+            
+            timerRegistry[id] = setInterval(function() {
                 current += increment;
                 obj.innerHTML = current;
                 if (current == end) {
-                    clearInterval(timer);
+                    clearInterval(timerRegistry[id]);
+                    delete timerRegistry[id];
                 }
             }, stepTime);
         }
@@ -2617,10 +2766,11 @@ Provide the response EXACTLY in the following JSON format without any markdown w
         window.initApp();
     </script>
 
+    <!-- Firebase SDK & Database Scripts -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-app.js";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut, setPersistence, browserLocalPersistence } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-auth.js";
-        import { getFirestore, doc, setDoc, getDoc, collection, query, where, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
+        import { getFirestore, doc, setDoc, getDoc, collection, limit, getDocs, deleteDoc, query } from "https://www.gstatic.com/firebasejs/10.5.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyA7v4V_jMb3x996QdHW7EL2DcZsB8FoiZw",
@@ -2639,8 +2789,7 @@ Provide the response EXACTLY in the following JSON format without any markdown w
         setPersistence(auth, browserLocalPersistence).catch(console.error);
 
         function getAuthMessage(key) {
-            const lang = window.currentLang;
-            const isJa = (lang === 'ja');
+            const isJa = (window.currentLang === 'ja');
             const messages = {
                 pwLength: isJa ? "パスワードは6文字以上で入力してください。" : "비밀번호는 6자리 이상이어야 합니다.",
                 requireEmail: isJa ? "メールアドレスを入力してください。" : "이메일 주소를 입력해주세요.",
@@ -2655,17 +2804,14 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             return messages[key] || "";
         }
 
-        // [버그 패치 완료] 데이터 로딩 전 덮어쓰기 방지
         window.saveUserData = async function() {
             if (!window.currentUser || !window.currentUser.uid) return;
-            
             if (!window.isDataLoaded) {
                 console.warn("데이터가 아직 로드되지 않아 저장을 차단합니다.");
                 return;
             }
 
             const userRef = doc(db, "users", window.currentUser.uid);
-            
             const dataToSave = {
                 completedUnits: Array.from(window.completedUnits || []),
                 userDecks: window.userDecks || {},
@@ -2726,7 +2872,6 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                 }
 
                 window.isDataLoaded = true;
-
             } catch(e) {
                 console.error("데이터 불러오기 실패:", e);
                 window.isDataLoaded = false;
@@ -2744,7 +2889,6 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                 const idEl = document.getElementById('userIdDisplay');
                 
                 const displayName = window.currentUser.name || "User";
-                
                 if (badge) badge.innerText = displayName.charAt(0).toUpperCase();
                 if (nameEl) nameEl.innerText = displayName;
                 if (idEl) idEl.innerText = `@${window.currentUser.email.split('@')[0]}`; 
@@ -2764,14 +2908,8 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             const email = emailInput ? emailInput.value.trim() : '';
             const password = document.getElementById('authPassword').value.trim();
 
-            if (password.length < 6) {
-                window.customAlert(getAuthMessage('pwLength'));
-                return;
-            }
-            if (!email) {
-                window.customAlert(getAuthMessage('requireEmail'));
-                return;
-            }
+            if (password.length < 6) return window.customAlert(getAuthMessage('pwLength'));
+            if (!email) return window.customAlert(getAuthMessage('requireEmail'));
 
             if (window.authMode === 'signup') {
                 const nameInput = document.getElementById('authName');
@@ -2811,6 +2949,7 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             });
         };
 
+        // 관리자 패널 limit(50) 쿼리 최적화 적용
         window.renderAdminPanel = async function() {
             const tbody = document.getElementById('adminUsersTable');
             if(!tbody) return;
@@ -2820,11 +2959,11 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             tbody.innerHTML = html + `<tr><td colspan="5" style="text-align:center; padding: 20px;">데이터를 불러오는 중...</td></tr>`;
 
             try {
-                const querySnapshot = await getDocs(collection(db, "users"));
+                const q = query(collection(db, "users"), limit(50));
+                const querySnapshot = await getDocs(q);
                 html = `<tr><th>${t.thAdminId}</th><th>${t.thAdminName}</th><th>${t.thAdminUnits}</th><th>${t.thAdminTests}</th><th style="width: 160px;">${t.thAdminAction}</th></tr>`;
                 
                 window.usersDbCache = {}; 
-                
                 querySnapshot.forEach((docSnap) => {
                     const u = docSnap.data();
                     window.usersDbCache[u.uid] = u;
@@ -2832,13 +2971,13 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                     const tc = u.testCounts || {numbers:0, dates:0, times:0};
                     
                     html += `<tr>
-                        <td style="font-weight:bold;">${window.escapeHTML(u.email.split('@')[0])}</td>
+                        <td>${window.escapeHTML(u.email ? u.email.split('@')[0] : 'Unknown')}</td>
                         <td>${window.escapeHTML(u.name || '-')}</td>
-                        <td>${unitsCount}</td>
-                        <td>${tc.numbers} / ${tc.dates} / ${tc.times}</td>
-                        <td>
-                            <button class="btn-control" style="font-size:0.8rem; padding:4px 8px; margin-right:4px;" onclick="openAdminUserModal('${u.uid}')">🔍 ${t.btnDetailUser}</button>
-                            <button class="btn-delete-small" style="padding:4px 8px;" onclick="deleteUser('${u.uid}')">❌ ${t.btnDeleteUser}</button>
+                        <td>${unitsCount}개 완료</td>
+                        <td>${tc.numbers}/${tc.dates}/${tc.times}</td>
+                        <td style="white-space: nowrap;">
+                            <button class="btn-control" style="padding:4px 8px; font-size:0.8rem;" onclick="openAdminUserModal('${u.uid}')">${t.btnDetailUser}</button>
+                            ${u.role !== 'admin' ? `<button class="btn-logout" style="padding:4px 8px; font-size:0.8rem; margin-left:4px;" onclick="deleteUser('${u.uid}')">${t.btnDeleteUser}</button>` : ''}
                         </td>
                     </tr>`;
                 });
@@ -2852,7 +2991,6 @@ Provide the response EXACTLY in the following JSON format without any markdown w
         window.openAdminUserModal = function(uid) {
             const u = window.usersDbCache[uid];
             if(!u) return;
-            const t = window.i18n[window.currentLang];
             
             let detailsHtml = `
                 <div style="background: var(--bg-color); padding: 16px; border-radius: 8px; margin-bottom: 16px;">
@@ -2869,9 +3007,7 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             } else {
                 detailsHtml += `<span style="color:var(--text-muted);">완료된 유닛이 없습니다.</span>`;
             }
-            detailsHtml += `</div>
-                <h3 style="margin-top: 20px; margin-bottom: 8px; font-size: 1.1rem; color: var(--primary);">📅 날짜별 테스트 이력</h3>
-            `;
+            detailsHtml += `</div><h3 style="margin-top: 20px; margin-bottom: 8px; font-size: 1.1rem; color: var(--primary);">📅 날짜별 테스트 이력</h3>`;
             
             if(u.history && Object.keys(u.history).length > 0) {
                 const dates = Object.keys(u.history).sort((a,b) => b.localeCompare(a));
@@ -2895,9 +3031,7 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             if(!u) return;
             const t = window.i18n[window.currentLang];
             
-            if(u.role === 'admin') {
-                return window.customAlert(t.alertAdminNoDelete);
-            }
+            if(u.role === 'admin') return window.customAlert(t.alertAdminNoDelete);
             
             if(confirm(`[${u.email}]${t.confirmDelete}`)) {
                 try {
@@ -2927,7 +3061,7 @@ Provide the response EXACTLY in the following JSON format without any markdown w
                 window.currentUser = { 
                     uid: user.uid, 
                     email: user.email, 
-                    name: displayName,
+                    name: displayName, 
                     role: role 
                 };
                 
