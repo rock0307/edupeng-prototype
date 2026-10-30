@@ -889,7 +889,7 @@
 
     <script>
         // 🔑 Gemini API Key 직접 연동 설정 (테스트 시 본인의 API 키 입력)
-        window.GEMINI_API_KEY = ""; 
+        window.GEMINI_API_KEY = "AQ.Ab8RN6ImlJrzzF1mlM5hLELxmumpxAEIxCnmGlk2RfrwSx6SRA"; 
 
         window.escapeHTML = function(str) {
             if (typeof str !== 'string') return str;
