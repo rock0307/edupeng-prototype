@@ -10,8 +10,8 @@ export default async function handler(req, res) {
 
   const { contents, generationConfig } = req.body;
 
-  // 올바른 공식 엔드포인트 모델명: gemini-1.5-flash
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`;
+  // URL에서 ?key= 파라미터를 제거한 표준 엔드포인트
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
 
   try {
     const payload = { contents };
@@ -22,7 +22,8 @@ export default async function handler(req, res) {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'x-goog-api-key': apiKey.trim() // 헤더로 API 키 전달
       },
       body: JSON.stringify(payload)
     });
