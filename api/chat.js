@@ -11,7 +11,7 @@ export default async function handler(req, res) {
   const { contents, generationConfig } = req.body;
 
   // URL에서 ?key= 파라미터를 제거한 표준 엔드포인트
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/flash-latest:generateContent`;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent`;
   try {
     const payload = { contents };
     if (generationConfig) {
