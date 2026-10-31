@@ -2660,40 +2660,44 @@ Provide the response EXACTLY in the following JSON format without any markdown w
             document.getElementById('ai-conv-chat-input').value = '';
         };
 
-        // Gemini API 호출 엔드포인트 분기 처리 (API 키 직접 사용 가능)
-        async function callGeminiAPI(history, callback) {
-            let apiUrl = '/api/chat';
-            if (window.GEMINI_API_KEY && window.GEMINI_API_KEY.trim() !== '') {
-                apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${window.GEMINI_API_KEY}`;
-            }
+async function callGeminiAPI(history, callback) {
+    let apiUrl = '/api/chat';
+    if (window.GEMINI_API_KEY && window.GEMINI_API_KEY.trim() !== '') {
+        apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${window.GEMINI_API_KEY}`;
+    }
 
-            const payload = { contents: history };
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 15000); 
+    const payload = { contents: history };
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000); 
 
-            try {
-                const response = await fetch(apiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload),
-                    signal: controller.signal
-                });
-                clearTimeout(timeoutId);
-                
-                if (!response.ok) throw new Error("API Response Error");
-                const result = await response.json();
-                if(result.candidates && result.candidates[0].content) {
-                    callback(result.candidates[0].content.parts[0].text);
-                } else {
-                    throw new Error("No Content in Response");
-                }
-            } catch (e) {
-                console.error(e);
-                clearTimeout(timeoutId);
-                callback(window.i18n[window.currentLang].alertError);
-            }
+    try {
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload),
+            signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+        
+        // 💡 화면에 팝업을 띄우도록 수정된 부분
+        if (!response.ok) {
+            const errorData = await response.text();
+            alert(`❌ 서버 통신 에러 발생!\n상태 코드: ${response.status}\n\n상세 이유:\n${errorData}`);
+            throw new Error("API Response Error");
         }
-
+        
+        const result = await response.json();
+        if(result.candidates && result.candidates[0].content) {
+            callback(result.candidates[0].content.parts[0].text);
+        } else {
+            throw new Error("No Content in Response");
+        }
+    } catch (e) {
+        console.error("통신 에러:", e);
+        clearTimeout(timeoutId);
+        callback(window.i18n[window.currentLang].alertError);
+    }
+}
         async function callGeminiJSON(history, callback) {
             let apiUrl = '/api/chat';
             if (window.GEMINI_API_KEY && window.GEMINI_API_KEY.trim() !== '') {
