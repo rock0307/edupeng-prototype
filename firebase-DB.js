@@ -8,12 +8,14 @@ import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, si
 import { getFirestore, doc, setDoc, getDoc, collection, query, limit, getDocs, deleteDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyA7v4V_jMb3x996QdHW7EL2DcZsB8FoiZw",
+  authDomain: "my-language-site.firebaseapp.com",
+  databaseURL: "https://my-language-site-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "my-language-site",
+  storageBucket: "my-language-site.firebasestorage.app",
+  messagingSenderId: "550541389936",
+  appId: "1:550541389936:web:8b0f38c9312d2b6b7bc4b5",
+  measurementId: "G-X1RLXJ8H7R"
 };
 
 const app = initializeApp(firebaseConfig);
