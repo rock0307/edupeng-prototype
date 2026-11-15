@@ -43,7 +43,7 @@ window.handleAuthSubmit = async function(event) {
                 uid: user.uid,
                 email: email,
                 name: name,
-                role: email === 'admin@edupeng.com' ? 'admin' : 'user',
+                role: email === 'leegieun2525@gmail.com' ? 'admin' : 'user',
                 history: {},
                 testCounts: { numbers: 0, dates: 0, times: 0 },
                 completedUnits: [],
@@ -140,11 +140,11 @@ onAuthStateChanged(auth, async (user) => {
                 document.getElementById('userBadge').innerText = (window.currentUser.name || 'U').charAt(0).toUpperCase();
 
                 // 관리자 메뉴 권한 처리
-                if (window.currentUser.role === 'admin') {
-                    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
-                } else {
-                    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
-                }
+                if (window.currentUser.role === 'admin' || user.email === 'leegieun2525@gmail.com') {
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'flex');
+} else {
+    document.querySelectorAll('.admin-only').forEach(el => el.style.display = 'none');
+}
 
                 window.initApp(); 
             }
