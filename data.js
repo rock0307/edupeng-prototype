@@ -1,4 +1,3 @@
-// 학습 데이터 전역 변수 할당
 const massiveRawData = `
 C|B|1|인사와 안부|挨拶と近況|Hello, how are you today?|안녕하세요, 오늘 어때요?|こんにちは、今日の調子はどう？|I'm doing great. And you?|아주 좋아요. 당신은요?|絶好調です。あなたは？|I'm a bit tired, but good.|약간 피곤하지만 괜찮아요.|少し疲れていますが、元気です。|Make sure to rest later.|나중에 꼭 쉬세요.|後でしっかり休んでね。|how are you|어떻게 지내요|調子はどう|a bit tired|약간 피곤한|少し疲れた|make sure to|반드시 ~하다|必ず〜する
 C|B|2|자기소개|自己紹介|Nice to meet you. I'm Alex.|만나서 반가워요. 알렉스입니다.|はじめまして。アレックスです。|I'm Sarah. I'm from Canada.|저는 사라예요. 캐나다에서 왔어요.|私はサラです。カナダから来ました。|Oh, I visited Canada last year.|오, 작년에 캐나다 갔었어요.|あ、昨年カナダに行きました。|Really? I hope you liked it!|정말요? 맘에 들었길 바라요!|本当？気に入ってくれたといいな！|nice to meet you|만나서 반가워요|はじめまして|visited|방문했다|訪れた|last year|작년|昨年
@@ -49,7 +48,6 @@ const readingPool = [
     }
 ];
 
-// app.js 에서 사용할 수 있도록 전역 window 객체에 등록
 window.massiveRawData = massiveRawData;
 window.topikVocabRaw = topikVocabRaw;
 window.listeningPool = listeningPool;
